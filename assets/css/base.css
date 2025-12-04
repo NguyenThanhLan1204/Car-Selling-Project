@@ -12,3 +12,12 @@
     --btn-border-color: #000;
     --btn-color: #fff;
 }
+
+i {
+  color: var(--black);
+}
+
+.custom_hover:hover{
+  transition: color 0.15s ease-in-out;
+  color: #ffdd57;
+}
