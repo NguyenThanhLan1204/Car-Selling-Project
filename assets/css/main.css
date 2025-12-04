@@ -61,3 +61,16 @@
   font-size: 38px;
 }
 
+/* Silder */
+
+/* ====== TEXT Ở DƯỚI ẢNH (CĂN GIỮA) ====== */
+.info-content {
+  bottom: 20px;
+}
+
+/* Hover cho nút */
+.slide-control:hover {
+  background: rgba(255, 255, 255, 0.7);
+}
+
+
