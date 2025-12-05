@@ -13,41 +13,60 @@
 <body>
     <div class="app">
         <header class="header bg-main py-2">        
-            <div class="header_top container-fluid d-flex align-items-center justify-content-around">
+            <div class="header_top container-fluid position-relative d-flex align-items-center justify-content-around">
 
                 <h4 id="header_brand-slogen" class="text-decoration-none m-0 text-dark fw-bold fs-2">
                     EM RỂ TK KHẢI
                 </h4>
                 
                 <div class="search_box position-relative d-flex">
-                    <input type="search" id="search" class="form-control" name="search" placeholder="Tìm kiếm">
+                    <input type="search" id="search" class="form-control h-100 w-100 px-4 rounded-3 border-0" name="search" placeholder="Tìm kiếm">
                     <i class="bx bx-search-alt custom_hover position-absolute top-50 end-0 translate-middle-y me-3"></i>
                 </div>                                     
     
                 <ul class="user_menu list-unstyled d-flex m-0 gap-3">
-                    <li class="user_menu-notice">                     
-                        <i class="bx bx-bell fs-2 custom_hover"></i>
+                    <li class="user_menu-notice menu-item position-relative">                     
+                        <a href="#" class="dropdown_btn" data-target="#bellDropdown">
+                            <i class="bx bx-bell fs-2 custom_hover"></i>
+                        </a>
                     </li>
 
-                    <li class="user_menu-log">
-                        <link href="#" class="">
-                            <i class="bx bx-user-circle fs-2 custom_hover"></i>
-                        </link>
-                    </li>
-                    
                     <li class="user_menu-cart">
-                        <link href="#" id="" class="">
+                        <a href="?page=cart" class="">
                             <i class="bx bx-cart fs-2 custom_hover"></i>
-                        </link>
+                        </a>
                     </li>
-                </ul>                
+
+                    <li class="user_menu-log menu-item position-relative">
+                        <a href="" class="dropdown_btn" data-target="#userDropdown">
+                            <i class="bx bx-user-circle fs-2 custom_hover"></i>
+                        </a>                    
+                    </li>                   
+                </ul> 
+                <div class="user-dropdown position-absolute rounded-2 p-3 shadow-lg" id="mainDropdown">
+                    <div class="dropdown-content" id="bellDropdown">
+                        <h3 class="pt-2 pb-4 text-nowrap fw-bold">Thông báo</h3>
+                        <ul class="list-unstyled">
+                            <li class="py-2 text-nowrap text-decoration-none">Thông báo 1</li>
+                            <li class="py-2 text-nowrap text-decoration-none">Thông báo 2</li>
+                        </ul>
+                    </div>
+                    <div class="dropdown-content" id="userDropdown">
+                        <h3 class="pt-2 pb-4 text-nowrap fw-bold">Xin chào Admin</h3>
+                        <ul class="list-unstyled">
+                            <li class="py-2"><a href="#" class="text-nowrap text-decoration-none custom_hover">Trang cá nhân</a></li>
+                            <li class="py-2"><a href="?page=order" class="text-nowrap text-decoration-none custom_hover">Đơn hàng</a></li>
+                            <li class="py-2"><a href="#" class="text-nowrap text-decoration-none custom_hover">Đăng Xuất</a></li>
+                        </ul>
+                    </div> 
+                </div>               
             </div>           
         </header>
         <div id="myNavbar" class="navbar w-100 p-0 sticky-top d-flex align-items-center" >
             <ul class="navbar__list list-unstyled align-items-center justify-content-center d-flex gap-5 m-0 py-2 w-100">
                 
                 <li class="navbar__item">
-                    <a href="" class="custom_hover fw-bold text-uppercase text-decoration-none text-nowrap">Trang chủ</a>
+                    <a href="?page=home" class="custom_hover fw-bold text-uppercase text-decoration-none text-nowrap">Trang chủ</a>
                 </li>
 
                 <li class="navbar__item">
@@ -62,7 +81,19 @@
         </div>
             
         <main>
-            <?php include("./home.php") ?>
+            <?php
+                $page = isset($_GET['page']) ? $_GET['page'] : 'home';
+          
+                if ($page == 'home') {
+                  include("./home.php");
+                } elseif ($page == 'cart') {
+                  include("./cart.php");
+                } elseif ($page == 'order') {
+                  include("./order.php");
+                } else {
+                  echo "<h2>Trang không tồn tại</h2>";
+                }
+            ?>
         </main>
 
         <footer class="footer">

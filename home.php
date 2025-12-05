@@ -6,7 +6,7 @@
                     <img 
                     src="./assets/img/101-anh-sieu-xe-4k-tai-free-lam-hinh-nen-dt-may-tinh.jpg" 
                     alt=""
-                    class="d-block w-100"
+                    class="d-block w-75 mx-auto"
                     >
                 </div>
 

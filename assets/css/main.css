@@ -12,14 +12,13 @@
   
 }
 
+.search_box{
+  width: 40vw;
+}
+
 .search_box input {
-  height: 100%;
-  width: 100%;
   font-size: 16px;
   outline: 0;
-  padding: 0 20px;
-  border-radius: 10px;
-  border: 0;
   background-color: var(--second-bg-color);
 }
 
@@ -39,7 +38,6 @@
 
 
 /* Nabar */
-
 .navbar {
   background-color: var(--third-bg-color);
   height: 60px;
@@ -62,15 +60,40 @@
 }
 
 /* Silder */
-
-/* ====== TEXT Ở DƯỚI ẢNH (CĂN GIỮA) ====== */
 .info-content {
   bottom: 20px;
 }
 
-/* Hover cho nút */
 .slide-control:hover {
   background: rgba(255, 255, 255, 0.7);
 }
+
+/* Modal */
+.user-dropdown {
+  display: none;
+  top: 100%;
+  right: 0;
+  z-index: 1030;
+  background-color: var(--third-bg-color);
+  width: 20%;
+}
+
+.user-dropdown.show {
+  display: block;
+}
+
+.dropdown-content {
+  display: none;
+}
+
+.dropdown-content.show {
+  display: block;
+}
+
+.dropdown-content li a {
+  color: var(--black);
+}
+
+/* Cart */
 
 
