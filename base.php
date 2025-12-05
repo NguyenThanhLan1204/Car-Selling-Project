@@ -54,7 +54,7 @@
                     <div class="dropdown-content" id="userDropdown">
                         <h3 class="pt-2 pb-4 text-nowrap fw-bold">Xin chào Admin</h3>
                         <ul class="list-unstyled">
-                            <li class="py-2"><a href="#" class="text-nowrap text-decoration-none custom_hover">Trang cá nhân</a></li>
+                            <li class="py-2"><a href="?page=user-profile" class="text-nowrap text-decoration-none custom_hover">Trang cá nhân</a></li>
                             <li class="py-2"><a href="?page=order" class="text-nowrap text-decoration-none custom_hover">Đơn hàng</a></li>
                             <li class="py-2"><a href="#" class="text-nowrap text-decoration-none custom_hover">Đăng Xuất</a></li>
                         </ul>
@@ -74,7 +74,7 @@
                 </li>
 
                 <li class="navbar__item">
-                    <a href="" class="custom_hover fw-bold text-uppercase text-decoration-none text-nowrap">About</a>
+                    <a href="?page=about" class="custom_hover fw-bold text-uppercase text-decoration-none text-nowrap">About</a>
                 </li>
                 </li>
             </ul>
@@ -90,6 +90,10 @@
                   include("./cart.php");
                 } elseif ($page == 'order') {
                   include("./order.php");
+                } elseif ($page == 'about') {
+                  include("./about.php");
+                } elseif ($page == 'user-profile') {
+                  include("./user-profile.php");
                 } else {
                   echo "<h2>Trang không tồn tại</h2>";
                 }
