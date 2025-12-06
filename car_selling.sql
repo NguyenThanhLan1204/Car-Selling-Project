@@ -1,4 +1,3 @@
--- Tạo Database
 CREATE DATABASE car_selling ;
 USE car_selling ;
 
