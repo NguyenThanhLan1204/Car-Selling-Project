@@ -11,8 +11,8 @@
                 </div>
 
                 <div class="info-content position-absolute start-50 translate-middle-x text-center text-white z-1">
-                    <h2 class="text-heading">Car</h2>
-                    <div class="text-description">Bán xe lấy tiền cưới em gái của Khải</div>
+                    <h2 class="text-heading">Car World</h2>
+                    <div class="text-description">Find your dream car at the best price today</div>
                 </div>
             </div>
             <button class="slide-control btn btn-dark bg-opacity-50 border-0 position-absolute top-50 start-0 translate-middle-y z-2 ms-2 p-2">
@@ -25,9 +25,8 @@
     </div>
 
     <div class="container py-5">
-        <h2 class="text-center fw-bold mb-4">KHÁM PHÁ CÁC DÒNG XE TOYOTA</h2>
+        <h2 class="text-center fw-bold mb-4">DISCOVER OUR MODELS</h2>
       
-        <!-- Tabs -->
         <ul class="nav nav-tabs justify-content-center mb-4" id="carTabs" role="tablist">
           <li class="nav-item" role="presentation">
             <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#sedan" type="button" role="tab">Sedan</button>
@@ -39,78 +38,62 @@
             <button class="nav-link" data-bs-toggle="tab" data-bs-target="#suv" type="button" role="tab">SUV</button>
           </li>
           <li class="nav-item" role="presentation">
-            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#mpv" type="button" role="tab">Đa dụng</button>
+            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#mpv" type="button" role="tab">MPV</button>
           </li>
           <li class="nav-item" role="presentation">
-            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#pickup" type="button" role="tab">Bán tải</button>
+            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#pickup" type="button" role="tab">Pickup</button>
           </li>
         </ul>
       
-        <!-- Tab content -->
         <div class="tab-content" id="carTabsContent">
           <div class="tab-pane fade show active" id="sedan" role="tabpanel">
-            <div class="row g-4">
-              <!-- Vios -->
+            <div class="row g-4 justify-content-center">
+              
               <div class="col-md-4">
                 <div class="card h-100 shadow-sm">
                   <img src="./assets/img/vios.jpg" class="card-img-top" alt="Toyota Vios">
                   <div class="card-body">
-                    <h5 class="card-title fw-bold">Vios</h5>
+                    <h5 class="card-title fw-bold">Toyota Vios</h5>
                     <ul class="list-unstyled mb-3">
-                      <li>Động cơ: 1.5</li>
-                      <li>Dung tích: 1.496 cc</li>
-                      <li>Số chỗ: 5</li>
-                      <li>Hộp số: Số tay 5 cấp</li>
+                      <li>Brand: Toyota (Japan)</li>
+                      <li>Engine: 1.5L</li>
+                      <li>Seats: 5</li>
+                      <li>Description: The national sedan, durable.</li>
                     </ul>
-                    <p class="fw-bold text-danger">458.000.000 VND</p>
+                    <p class="fw-bold text-danger">458,000,000 VND</p>
+                    <button class="btn btn-primary w-100">Order Now</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <div class="card h-100 shadow-sm">
+                  <img src="./assets/img/city.jpg" class="card-img-top" alt="Honda City">
+                  <div class="card-body">
+                    <h5 class="card-title fw-bold">Honda City</h5>
+                    <ul class="list-unstyled mb-3">
+                      <li>Brand: Honda (Japan)</li>
+                      <li>Engine: 1.5L DOHC</li>
+                      <li>Seats: 5</li>
+                      <li>Description: Sporty, best driving experience.</li>
+                    </ul>
+                    <p class="fw-bold text-danger">559,000,000 VND</p>
+                    <button class="btn btn-primary w-100">Order Now</button>
                   </div>
                 </div>
               </div>
       
-              <!-- Corolla Altis -->
-              <div class="col-md-4">
-                <div class="card h-100 shadow-sm">
-                  <img src="./assets/img/altis.jpg" class="card-img-top" alt="Corolla Altis">
-                  <div class="card-body">
-                    <h5 class="card-title fw-bold">Corolla Altis</h5>
-                    <ul class="list-unstyled mb-3">
-                      <li>Động cơ: 1.8</li>
-                      <li>Dung tích: 1.798 cc</li>
-                      <li>Số chỗ: 5</li>
-                      <li>Hộp số: CVT</li>
-                    </ul>
-                    <p class="fw-bold text-danger">725.000.000 VND</p>
-                  </div>
-                </div>
-              </div>
-      
-              <!-- Camry -->
-              <div class="col-md-4">
-                <div class="card h-100 shadow-sm">
-                  <img src="./assets/img/camry.jpg" class="card-img-top" alt="Toyota Camry">
-                  <div class="card-body">
-                    <h5 class="card-title fw-bold">Camry</h5>
-                    <ul class="list-unstyled mb-3">
-                      <li>Động cơ: 2.0</li>
-                      <li>Dung tích: 1.987 cc</li>
-                      <li>Số chỗ: 5</li>
-                      <li>Hộp số: Số tự động vô cấp CVT</li>
-                    </ul>
-                    <p class="fw-bold text-danger">1.220.000.000 VND</p>
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
       
-          <!-- Các tab khác có thể thêm sau -->
-          <div class="tab-pane fade" id="hatchback" role="tabpanel">...</div>
-          <div class="tab-pane fade" id="suv" role="tabpanel">...</div>
-          <div class="tab-pane fade" id="mpv" role="tabpanel">...</div>
-          <div class="tab-pane fade" id="pickup" role="tabpanel">...</div>
+          <div class="tab-pane fade" id="hatchback" role="tabpanel"><p class="text-center mt-3">No data available</p></div>
+          <div class="tab-pane fade" id="suv" role="tabpanel"><p class="text-center mt-3">Coming soon (SantaFe, VF8...)</p></div>
+          <div class="tab-pane fade" id="mpv" role="tabpanel"><p class="text-center mt-3">Updating...</p></div>
+          <div class="tab-pane fade" id="pickup" role="tabpanel"><p class="text-center mt-3">Updating...</p></div>
         </div>
-      </div>
+    </div>
+
     <div class="container">
-        <h2 class="text-center fw-bold mb-5">Xe bán chạy nhất</h2>
+        <h2 class="text-center fw-bold mb-5">Best Selling Cars</h2>
     </div>
 </body>
