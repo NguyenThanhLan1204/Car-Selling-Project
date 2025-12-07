@@ -25,15 +25,15 @@ $orders = getAllOrder($type);
                         <div class="table-responsive p-0">
                             <a href='./order.php' style="margin-left: 20px"><span class="badge badge-sm bg-gradient-secondary">All</span></a>
                             <a href='./order.php?type=2' style="margin-left: 20px"><span class="badge badge-sm bg-gradient-primary">Booked</span></a>
-                            <a href='./order.php?type=3' style="margin-left: 20px"><span class='badge badge-sm bg-gradient-info'>Delivered</span></a>
+                            <a href='./order.php?type=3' style="margin-left: 20px"><span class='badge badge-sm bg-gradient-info'>Delivering</span></a>
                             <a href='./order.php?type=4' style="margin-left: 20px"><span class="badge badge-sm bg-gradient-success">Success</span></a>
                             
                             <table class="table align-items-center mb-0">
                                 <thead>
                                     <tr>
                                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">ID</th>
-                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">User</th>
-                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Product</th>
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Customer</th>
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Vehicle</th>
                                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Address</th>
                                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>
                                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Time order</th>
@@ -47,7 +47,7 @@ $orders = getAllOrder($type);
                                 ?>
                                     <tr>
                                         <td>
-                                            <p class="text-xs font-weight-bold mb-0">&nbsp &nbsp #<?= $order['id'] ?></p>
+                                            <p class="text-xs font-weight-bold mb-0">&nbsp &nbsp #<?= $order['order_id'] ?></p>
                                         </td>
                                         <td>
                                             <div class="d-flex px-2 py-1">
@@ -59,13 +59,13 @@ $orders = getAllOrder($type);
                                         </td>
                                         <td>
                                             <p class="text-xs font-weight-bold mb-0">
-                                                <a href="./order-detail.php?id_order=<?= $order['id'] ?>">View now</a>
+                                                <a href="./order-detail.php?id_order=<?= $order['order_id'] ?>">View now</a>
                                             </p>
                                             <p class="text-xs text-secondary mb-0">Quantity: <?= $order['quantity'] ?></p>
                                         </td>
                                         <td>
                                             <p class="text-xs font-weight-bold mb-0"><?= $order['address'] ?></p>
-                                            <p class="text-xs text-secondary mb-0"><?= $order['phone'] ?></p>
+                                            <p class="text-xs text-secondary mb-0"><?= $order['phone_number'] ?></p>
                                         </td>
                                         <td class="align-middle text-center text-sm">
                                             <?php  
@@ -96,4 +96,3 @@ $orders = getAllOrder($type);
         </div>
     </div>
 </body>
-<?php include("../admin/includes/footer.php"); ?>
