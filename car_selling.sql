@@ -30,7 +30,8 @@ CREATE TABLE customer (
     phone_number VARCHAR(20),
     email VARCHAR(255),
     dob DATE, 
-    username VARCHAR(100) UNIQUE, 
+    username VARCHAR(100) UNIQUE,
+    address varchar(191) DEFAULT NULL, 
     password VARCHAR(255),
     role VARCHAR(20) DEFAULT 'user' 
 );
@@ -50,8 +51,9 @@ CREATE TABLE order_detail (
   vehicle_id INT NOT NULL,
   order_id INT DEFAULT NULL,
   amount DECIMAL(15, 2) NOT NULL, 
+  quantity INT(11) NOT NULL,
   payment_method VARCHAR(50) NOT NULL,
-  status int(11) NOT NULL DEFAULT 1,
+  status INT(11) NOT NULL DEFAULT 1,
   created_at timestamp NOT NULL DEFAULT current_timestamp()
   CONSTRAINT fk_orderdetail_customer FOREIGN KEY (customer_id) REFERENCES customer(customer_id),
   CONSTRAINT fk_orderdetail_vehicle FOREIGN KEY (vehicle_id) REFERENCES vehicle(vehicle_id),
