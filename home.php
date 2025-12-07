@@ -46,50 +46,118 @@
         </ul>
       
         <div class="tab-content" id="carTabsContent">
-          <div class="tab-pane fade show active" id="sedan" role="tabpanel">
-            <div class="row g-4 justify-content-center">
-              
-              <div class="col-md-4">
-                <div class="card h-100 shadow-sm">
-                  <img src="./assets/img/vios.jpg" class="card-img-top" alt="Toyota Vios">
-                  <div class="card-body">
-                    <h5 class="card-title fw-bold">Toyota Vios</h5>
-                    <ul class="list-unstyled mb-3">
-                      <li>Brand: Toyota (Japan)</li>
-                      <li>Engine: 1.5L</li>
-                      <li>Seats: 5</li>
-                      <li>Description: The national sedan, durable.</li>
-                    </ul>
-                    <p class="fw-bold text-danger">458,000,000 VND</p>
-                    <button class="btn btn-primary w-100">Order Now</button>
-                  </div>
-                </div>
-              </div>
+            
+            <div class="tab-pane fade show active" id="sedan" role="tabpanel">
+                <div class="row g-4 justify-content-center">
+                    
+                    <div class="col-md-4">
+                        <div class="card h-100 shadow-sm">
+                            <img src="./assets/img/vios.jpg" class="card-img-top" alt="Toyota Vios">
+                            <div class="card-body">
+                                <h5 class="card-title fw-bold">Toyota Vios</h5>
+                                <ul class="list-unstyled mb-3">
+                                    <li>Brand: Toyota (Japan)</li>
+                                    <li>Engine: 1.5L</li>
+                                    <li>Seats: 5</li>
+                                    <li>Description: The national sedan, durable.</li>
+                                </ul>
+                                <p class="fw-bold text-danger">458,000,000 VND</p>
+                                <button class="btn btn-primary w-100">Order Now</button>
+                            </div>
+                        </div>
+                    </div>
 
-              <div class="col-md-4">
-                <div class="card h-100 shadow-sm">
-                  <img src="./assets/img/city.jpg" class="card-img-top" alt="Honda City">
-                  <div class="card-body">
-                    <h5 class="card-title fw-bold">Honda City</h5>
-                    <ul class="list-unstyled mb-3">
-                      <li>Brand: Honda (Japan)</li>
-                      <li>Engine: 1.5L DOHC</li>
-                      <li>Seats: 5</li>
-                      <li>Description: Sporty, best driving experience.</li>
-                    </ul>
-                    <p class="fw-bold text-danger">559,000,000 VND</p>
-                    <button class="btn btn-primary w-100">Order Now</button>
-                  </div>
+                    <div class="col-md-4">
+                        <div class="card h-100 shadow-sm">
+                            <img src="./assets/img/city.jpg" class="card-img-top" alt="Honda City">
+                            <div class="card-body">
+                                <h5 class="card-title fw-bold">Honda City</h5>
+                                <ul class="list-unstyled mb-3">
+                                    <li>Brand: Honda (Japan)</li>
+                                    <li>Engine: 1.5L DOHC</li>
+                                    <li>Seats: 5</li>
+                                    <li>Description: Sporty, best driving experience.</li>
+                                </ul>
+                                <p class="fw-bold text-danger">559,000,000 VND</p>
+                                <button class="btn btn-primary w-100">Order Now</button>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
-              </div>
-      
             </div>
-          </div>
-      
-          <div class="tab-pane fade" id="hatchback" role="tabpanel"><p class="text-center mt-3">No data available</p></div>
-          <div class="tab-pane fade" id="suv" role="tabpanel"><p class="text-center mt-3">Coming soon (SantaFe, VF8...)</p></div>
-          <div class="tab-pane fade" id="mpv" role="tabpanel"><p class="text-center mt-3">Updating...</p></div>
-          <div class="tab-pane fade" id="pickup" role="tabpanel"><p class="text-center mt-3">Updating...</p></div>
+
+            <div class="tab-pane fade" id="hatchback" role="tabpanel">
+                <p class="text-center mt-3 text-muted">No data available for Hatchback</p>
+            </div>
+
+            <div class="tab-pane fade" id="suv" role="tabpanel">
+                <div class="row g-4 justify-content-center">
+                    
+                    <div class="col-md-4">
+                        <div class="card h-100 shadow-sm">
+                            <img src="./assets/img/santafe.jpg" class="card-img-top" alt="Hyundai SantaFe">
+                            <div class="card-body">
+                                <h5 class="card-title fw-bold">Hyundai SantaFe</h5>
+                                <ul class="list-unstyled mb-3">
+                                    <li>Brand: Hyundai (Korea)</li>
+                                    <li>Engine: 2.5L SmartStream</li>
+                                    <li>Seats: 7</li>
+                                    <li>Description: Spacious, modern technology.</li>
+                                </ul>
+                                <p class="fw-bold text-danger">1,050,000,000 VND</p>
+                                <button class="btn btn-primary w-100">Order Now</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="card h-100 shadow-sm">
+                            <img src="./assets/img/vf8.jpg" class="card-img-top" alt="VinFast VF8">
+                            <div class="card-body">
+                                <h5 class="card-title fw-bold">VinFast VF8</h5>
+                                <ul class="list-unstyled mb-3">
+                                    <li>Brand: VinFast (Vietnam)</li>
+                                    <li>Engine: Dual Motor (402 HP)</li>
+                                    <li>Seats: 5</li>
+                                    <li>Description: Luxury electric SUV, Italian design.</li>
+                                </ul>
+                                <p class="fw-bold text-danger">1,090,000,000 VND</p>
+                                <button class="btn btn-primary w-100">Order Now</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="mpv" role="tabpanel">
+                <p class="text-center mt-3 text-muted">Updating...</p>
+            </div>
+
+            <div class="tab-pane fade" id="pickup" role="tabpanel">
+                <div class="row g-4 justify-content-center">
+                    
+                    <div class="col-md-4">
+                        <div class="card h-100 shadow-sm">
+                            <img src="./assets/img/ranger.jpg" class="card-img-top" alt="Ford Ranger">
+                            <div class="card-body">
+                                <h5 class="card-title fw-bold">Ford Ranger</h5>
+                                <ul class="list-unstyled mb-3">
+                                    <li>Brand: Ford (USA)</li>
+                                    <li>Engine: 2.0L Bi-Turbo</li>
+                                    <li>Seats: 5</li>
+                                    <li>Description: King of pickups, powerful off-road.</li>
+                                </ul>
+                                <p class="fw-bold text-danger">665,000,000 VND</p>
+                                <button class="btn btn-primary w-100">Order Now</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
         </div>
     </div>
 
