@@ -52,7 +52,7 @@ $total=0;
                             <table class="table align-items-center mb-0">
                                 <thead>
                                     <tr>
-                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Product Name</th>
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Vehicle</th>
                                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Infor</th>
                                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Time order</th>
                                     </tr>
@@ -67,15 +67,15 @@ $total=0;
                                                     <img src="../images/<?= $order['image'] ?>" class="avatar avatar-sm me-3 border-radius-lg" alt="user1">
                                                 </div>
                                                 <div class="d-flex flex-column justify-content-center">
-                                                    <h6 class="mb-0 text-sm"><?= $order['name_product'] ?></h6>
-                                                    <p class="text-xs text-secondary mb-0">Price: $<?= $order['selling_price'] ?></p>
+                                                    <h6 class="mb-0 text-sm"><?= $order['vehicle'] ?></h6>
+                                                    <p class="text-xs text-secondary mb-0">Price: $<?= $order['amount'] ?></p>
                                                 </div>
                                             </div>
                                         </td>
                                         <td>
                                             <p class="text-xs font-weight-bold mb-0">Total Price: $
                                                 <?= 
-                                                    $total_product= $order['quantity'] * $order['selling_price'];
+                                                    $total_product= $order['quantity'] * $order['amount'];
                                                     $total +=$total_product;
                                                 ?>
                                             </p>
@@ -101,4 +101,3 @@ $total=0;
         </div>
     </div>
 </body>
-<?php include("../admin/includes/footer.php"); ?>
