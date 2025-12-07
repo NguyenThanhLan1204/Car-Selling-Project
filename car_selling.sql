@@ -1,5 +1,5 @@
-CREATE DATABASE car_selling ;
-USE car_selling ;
+CREATE DATABASE car_selling;
+USE car_selling;
 
 -- 1. Bảng Manufacturer (Nhà sản xuất)
 CREATE TABLE manufacturer (
@@ -22,27 +22,20 @@ CREATE TABLE vehicle (
     CONSTRAINT fk_vehicle_manufacturer FOREIGN KEY (manufacturer_id) REFERENCES manufacturer(manufacturer_id)
 );
 
--- 3. Bảng Customer (Khách hàng)
+-- 3. Bảng Customer (Khách hàng )
 CREATE TABLE customer (
     customer_id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     age INT, 
     phone_number VARCHAR(20),
     email VARCHAR(255),
-    dob DATE, -- Ngày sinh
+    dob DATE, 
     username VARCHAR(100) UNIQUE, 
-    password VARCHAR(255) 
-);
-
--- 4. Bảng Admin (Quản trị viên)
-CREATE TABLE admin (
-    admin_id INT AUTO_INCREMENT PRIMARY KEY,
-    username VARCHAR(100) UNIQUE,
     password VARCHAR(255),
-    email VARCHAR(255)
+    role VARCHAR(20) DEFAULT 'user' 
 );
 
--- 5. Bảng Order (Đơn hàng)
+-- 4. Bảng Order (Đơn hàng)
 CREATE TABLE `order` (
     order_id INT AUTO_INCREMENT PRIMARY KEY,
     customer_id INT, 
