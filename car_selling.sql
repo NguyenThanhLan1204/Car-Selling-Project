@@ -36,17 +36,27 @@ CREATE TABLE customer (
 );
 
 -- 4. Bảng Order (Đơn hàng)
-CREATE TABLE `order` (
+CREATE TABLE order (
     order_id INT AUTO_INCREMENT PRIMARY KEY,
-    customer_id INT, 
-    vehicle_id INT,  
-    amount DECIMAL(15, 2), 
-    payment_method VARCHAR(50),
-    status VARCHAR(50), 
-    payment_date DATETIME, 
-    CONSTRAINT fk_order_customer FOREIGN KEY (customer_id) REFERENCES customer(customer_id),
-    CONSTRAINT fk_order_vehicle FOREIGN KEY (vehicle_id) REFERENCES vehicle(vehicle_id)
+    customer_id INT NOT NULL, 
+    status INT(11) NOT NULL DEFAULT 2, 
+    created_at timestamp NOT NULL DEFAULT current_timestamp(), 
+    CONSTRAINT fk_order_customer FOREIGN KEY (customer_id) REFERENCES customer(customer_id)
 );
+
+CREATE TABLE order_detail (
+  order_detail_id INT AUTO_INCREMENT PRIMARY KEY,
+  customer_id INT NOT NULL,
+  vehicle_id INT NOT NULL,
+  order_id INT DEFAULT NULL,
+  amount DECIMAL(15, 2) NOT NULL, 
+  payment_method VARCHAR(50) NOT NULL,
+  status int(11) NOT NULL DEFAULT 1,
+  created_at timestamp NOT NULL DEFAULT current_timestamp()
+  CONSTRAINT fk_orderdetail_customer FOREIGN KEY (customer_id) REFERENCES customer(customer_id),
+  CONSTRAINT fk_orderdetail_vehicle FOREIGN KEY (vehicle_id) REFERENCES vehicle(vehicle_id),
+  CONSTRAINT fk_orderdetail_order FOREIGN KEY (order_id) REFERENCES order(order_id
+)
 
 -- 1.Tạo Manufacturers
 INSERT INTO manufacturer (name, country, description) VALUES
