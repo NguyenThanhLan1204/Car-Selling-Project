@@ -16,7 +16,7 @@
             <div class="header_top container-fluid position-relative d-flex align-items-center justify-content-around">
 
                 <h4 id="header_brand-slogen" class="text-decoration-none m-0 text-dark fw-bold fs-2">
-                    EM RỂ TK KHẢI
+                    CHI LAN SHOWROOM
                 </h4>
                 
                 <div class="search_box position-relative d-flex">
