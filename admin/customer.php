@@ -1,4 +1,5 @@
 <?php
+include("header.php");
 include "dbconn.php";
 $users = getAllCustomers();
 ?>
