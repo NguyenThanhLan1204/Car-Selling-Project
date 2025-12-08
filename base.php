@@ -61,7 +61,7 @@ session_start();
                             <h3 class="pt-2 pb-4 text-nowrap fw-bold">Xin chào <?= $_SESSION['username'] ?></h3>
                             <ul class="list-unstyled">
                                 <?php if ($_SESSION['role'] == 'admin'): ?>
-                                    <li class="py-2"><a href="./admin/header.php" class="text-nowrap text-decoration-none custom_hover">Admin Page</a></li>
+                                    <li class="py-2"><a href="./admin/index.php" class="text-nowrap text-decoration-none custom_hover">Admin Page</a></li>
                                 <?php else: ?>
                                     <li class="py-2"><a href="?page=user-profile" class="text-nowrap text-decoration-none custom_hover">Profile Page</a></li>
                                 <?php endif; ?>

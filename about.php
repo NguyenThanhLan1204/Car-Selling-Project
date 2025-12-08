@@ -14,7 +14,6 @@
         </ul>
       </div>
     </div>
-
     <!-- Cột giữa: Hình ảnh + Tầm nhìn -->
     <div class="col-lg-6">
       <div class="mb-4">
