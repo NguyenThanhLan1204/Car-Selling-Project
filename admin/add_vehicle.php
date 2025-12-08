@@ -3,6 +3,7 @@ include("dbconn.php");
 
 if (isset($_POST["submit"])) {
     $manufacturer_id = $_POST["manufacturer_id"];
+    $category = $_POST["category"];
     $model = $_POST["model"];
     $year = $_POST["year"];
     $price = $_POST["price"];
@@ -14,8 +15,8 @@ if (isset($_POST["submit"])) {
     $path = "../uploads/vehicles/" . $image;
     move_uploaded_file($_FILES["image"]["tmp_name"], $path);
 
-    $sql = "INSERT INTO vehicle (manufacturer_id, model, year, price, stock, description, image_url)
-            VALUES ('$manufacturer_id', '$model', '$year', '$price', '$stock', '$description', '$path')";
+    $sql = "INSERT INTO vehicle (manufacturer_id, model, category, year, price, stock, description, image_url)
+            VALUES ('$manufacturer_id', '$model', '$category', '$year', '$price', '$stock', '$description', '$path')";
 
     mysqli_query($link, $sql);
 
@@ -54,6 +55,9 @@ if (isset($_POST["submit"])) {
 
                 <label>Model</label>
                 <input type="text" name="model" class="form-control" required>
+
+                <label>Category</label>
+                <input type="text" name="category" class="form-control" required>
 
                 <label>Year</label>
                 <input type="number" name="year" class="form-control" required>

@@ -10,6 +10,7 @@ $vehicle = mysqli_fetch_assoc(
 if (isset($_POST["update"])) {
     $manufacturer_id = $_POST["manufacturer_id"];
     $model = $_POST["model"];
+    $category = $_POST["category"];
     $year = $_POST["year"];
     $price = $_POST["price"];
     $stock = $_POST["stock"];
@@ -27,6 +28,7 @@ if (isset($_POST["update"])) {
         UPDATE vehicle SET
         manufacturer_id='$manufacturer_id',
         model='$model',
+        category='$category',
         year='$year',
         price='$price',
         stock='$stock',
@@ -72,6 +74,9 @@ if (isset($_POST["update"])) {
 
                 <label>Model</label>
                 <input type="text" name="model" class="form-control" value="<?= $vehicle['model']; ?>">
+
+                <label>Category</label>
+                <input type="text" name="category" class="form-control" value="<?= $vehicle['category']; ?>">
 
                 <label>Year</label>
                 <input type="number" name="year" class="form-control" value="<?= $vehicle['year']; ?>">
