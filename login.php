@@ -1,7 +1,8 @@
 <?php
 session_start();
 if (isset($_SESSION['username'])) {
-    header("Location: home.php");
+    // SỬA: Chuyển hướng về base.php
+    header("Location: base.php?page=home");
     exit();
 }
 ?>
