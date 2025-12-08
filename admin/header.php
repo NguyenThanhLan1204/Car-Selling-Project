@@ -5,6 +5,9 @@ $page = basename($_SERVER['PHP_SELF']);
 <head>
     <link rel="stylesheet" href="bootstrap.min.css">
     <link rel="stylesheet" href="./css/header.css">
+
+    <!-- ⭐ Import font Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 
 <aside class="sidenav" id="sidenav-main">
