@@ -1,4 +1,15 @@
 /* ============================
+   GLOBAL FONT
+   ============================ */
+* {
+    font-family: 'Inter', sans-serif !important;
+}
+
+/* Import font Inter từ Google */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+
+/* ============================
    SIDEBAR / HEADER CUSTOM CSS
    ============================ */
 
@@ -13,7 +24,7 @@
     width: 260px !important;
     min-width: 260px !important;
     max-width: 260px !important;
-    flex-shrink: 0; /* Chặn bị kéo dãn */
+    flex-shrink: 0;
     position: fixed; 
 }
 
@@ -41,7 +52,7 @@
     opacity: 0.2;
 }
 
-/* ========= UNIFIED BUTTON STYLE (giống Dashboard) ========= */
+/* ========= UNIFIED BUTTON STYLE ========= */
 .navbar-nav .nav-link {
     display: flex;
     align-items: center;
@@ -63,14 +74,14 @@
     margin-right: 6px;
 }
 
-/* Hover effect */
+/* Hover */
 .navbar-nav .nav-link:hover {
     transform: translateX(5px);
     cursor: pointer;
     background: linear-gradient(135deg, #ff7ba3, #e00072) !important;
 }
 
-/* ACTIVE — chỉ cần giữ khác nhẹ 1 chút nếu muốn */
+/* ACTIVE */
 .navbar-nav .nav-link.active {
     background: linear-gradient(135deg, #ff7ba3, #e00072) !important;
 }
