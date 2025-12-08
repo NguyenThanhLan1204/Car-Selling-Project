@@ -1,5 +1,6 @@
 <div class="container py-5">
   <!-- Tiêu đề -->
+
   <h2 class="text-center fw-bold mb-5">INTRODUCTION</h2>
 
   <div class="row g-4">
@@ -8,12 +9,11 @@
       <div class="p-3 shadow-lg">
         <h5 class="fw-bold mb-3">About us</h5>
         <ul class="list-group list-group-flush">
-          <li class="list-group-item">History of formation</li>
-          <li class="list-group-item">Team</li>
+          <li class="list-group-item">History and Formation</li>
+          <li class="list-group-item">Our Team</li>
         </ul>
       </div>
     </div>
-
     <!-- Cột giữa: Hình ảnh + Tầm nhìn -->
     <div class="col-lg-6">
       <div class="mb-4">
@@ -40,7 +40,7 @@
             >
         </div>
         <div class="card p-3 shadow-sm mb-4">
-          <h5 class="fw-bold mb-3">Leadership team</h5>
+          <h5 class="fw-bold mb-3">Leadership Team</h5>
   
           <div class="d-flex align-items-center mb-3 pb-3 border-bottom">
             <img src="./assets/img/ceo1.jpg" class="rounded-circle me-3" width="60" height="60" alt="CEO 1">

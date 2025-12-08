@@ -23,7 +23,7 @@ session_start();
                 </h4>
                 
                 <div class="search_box position-relative d-flex">
-                    <input type="search" id="search" class="form-control h-100 w-100 px-4 rounded-3 border-0" name="search" placeholder="Tìm kiếm">
+                    <input type="search" id="search" class="form-control h-100 w-100 px-4 rounded-3 border-0" name="search" placeholder="Search...">
                     <i class="bx bx-search-alt custom_hover position-absolute top-50 end-0 translate-middle-y me-3"></i>
                 </div>                                     
     
@@ -50,10 +50,10 @@ session_start();
                 </ul> 
                 <div class="user-dropdown position-absolute rounded-2 p-3 shadow-lg" id="mainDropdown">
                     <div class="dropdown-content" id="bellDropdown">
-                        <h3 class="pt-2 pb-4 text-nowrap fw-bold">Thông báo</h3>
+                        <h3 class="pt-2 pb-4 text-nowrap fw-bold">Notification</h3>
                         <ul class="list-unstyled">
-                            <li class="py-2 text-nowrap text-decoration-none">Thông báo 1</li>
-                            <li class="py-2 text-nowrap text-decoration-none">Thông báo 2</li>
+                            <li class="py-2 text-nowrap text-decoration-none">Notification 1</li>
+                            <li class="py-2 text-nowrap text-decoration-none">Notification 2</li>
                         </ul>
                     </div>
                     <div class="dropdown-content" id="userDropdown">
@@ -61,17 +61,17 @@ session_start();
                             <h3 class="pt-2 pb-4 text-nowrap fw-bold">Xin chào <?= $_SESSION['username'] ?></h3>
                             <ul class="list-unstyled">
                                 <?php if ($_SESSION['role'] == 'admin'): ?>
-                                    <li class="py-2"><a href="./admin/header.php" class="text-nowrap text-decoration-none custom_hover">Trang Admin</a></li>
+                                    <li class="py-2"><a href="./admin/index.php" class="text-nowrap text-decoration-none custom_hover">Admin Page</a></li>
                                 <?php else: ?>
-                                    <li class="py-2"><a href="?page=user-profile" class="text-nowrap text-decoration-none custom_hover">Trang cá nhân</a></li>
+                                    <li class="py-2"><a href="?page=user-profile" class="text-nowrap text-decoration-none custom_hover">Profile Page</a></li>
                                 <?php endif; ?>
-                                <li class="py-2"><a href="?page=order" class="text-nowrap text-decoration-none custom_hover">Đơn hàng</a></li>
-                                <li class="py-2"><a href="logout.php" class="text-nowrap text-decoration-none custom_hover">Đăng Xuất</a></li>
+                                <li class="py-2"><a href="?page=order" class="text-nowrap text-decoration-none custom_hover">My Orders</a></li>
+                                <li class="py-2"><a href="logout.php" class="text-nowrap text-decoration-none custom_hover">Logout</a></li>
                             </ul>
                         <?php else: ?>
                             <ul class="list-unstyled">
-                                <li class="py-2"><a href="login.php" class="text-nowrap text-decoration-none custom_hover">Đăng nhập</a></li>
-                                <li class="py-2"><a href="registration.php" class="text-nowrap text-decoration-none custom_hover">Đăng ký</a></li>
+                                <li class="py-2"><a href="login.php" class="text-nowrap text-decoration-none custom_hover">Login</a></li>
+                                <li class="py-2"><a href="registration.php" class="text-nowrap text-decoration-none custom_hover">Register</a></li>
                             </ul>
                         <?php endif; ?>
                     </div>        
@@ -82,17 +82,13 @@ session_start();
             <ul class="navbar__list list-unstyled align-items-center justify-content-center d-flex gap-5 m-0 py-2 w-100">
                 
                 <li class="navbar__item">
-                    <a href="?page=home" class="custom_hover fw-bold text-uppercase text-decoration-none text-nowrap">Trang chủ</a>
-                </li>
-
-                <li class="navbar__item">
-                    <a href="" class="custom_hover fw-bold text-uppercase text-decoration-none text-nowrap">Xe</a>
+                    <a href="?page=home" class="custom_hover fw-bold text-uppercase text-decoration-none text-nowrap">Home</a>
                 </li>
 
                 <li class="navbar__item">
                     <a href="?page=about" class="custom_hover fw-bold text-uppercase text-decoration-none text-nowrap">About</a>
                 </li>
-                </li>
+                
             </ul>
         </div>
             
