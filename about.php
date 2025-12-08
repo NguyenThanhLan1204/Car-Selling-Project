@@ -1,15 +1,15 @@
 <div class="container py-5">
   <!-- Tiêu đề -->
-  <h2 class="text-center fw-bold mb-5">EM RỂ TK KHẢI</h2>
+  <h2 class="text-center fw-bold mb-5">CHI LAN CAR</h2>
 
   <div class="row g-4">
     <!-- Cột trái: Về chúng tôi -->
     <div class="col-lg-3">
       <div class="p-3 shadow-lg">
-        <h5 class="fw-bold mb-3">Về chúng tôi</h5>
+        <h5 class="fw-bold mb-3">About us</h5>
         <ul class="list-group list-group-flush">
-          <li class="list-group-item">Lịch sử hình thành</li>
-          <li class="list-group-item">Đội ngũ</li>
+          <li class="list-group-item">History and Formation</li>
+          <li class="list-group-item">Our Team</li>
         </ul>
       </div>
     </div>
@@ -24,9 +24,9 @@
       </div>
 
       <div class="card p-4 shadow-sm mt-4">
-        <h5 class="fw-bold mb-3">Tầm nhìn & Sứ mệnh</h5>
-        <p><strong>Tầm nhìn:</strong> Trở thành thương hiệu xe thể thao hàng đầu Đông Nam Á.</p>
-        <p><strong>Sứ mệnh:</strong> Mang đến trải nghiệm lái xe đẳng cấp và dịch vụ tận tâm cho khách hàng.</p>
+        <h5 class="fw-bold mb-3">Vision & Mission</h5>
+        <p><strong>Vision:</strong> To become the leading sports car brand in Southeast Asia.</p>
+        <p><strong>Mission:</strong> To provide premium driving experiences and dedicated services to customers.</p>
       </div>
     </div>
 
@@ -40,14 +40,14 @@
             >
         </div>
         <div class="card p-3 shadow-sm mb-4">
-          <h5 class="fw-bold mb-3">Đội ngũ lãnh đạo</h5>
+          <h5 class="fw-bold mb-3">Leadership Team</h5>
   
           <div class="d-flex align-items-center mb-3 pb-3 border-bottom">
             <img src="./assets/img/ceo1.jpg" class="rounded-circle me-3" width="60" height="60" alt="CEO 1">
             <div>
               <h6 class="mb-0 fw-bold">Nan</h6>
               <small class="text-muted">CEO</small>
-              <p class="mb-0">Chuyên gia chiến lược và phát triển thị trường.</p>
+              <p class="mb-0">Strategy and market development expert.</p>
             </div>
           </div>
   
@@ -56,7 +56,7 @@
             <div>
               <h6 class="mb-0 fw-bold">Ný</h6>
               <small class="text-muted">CEO</small>
-              <p class="mb-0">Phụ trách vận hành và dịch vụ khách hàng.</p>
+              <p class="mb-0">In charge of operations and customer service.</p>
             </div>
           </div>
         </div>
