@@ -89,7 +89,11 @@ $grand_total = 0;
                     <span class="fw-bold h5">Total:</span>
                     <span class="h4 fw-bold text-danger" id="grand-total-display">$<?= number_format($grand_total) ?></span>
                 </div>
-                <button class="btn btn-dark w-100 py-3 fw-bold rounded-pill text-uppercase">Checkout</button>
+                <form action="check_out.php" method="POST">
+                    <button type="submit" class="btn btn-dark w-100 py-3 fw-bold rounded-pill text-uppercase">
+                        Checkout
+                    </button>
+                </form>
             </div>
         </div>
         <?php endif; ?>
