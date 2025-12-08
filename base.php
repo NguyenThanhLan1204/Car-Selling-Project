@@ -86,13 +86,9 @@ session_start();
                 </li>
 
                 <li class="navbar__item">
-                    <a href="" class="custom_hover fw-bold text-uppercase text-decoration-none text-nowrap">Cars</a>
-                </li>
-
-                <li class="navbar__item">
                     <a href="?page=about" class="custom_hover fw-bold text-uppercase text-decoration-none text-nowrap">About</a>
                 </li>
-                </li>
+                
             </ul>
         </div>
             
