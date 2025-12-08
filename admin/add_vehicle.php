@@ -9,13 +9,25 @@ if (isset($_POST["submit"])) {
     $stock = $_POST["stock"];
     $description = $_POST["description"];
 
-    // File upload (simple)
+    // ----------------------------
+    // UPLOAD IMAGE
+    // ----------------------------
     $image = $_FILES["image"]["name"];
-    $path = "../uploads/vehicles/" . $image;
-    move_uploaded_file($_FILES["image"]["tmp_name"], $path);
 
+    // đường dẫn lưu vào DB (dùng cho <img src="">)
+    $image_url = "assets/img/" . $image;
+
+    // đường dẫn hệ thống thật để move file (admin nằm trong folder con)
+    $upload_path = "../assets/img/" . $image;
+
+    // di chuyển file upload vào thư mục assets/img/
+    move_uploaded_file($_FILES["image"]["tmp_name"], $upload_path);
+
+    // ----------------------------
+    // INSERT SQL
+    // ----------------------------
     $sql = "INSERT INTO vehicle (manufacturer_id, model, year, price, stock, description, image_url)
-            VALUES ('$manufacturer_id', '$model', '$year', '$price', '$stock', '$description', '$path')";
+            VALUES ('$manufacturer_id', '$model', '$year', '$price', '$stock', '$description', '$image_url')";
 
     mysqli_query($link, $sql);
 
@@ -29,58 +41,54 @@ if (isset($_POST["submit"])) {
 
 <div class="layout">
 
-    <!-- SIDEBAR GỌI TỪ header.php -->
     <?php include ("header.php"); ?>
-<div class="container mt-4">
-    <div class="card">
-        <div class="card-header">
-            <h4>Add Vehicle</h4>
-        </div>
 
-        <div class="card-body">
+    <div class="container mt-4">
+        <div class="card">
+            <div class="card-header">
+                <h4>Add Vehicle</h4>
+            </div>
 
-            <form method="POST" enctype="multipart/form-data">
-                
-                <label>Manufacturer</label>
-                <select name="manufacturer_id" class="form-control" required>
-                    <option>Select Manufacturer</option>
-                    <?php 
-                        $manu = mysqli_query($link, "SELECT * FROM manufacturer");
-                        foreach ($manu as $m) {
-                            echo "<option value='{$m['manufacturer_id']}'>{$m['name']}</option>";
-                        }
-                    ?>
-                </select>
+            <div class="card-body">
 
-                <label>Model</label>
-                <input type="text" name="model" class="form-control" required>
+                <form method="POST" enctype="multipart/form-data">
+                    
+                    <label>Manufacturer</label>
+                    <select name="manufacturer_id" class="form-control" required>
+                        <option>Select Manufacturer</option>
+                        <?php 
+                            $manu = mysqli_query($link, "SELECT * FROM manufacturer");
+                            foreach ($manu as $m) {
+                                echo "<option value='{$m['manufacturer_id']}'>{$m['name']}</option>";
+                            }
+                        ?>
+                    </select>
 
-                <label>Year</label>
-                <input type="number" name="year" class="form-control" required>
+                    <label>Model</label>
+                    <input type="text" name="model" class="form-control" required>
 
-                <label>Price</label>
-                <input type="number" name="price" class="form-control" required>
+                    <label>Year</label>
+                    <input type="number" name="year" class="form-control" required>
 
-                <label>Stock</label>
-                <input type="number" name="stock" class="form-control">
+                    <label>Price</label>
+                    <input type="number" name="price" class="form-control" required>
 
-                <label>Description</label>
-                <textarea name="description" class="form-control"></textarea>
+                    <label>Stock</label>
+                    <input type="number" name="stock" class="form-control">
 
-                <label>Image</label>
-                <input type="file" name="image" class="form-control" required>
+                    <label>Description</label>
+                    <textarea name="description" class="form-control"></textarea>
 
-                <button type="submit" name="submit" class="btn btn-success mt-3">
-                    Save Vehicle
-                </button>
+                    <label>Image</label>
+                    <input type="file" name="image" class="form-control" required>
 
-            </form>
+                    <button type="submit" name="submit" class="btn btn-success mt-3">
+                        Save Vehicle
+                    </button>
 
+                </form>
+
+            </div>
         </div>
     </div>
 </div>
-</div>
-    <!-- KẾT THÚC CONTENT-AREA -->
-
-</div>
-<!-- KẾT THÚC LAYOUT -->

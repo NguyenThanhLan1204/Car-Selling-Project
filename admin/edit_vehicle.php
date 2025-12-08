@@ -3,11 +3,13 @@ include("dbconn.php");
 
 $id = $_GET["id"];
 
+// Lấy dữ liệu xe hiện tại
 $vehicle = mysqli_fetch_assoc(
     mysqli_query($link, "SELECT * FROM vehicle WHERE vehicle_id = $id")
 );
 
 if (isset($_POST["update"])) {
+
     $manufacturer_id = $_POST["manufacturer_id"];
     $model = $_POST["model"];
     $year = $_POST["year"];
@@ -15,23 +17,41 @@ if (isset($_POST["update"])) {
     $stock = $_POST["stock"];
     $description = $_POST["description"];
 
+    // ----------------------------
+    // XỬ LÝ ẢNH UPDATE
+    // ----------------------------
     if (!empty($_FILES["image"]["name"])) {
+
+        // Tên file ảnh mới
         $image = $_FILES["image"]["name"];
-        $path = "../uploads/vehicles/" . $image;
-        move_uploaded_file($_FILES["image"]["tmp_name"], $path);
+
+        // Đường dẫn lưu vào DB
+        $image_url = "assets/img/" . $image;
+
+        // Đường dẫn thực tế để upload
+        $upload_path = "../assets/img/" . $image;
+
+        // Upload file
+        move_uploaded_file($_FILES["image"]["tmp_name"], $upload_path);
+
     } else {
-        $path = $vehicle["image_url"];
+
+        // Không upload ảnh mới → giữ ảnh cũ
+        $image_url = $vehicle["image_url"];
     }
 
+    // ----------------------------
+    // CHẠY LỆNH UPDATE
+    // ----------------------------
     $sql = "
         UPDATE vehicle SET
-        manufacturer_id='$manufacturer_id',
-        model='$model',
-        year='$year',
-        price='$price',
-        stock='$stock',
-        description='$description',
-        image_url='$path'
+            manufacturer_id='$manufacturer_id',
+            model='$model',
+            year='$year',
+            price='$price',
+            stock='$stock',
+            description='$description',
+            image_url='$image_url'
         WHERE vehicle_id = $id
     ";
 
@@ -46,8 +66,6 @@ if (isset($_POST["update"])) {
 </head>
 
 <div class="layout">
-
-    <!-- SIDEBAR GỌI TỪ header.php -->
     <?php include ("header.php"); ?>
 
 <div class="container mt-4">
@@ -57,6 +75,7 @@ if (isset($_POST["update"])) {
         </div>
 
         <div class="card-body">
+
             <form method="POST" enctype="multipart/form-data">
 
                 <label>Manufacturer</label>
@@ -88,6 +107,7 @@ if (isset($_POST["update"])) {
                 <label>Image</label>
                 <input type="file" name="image" class="form-control">
 
+                <!-- Preview ảnh cũ -->
                 <img src="<?= $vehicle['image_url']; ?>" width="120" class="mt-2">
 
                 <button type="submit" name="update" class="btn btn-primary mt-3">
@@ -95,11 +115,9 @@ if (isset($_POST["update"])) {
                 </button>
 
             </form>
+
         </div>
     </div>
 </div>
-</div>
-    <!-- KẾT THÚC CONTENT-AREA -->
 
 </div>
-<!-- KẾT THÚC LAYOUT -->
