@@ -1,6 +1,7 @@
 <div class="container py-5">
   <!-- Tiêu đề -->
-  <h2 class="text-center fw-bold mb-5">CHI LAN CAR</h2>
+
+  <h2 class="text-center fw-bold mb-5">INTRODUCTION</h2>
 
   <div class="row g-4">
     <!-- Cột trái: Về chúng tôi -->
@@ -25,8 +26,8 @@
 
       <div class="card p-4 shadow-sm mt-4">
         <h5 class="fw-bold mb-3">Vision & Mission</h5>
-        <p><strong>Vision:</strong> To become the leading sports car brand in Southeast Asia.</p>
-        <p><strong>Mission:</strong> To provide premium driving experiences and dedicated services to customers.</p>
+        <p><strong>Vision:</strong> Become the leading sports car brand in Southeast Asia.</p>
+        <p><strong>Mission:</strong> Providing a premium driving experience and dedicated service for customers.</p>
       </div>
     </div>
 
