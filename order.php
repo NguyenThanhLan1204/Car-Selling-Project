@@ -104,7 +104,12 @@ $result = $stmt->get_result();
                     echo '</div>';
                 }
             } else {
-                echo "<p>Không có đơn hàng nào.</p>";
+                echo '<div class="d-flex justify-content-center align-items-center" style="min-height: 400px;">';
+                echo '   <div class="text-center text-muted">';
+                echo '       <i class="bi bi-box-seam" style="font-size: 3rem;"></i>';
+                echo '        <p class="mt-3">Bạn chưa có đơn hàng nào.</p>';
+                echo '    </div>';
+                echo '</div>';
             }
             ?>
         </div>
