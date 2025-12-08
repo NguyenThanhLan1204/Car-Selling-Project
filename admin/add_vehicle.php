@@ -3,24 +3,22 @@ include("dbconn.php");
 
 if (isset($_POST["submit"])) {
     $manufacturer_id = $_POST["manufacturer_id"];
-    $category = $_POST["category"];    // ← lấy category
+    $category = $_POST["category"];   // ⭐ thêm dòng này
     $model = $_POST["model"];
     $year = $_POST["year"];
     $price = $_POST["price"];
     $stock = $_POST["stock"];
     $description = $_POST["description"];
 
-    // Upload image
+    // UPLOAD IMAGE
     $image = $_FILES["image"]["name"];
     $image_url = "./assets/img/" . $image;
     $upload_path = "../assets/img/" . $image;
     move_uploaded_file($_FILES["image"]["tmp_name"], $upload_path);
 
-    // Insert SQL (đã thêm category)
-    $sql = "INSERT INTO vehicle 
-            (manufacturer_id, category, model, year, price, stock, description, image_url)
-            VALUES 
-            ('$manufacturer_id', '$category', '$model', '$year', '$price', '$stock', '$description', '$image_url')";
+    // INSERT SQL (chỉ thêm category)
+    $sql = "INSERT INTO vehicle (manufacturer_id, category, model, year, price, stock, description, image_url)
+            VALUES ('$manufacturer_id', '$category', '$model', '$year', '$price', '$stock', '$description', '$image_url')";
 
     mysqli_query($link, $sql);
 
@@ -37,8 +35,9 @@ if (isset($_POST["submit"])) {
     <label>Manufacturer</label>
     <input type="text" name="manufacturer_id" class="form-control" required>
 
+    <!-- ⭐ THÊM CHỈ MỘT Ô CATEGORY -->
     <label>Category</label>
-    <input type="text" name="category" class="form-control" required>  <!-- ← thêm đây -->
+    <input type="text" name="category" class="form-control" required>
 
     <label>Model</label>
     <input type="text" name="model" class="form-control">
