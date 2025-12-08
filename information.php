@@ -2,14 +2,14 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
-// Connect to database
+// Kết nối database
 require_once 'db.php';
 
-// Check ID parameter in URL
+// Kiểm tra tham số ID trên URL
 if (isset($_GET['id'])) {
     $id = intval($_GET['id']);
 
-    // Query vehicle info + manufacturer
+    // Truy vấn thông tin xe + hãng sản xuất
     $sql = "SELECT v.*, m.name AS manufacturer_name, m.country 
             FROM vehicle v 
             JOIN manufacturer m ON v.manufacturer_id = m.manufacturer_id 
@@ -20,7 +20,6 @@ if (isset($_GET['id'])) {
     if ($result->num_rows > 0) {
         $car = $result->fetch_assoc();
     } else {
-        // Vehicle not found
         echo "<div class='container py-5 text-center'>
                 <h2>Vehicle not found!</h2>
                 <a href='base.php?page=home' class='btn btn-primary mt-3'>Back to Home</a>
@@ -28,12 +27,20 @@ if (isset($_GET['id'])) {
         exit();
     }
 } else {
-    // No ID provided -> Redirect to home
     header("Location: base.php?page=home");
     exit();
 }
 ?>
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><?= htmlspecialchars($car['model']) ?> - Car Details</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+</head>
 <body>
     <div class="container mt-5">
         <div class="product-wrapper row bg-white rounded shadow-sm p-4">
@@ -59,7 +66,6 @@ if (isset($_GET['id'])) {
 
             <div class="col-md-5">
                 <form action="cart_add.php" method="POST">
-                    
                     <input type="hidden" name="vehicle_id" value="<?= $car['vehicle_id'] ?>">
 
                     <div class="brand-header d-flex justify-content-between align-items-center mb-2">
@@ -91,21 +97,22 @@ if (isset($_GET['id'])) {
                         <div class="d-flex gap-3">
                             <label>
                                 <input type="radio" name="color" value="White" class="color-radio" checked onclick="document.getElementById('color-name').innerText='White'">
-                                <span class="color-circle shadow-sm" style="background-color: #fff;" title="White"></span>
+                                <span class="color-circle shadow-sm" style="background-color: #fff; border: 1px solid #ddd; width: 30px; height: 30px; display:inline-block; border-radius:50%; cursor:pointer;" title="White"></span>
                             </label>
                             <label>
                                 <input type="radio" name="color" value="Black" class="color-radio" onclick="document.getElementById('color-name').innerText='Black'">
-                                <span class="color-circle shadow-sm" style="background-color: #000;" title="Black"></span>
+                                <span class="color-circle shadow-sm" style="background-color: #000; border: 1px solid #ddd; width: 30px; height: 30px; display:inline-block; border-radius:50%; cursor:pointer;" title="Black"></span>
                             </label>
                             <label>
                                 <input type="radio" name="color" value="Red" class="color-radio" onclick="document.getElementById('color-name').innerText='Red'">
-                                <span class="color-circle shadow-sm" style="background-color: #d63031;" title="Red"></span>
+                                <span class="color-circle shadow-sm" style="background-color: #d63031; width: 30px; height: 30px; display:inline-block; border-radius:50%; cursor:pointer;" title="Red"></span>
                             </label>
                             <label>
                                 <input type="radio" name="color" value="Blue" class="color-radio" onclick="document.getElementById('color-name').innerText='Blue'">
-                                <span class="color-circle shadow-sm" style="background-color: #0984e3;" title="Blue"></span>
+                                <span class="color-circle shadow-sm" style="background-color: #0984e3; width: 30px; height: 30px; display:inline-block; border-radius:50%; cursor:pointer;" title="Blue"></span>
                             </label>
                         </div>
+                        <style>.color-radio { display: none; } .color-radio:checked + span { outline: 3px solid #0d6efd; outline-offset: 2px; }</style>
                     </div>
 
                     <div class="row mb-4 text-center">
@@ -140,7 +147,6 @@ if (isset($_GET['id'])) {
                                     Temporarily Out of Stock
                                 </button>
                             <?php endif; ?>
-                            
                             <button type="button" class="btn btn-outline-danger px-4 rounded-pill">
                                 <i class='bx bx-heart fs-4'></i>
                             </button>
@@ -150,7 +156,6 @@ if (isset($_GET['id'])) {
                             </a>
                         <?php endif; ?>
                     </div>
-
                 </form> 
             </div>
 
@@ -163,7 +168,6 @@ if (isset($_GET['id'])) {
 
         </div>
     </div>
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
