@@ -26,7 +26,8 @@ if (isset($_POST['user']) && isset($_POST['password'])) {
         $_SESSION['role'] = $row['role']; // Lưu quyền admin/user
 
         // Đăng nhập thành công -> Về trang chủ
-        header('Location: home.php');
+        // SỬA: Chuyển hướng về base.php thay vì home.php
+    header('Location: base.php?page=home');
     } else {
         // Sai mật khẩu -> Quay lại login
         header('Location: login.php?error=1');
