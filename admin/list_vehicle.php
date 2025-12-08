@@ -5,11 +5,10 @@ include("dbconn.php");
     <link rel="stylesheet" href="bootstrap.min.css">
     <link rel="stylesheet" href="./css/list_vers.css"> 
 </head>
-
 <div class="layout">
 
-<?php include ("header.php"); ?>
-
+    <!-- SIDEBAR GỌI TỪ header.php -->
+    <?php include ("header.php"); ?>
 <div class="container mt-4">
 
     <div class="card">
@@ -53,8 +52,7 @@ include("dbconn.php");
                         <td><?= $item["manufacturer_name"]; ?></td>
 
                         <td>
-                            <img src="<?= $item["image_url"]; ?>" width="70" height="50" 
-                                 style="object-fit: cover; border-radius: 4px;">
+                            <img src="assets/img/<?= $item["image_url"]; ?>" width="70" height="50">
                         </td>
 
                         <td><?= $item["year"]; ?></td>
@@ -85,5 +83,8 @@ include("dbconn.php");
     </div>
 
 </div>
+</div>
+    <!-- KẾT THÚC CONTENT-AREA -->
 
 </div>
+<!-- KẾT THÚC LAYOUT -->
