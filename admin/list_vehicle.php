@@ -52,7 +52,7 @@ include("dbconn.php");
                         <td><?= $item["manufacturer_name"]; ?></td>
 
                         <td>
-                            <img src="assets/img/<?= $item["image_url"]; ?>" width="70" height="50">
+                            <img src="../<?= $item["image_url"]; ?>" width="70" height="50">
                         </td>
 
                         <td><?= $item["year"]; ?></td>

@@ -108,7 +108,7 @@ if (isset($_POST["update"])) {
                 <input type="file" name="image" class="form-control">
 
                 <!-- Preview ảnh cũ -->
-                <img src="<?= $vehicle['image_url']; ?>" width="120" class="mt-2">
+                <img src="../<?= $vehicle['image_url']; ?>" width="120" class="mt-2">
 
                 <button type="submit" name="update" class="btn btn-primary mt-3">
                     Update Vehicle

@@ -15,7 +15,7 @@ if (isset($_POST["submit"])) {
     $image = $_FILES["image"]["name"];
 
     // đường dẫn lưu vào DB (dùng cho <img src="">)
-    $image_url = "assets/img/" . $image;
+    $image_url = "./assets/img/" . $image;
 
     // đường dẫn hệ thống thật để move file (admin nằm trong folder con)
     $upload_path = "../assets/img/" . $image;
