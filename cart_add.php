@@ -30,7 +30,7 @@ if (isset($_POST['vehicle_id'])) {
     }
 
     // Chuyển hướng về trang giỏ hàng
-    header("Location: index.php?page=cart");
+    header("Location: base.php?page=cart");
     exit();
 
 } else {
