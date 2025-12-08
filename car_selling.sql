@@ -115,7 +115,7 @@ INSERT INTO orders (customer_id, status, created_at) VALUES
 (3, 2, '2024-02-20 14:15:00'),   -- Booked
 (4, 4, '2024-03-05 09:00:00'),   -- Completed
 (2, 2, '2024-04-10 16:45:00'),   -- Booked
-(5, 1, '2024-05-01 11:20:00');   -- Cancelled / Pending / your rule
+(5, 3, '2024-05-01 11:20:00');   -- Cancelled / Pending / your rule
 
 -- 5. Tạo Order Detail phù hợp bảng order_detail
 INSERT INTO order_detail 
