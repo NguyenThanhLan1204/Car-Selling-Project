@@ -37,12 +37,12 @@ CREATE TABLE customer (
 );
 
 -- 4. Bảng Order (Đơn hàng)
-CREATE TABLE order (
+CREATE TABLE orders (
     order_id INT AUTO_INCREMENT PRIMARY KEY,
     customer_id INT NOT NULL, 
     status INT(11) NOT NULL DEFAULT 2, 
     created_at timestamp NOT NULL DEFAULT current_timestamp(), 
-    CONSTRAINT fk_order_customer FOREIGN KEY (customer_id) REFERENCES customer(customer_id)
+    CONSTRAINT fk_orders_customer FOREIGN KEY (customer_id) REFERENCES customer(customer_id)
 );
 
 CREATE TABLE order_detail (
@@ -54,10 +54,10 @@ CREATE TABLE order_detail (
   quantity INT(11) NOT NULL,
   payment_method VARCHAR(50) NOT NULL,
   status INT(11) NOT NULL DEFAULT 1,
-  created_at timestamp NOT NULL DEFAULT current_timestamp()
+  created_at timestamp NOT NULL DEFAULT current_timestamp(),
   CONSTRAINT fk_orderdetail_customer FOREIGN KEY (customer_id) REFERENCES customer(customer_id),
   CONSTRAINT fk_orderdetail_vehicle FOREIGN KEY (vehicle_id) REFERENCES vehicle(vehicle_id),
-  CONSTRAINT fk_orderdetail_order FOREIGN KEY (order_id) REFERENCES order(order_id
+  CONSTRAINT fk_orderdetail_orders FOREIGN KEY (order_id) REFERENCES orders(order_id)
 )
 
 -- 1.Tạo Manufacturers

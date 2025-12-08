@@ -1,103 +1,137 @@
 <?php
 include("../admin/includes/header.php");
+include("../admin/db.php");
 
-$type = $_GET['id_order'];
+// Lấy order_id từ URL
+$order_id = isset($_GET['order_id']) ? (int)$_GET['order_id'] : 0;
 
-$orders = getOrderDetail($type);
-$total=0;
+if ($order_id <= 0) {
+    die("Invalid order id!");
+}
+
+// ===============================
+// Lấy thông tin đơn hàng + khách hàng
+// ===============================
+$sqlOrder = "
+    SELECT o.order_id, o.customer_id, o.status, o.created_at,
+           c.name, c.phone_number, c.email, c.address
+    FROM orders o
+    JOIN customer c ON o.customer_id = c.customer_id
+    WHERE o.order_id = $order_id
+";
+
+$orderInfo = mysqli_query($conn, $sqlOrder);
+
+if (!$orderInfo || mysqli_num_rows($orderInfo) == 0) {
+    die("Order not found!");
+}
+
+$first = mysqli_fetch_assoc($orderInfo);
+
+// ===============================
+// Lấy danh sách sản phẩm trong order_detail
+// ===============================
+$sqlDetail = "
+    SELECT od.order_detail_id, od.vehicle_id, od.quantity, od.amount,
+           od.payment_method, od.status, od.created_at,
+           v.model, v.price, v.image_url
+    FROM order_detail od
+    JOIN vehicle v ON od.vehicle_id = v.vehicle_id
+    WHERE od.order_id = $order_id
+";
+
+$details = mysqli_query($conn, $sqlDetail);
+
+// Tính tổng
+$total = 0;
 ?>
 
 <body>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-12">
-                <div class="card my-4">
-                    <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
-                        <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
-                            <h6 class="text-white text-capitalize ps-3">Order detail</h6>
-                        </div>
-                    </div>
-                    <div class="card-body px-0 pb-2">
-                        <div class="table-responsive p-0">
-                            <div style="padding-left: 20px">
-                                <?php foreach($orders as $order){ ?>
-                                    Buyer Name: <?= $order['name'] ?> <br>
-                                    Phone: <?= $order['phone'] ?> <br>
-                                    Email: <?= $order['email'] ?><br>
-                                    Address: <?= $order['address'] ?> <br>
-                                    Status: <?php 
-                                        if ($order['status'] == 2){
-                                            echo '<span class="badge badge-sm bg-gradient-primary">Booked</span>';
-                                        }else if ($order['status'] == 3){
-                                            echo '<span class="badge badge-sm bg-gradient-info">Delivering</span>';
-                                        }else if ($order['status'] == 4){
-                                            echo '<span class="badge badge-sm bg-gradient-success">Success</span>';
-                                        }
-                                    ?> 
-                                    update to: 
-                                    <?php 
-                                        $id_order = $order['order_id'];
-                                        if ($order['status'] == 2){
-                                            echo "<a href='./code.php?order=3&id=$id_order'><span class='badge badge-sm bg-gradient-info'>Delivery</span></a>";
-                                        }else if ($order["status"] == 3){
-                                            echo "<a href='./code.php?order=4&id=$id_order'><span class='badge badge-sm bg-gradient-success'>Delivered</span></a>";
-                                        }else if ($order["status"] == 4){
-                                            echo "<span class='badge badge-sm bg-gradient-primary'>Success</span>";
-                                        }
-                                    ?>
-                                <?php break; } ?>
-                            </div>
-                        </div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
 
-                            <table class="table align-items-center mb-0">
-                                <thead>
-                                    <tr>
-                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Vehicle</th>
-                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Infor</th>
-                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Time order</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    
-                                <?php foreach($orders as $order){ ?>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex px-2 py-1">
-                                                <div>
-                                                    <img src="../images/<?= $order['image'] ?>" class="avatar avatar-sm me-3 border-radius-lg" alt="user1">
-                                                </div>
-                                                <div class="d-flex flex-column justify-content-center">
-                                                    <h6 class="mb-0 text-sm"><?= $order['vehicle'] ?></h6>
-                                                    <p class="text-xs text-secondary mb-0">Price: $<?= $order['amount'] ?></p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <p class="text-xs font-weight-bold mb-0">Total Price: $
-                                                <?= 
-                                                    $total_product= $order['quantity'] * $order['amount'];
-                                                    $total +=$total_product;
-                                                ?>
-                                            </p>
-                                            <p class="text-xs text-secondary mb-0">Quantity: <?= $order['quantity'] ?></p>
-                                        </td>
-                                        <td>
-                                            <span class="text-secondary text-xs font-weight-bold">
-                                                <?= date('d-m-Y', strtotime($order['created_at'])); ?>
-                                            </span>
-                                        </td>
-                                        
-                                    </tr>
-                                <?php } ?> 
-
-                                </tbody>
-                            </table>
-                            <div style="padding-left: 20px">
-                            <h2>Total: $<?= $total ?></h2>
-                        </div>
+            <div class="card my-4">
+                <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                    <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
+                        <h6 class="text-white text-capitalize ps-3">Order Detail</h6>
                     </div>
                 </div>
+
+                <div class="card-body px-4">
+
+                    <h5>Buyer Information</h5>
+                    Buyer Name: <?= $first['name'] ?><br>
+                    Phone: <?= $first['phone_number'] ?><br>
+                    Email: <?= $first['email'] ?><br>
+                    Address: <?= $first['address'] ?><br>
+
+                    <br>
+                    <strong>Status:</strong>
+                    <?php
+                        if ($first['status'] == 2)
+                            echo '<span class="badge bg-primary">Booked</span>';
+                        else if ($first['status'] == 3)
+                            echo '<span class="badge bg-info">Delivering</span>';
+                        else if ($first['status'] == 4)
+                            echo '<span class="badge bg-success">Success</span>';
+                    ?>
+
+                    <br><br><strong>Update to:</strong>
+                    <?php
+                        if ($first['status'] == 2)
+                            echo "<a href='order.php?order=3&id=$order_id' class='badge bg-info'>Delivering</a>";
+                        else if ($first['status'] == 3)
+                            echo "<a href='order.php?order=4&id=$order_id' class='badge bg-success'>Delivered</a>";
+                        else
+                            echo "<span class='badge bg-secondary'>Done</span>";
+                    ?>
+
+                    <hr>
+
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Vehicle</th>
+                                <th>Info</th>
+                                <th>Order time</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                        <?php while ($item = mysqli_fetch_assoc($details)) { ?>
+                            <tr>
+                                <td>
+                                    <img src="../images/<?= $item['image_url'] ?>" width="60"><br>
+                                    <?= $item['model'] ?>
+                                </td>
+
+                                <td>
+                                    Price: $<?= number_format($item['amount']) ?><br>
+                                    Qty: <?= $item['quantity'] ?><br>
+                                    Total:
+                                    <?php
+                                        $tmp = $item['quantity'] * $item['amount'];
+                                        $total += $tmp;
+                                        echo "$" . number_format($tmp);
+                                    ?>
+                                </td>
+
+                                <td>
+                                    <?= date('d-m-Y', strtotime($item['created_at'])) ?>
+                                </td>
+                            </tr>
+                        <?php } ?>
+
+                        </tbody>
+                    </table>
+
+                    <h3>Total: $<?= number_format($total) ?></h3>
+
+                </div>
             </div>
+
         </div>
     </div>
+</div>
 </body>
