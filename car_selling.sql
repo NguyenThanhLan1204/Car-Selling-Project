@@ -90,12 +90,12 @@ INSERT INTO vehicle (manufacturer_id, model, year, price, image_url, stock, desc
 (11, 'Mazda 2 Sport', 2024, 550000000, './assets/img/mazda2.jpg', 18, 'Stylish hatchback with the best sporty driving feel in its class.');
 
 -- 3. Tạo Customers 
-INSERT INTO customer (name, age, phone_number, email, dob, username, password, role) VALUES
-('System Administrator', 30, '0909000111', 'admin@carselling.com', '1990-01-01', 'admin', 'admin123', 'admin'),
-('Dinh Khai', 25, '0912345678', 'ronadokhaibeo@gmail.com', '1999-05-15', 'khaibeo', '123456', 'user'),
-('Minh Ly', 40, '0988777666', 'minhca@gmail.com', '1984-12-20', 'minhca', 'password', 'user'),
-('Namdo', 22, '0365554444', 'namdo@gmail.com', '2002-03-08', 'namdo', 'security', 'user'),
-('Lanlitdo', 35, '0901239876', 'trumcho@gmail.com', '1989-07-27', 'lan', 'lan123', 'user');
+INSERT INTO customer (name, age, phone_number, email, dob, username, password, role, address) VALUES
+('System Administrator', 30, '0909000111', 'admin@carselling.com', '1990-01-01', 'admin', 'admin123', 'admin', '123 Admin Street, District 1, Ho Chi Minh City'),
+('Dinh Khai', 25, '0912345678', 'ronadokhaibeo@gmail.com', '1999-05-15', 'khaibeo', '123456', 'user', '45 Nguyen Hue, District 3, Ho Chi Minh City'),
+('Minh Ly', 40, '0988777666', 'minhca@gmail.com', '1984-12-20', 'minhca', 'password', 'user', '789 Le Loi, District 1, Ho Chi Minh City'),
+('Namdo', 22, '0365554444', 'namdo@gmail.com', '2002-03-08', 'namdo', 'security', 'user', '56 Tran Hung Dao, District 5, Ho Chi Minh City'),
+('Lanlitdo', 35, '0901239876', 'trumcho@gmail.com', '1989-07-27', 'lan', 'lan123', 'user', '321 Pham Ngu Lao, District 1, Ho Chi Minh City');
 
 -- 4. Tạo Orders
 INSERT INTO orders (customer_id, status, created_at) VALUES
