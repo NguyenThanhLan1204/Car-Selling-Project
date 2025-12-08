@@ -17,6 +17,8 @@ function totalValue($table) {
 <head>
     <link rel="stylesheet" href="bootstrap.min.css">
     <link rel="stylesheet" href="./css/index.css"> 
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
 </head>
 
 <body>
