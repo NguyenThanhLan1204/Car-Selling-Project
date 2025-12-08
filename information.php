@@ -2,14 +2,14 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
-// Kết nối database
+// Connect to database
 require_once 'db.php';
 
-// Kiểm tra tham số ID trên URL
+// Check ID parameter in URL
 if (isset($_GET['id'])) {
     $id = intval($_GET['id']);
 
-    // Truy vấn thông tin xe + hãng sản xuất
+    // Query vehicle info + manufacturer
     $sql = "SELECT v.*, m.name AS manufacturer_name, m.country 
             FROM vehicle v 
             JOIN manufacturer m ON v.manufacturer_id = m.manufacturer_id 
@@ -20,15 +20,15 @@ if (isset($_GET['id'])) {
     if ($result->num_rows > 0) {
         $car = $result->fetch_assoc();
     } else {
-        // Không tìm thấy xe
+        // Vehicle not found
         echo "<div class='container py-5 text-center'>
-                <h2>Không tìm thấy xe yêu cầu!</h2>
-                <a href='base.php?page=home' class='btn btn-primary mt-3'>Về trang chủ</a>
+                <h2>Vehicle not found!</h2>
+                <a href='base.php?page=home' class='btn btn-primary mt-3'>Back to Home</a>
               </div>";
         exit();
     }
 } else {
-    // Không có ID -> Về trang chủ
+    // No ID provided -> Redirect to home
     header("Location: base.php?page=home");
     exit();
 }
@@ -41,9 +41,9 @@ if (isset($_GET['id'])) {
             <div class="col-12 mb-3">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="base.php?page=home" class="text-decoration-none">Trang chủ</a></li>
-                        <li class="breadcrumb-item active" aria-current="page"><?= $car['manufacturer_name'] ?></li>
-                        <li class="breadcrumb-item active" aria-current="page"><?= $car['model'] ?></li>
+                        <li class="breadcrumb-item"><a href="base.php?page=home" class="text-decoration-none">Home</a></li>
+                        <li class="breadcrumb-item active" aria-current="page"><?= htmlspecialchars($car['manufacturer_name']) ?></li>
+                        <li class="breadcrumb-item active" aria-current="page"><?= htmlspecialchars($car['model']) ?></li>
                     </ol>
                 </nav>
             </div>
@@ -52,7 +52,7 @@ if (isset($_GET['id'])) {
                 <div class="main-image-container d-flex align-items-center justify-content-center bg-light rounded" style="min-height: 400px;">
                     <img src="<?= !empty($car['image_url']) ? $car['image_url'] : 'https://via.placeholder.com/600x400' ?>" 
                          class="img-fluid rounded shadow-sm"
-                         alt="<?= $car['model'] ?>"
+                         alt="<?= htmlspecialchars($car['model']) ?>"
                          style="max-height: 400px;">
                 </div>
             </div>
@@ -63,15 +63,15 @@ if (isset($_GET['id'])) {
                     <input type="hidden" name="vehicle_id" value="<?= $car['vehicle_id'] ?>">
 
                     <div class="brand-header d-flex justify-content-between align-items-center mb-2">
-                        <span class="text-muted"><i class='bx bxs-check-circle text-primary'></i> <?= $car['manufacturer_name'] ?> Chính hãng</span>
+                        <span class="text-muted"><i class='bx bxs-check-circle text-primary'></i> <?= htmlspecialchars($car['manufacturer_name']) ?> Official</span>
                         <?php if ($car['stock'] > 0): ?>
-                            <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-3">Còn hàng</span>
+                            <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-3">In Stock</span>
                         <?php else: ?>
-                            <span class="badge bg-danger bg-opacity-10 text-danger rounded-pill px-3">Hết hàng</span>
+                            <span class="badge bg-danger bg-opacity-10 text-danger rounded-pill px-3">Out of Stock</span>
                         <?php endif; ?>
                     </div>
 
-                    <h2 class="fw-bold mb-3"><?= $car['model'] ?></h2>
+                    <h2 class="fw-bold mb-3"><?= htmlspecialchars($car['model']) ?></h2>
 
                     <div class="mb-3">
                         <i class='bx bxs-star text-warning'></i>
@@ -79,31 +79,31 @@ if (isset($_GET['id'])) {
                         <i class='bx bxs-star text-warning'></i>
                         <i class='bx bxs-star text-warning'></i>
                         <i class='bx bxs-star-half text-warning'></i>
-                        <small class="text-muted">(Đánh giá khách hàng)</small>
+                        <small class="text-muted">(Customer Reviews)</small>
                     </div>
 
                     <h3 class="text-danger fw-bold mb-4">
-                        $<?= number_format($car['price'], 0, ',', '.') ?>
+                        $<?= number_format($car['price'], 0, '.', ',') ?>
                     </h3>
 
                     <div class="mb-4">
-                        <label class="fw-bold mb-2">Màu sắc: <span id="color-name" class="fw-normal">Tiêu chuẩn</span></label>
+                        <label class="fw-bold mb-2">Color: <span id="color-name" class="fw-normal">Standard</span></label>
                         <div class="d-flex gap-3">
                             <label>
-                                <input type="radio" name="color" value="Trắng" class="color-radio" checked onclick="document.getElementById('color-name').innerText='Trắng'">
-                                <span class="color-circle shadow-sm" style="background-color: #fff;" title="Trắng"></span>
+                                <input type="radio" name="color" value="White" class="color-radio" checked onclick="document.getElementById('color-name').innerText='White'">
+                                <span class="color-circle shadow-sm" style="background-color: #fff;" title="White"></span>
                             </label>
                             <label>
-                                <input type="radio" name="color" value="Đen" class="color-radio" onclick="document.getElementById('color-name').innerText='Đen'">
-                                <span class="color-circle shadow-sm" style="background-color: #000;" title="Đen"></span>
+                                <input type="radio" name="color" value="Black" class="color-radio" onclick="document.getElementById('color-name').innerText='Black'">
+                                <span class="color-circle shadow-sm" style="background-color: #000;" title="Black"></span>
                             </label>
                             <label>
-                                <input type="radio" name="color" value="Đỏ" class="color-radio" onclick="document.getElementById('color-name').innerText='Đỏ'">
-                                <span class="color-circle shadow-sm" style="background-color: #d63031;" title="Đỏ"></span>
+                                <input type="radio" name="color" value="Red" class="color-radio" onclick="document.getElementById('color-name').innerText='Red'">
+                                <span class="color-circle shadow-sm" style="background-color: #d63031;" title="Red"></span>
                             </label>
                             <label>
-                                <input type="radio" name="color" value="Xanh" class="color-radio" onclick="document.getElementById('color-name').innerText='Xanh'">
-                                <span class="color-circle shadow-sm" style="background-color: #0984e3;" title="Xanh"></span>
+                                <input type="radio" name="color" value="Blue" class="color-radio" onclick="document.getElementById('color-name').innerText='Blue'">
+                                <span class="color-circle shadow-sm" style="background-color: #0984e3;" title="Blue"></span>
                             </label>
                         </div>
                     </div>
@@ -111,34 +111,33 @@ if (isset($_GET['id'])) {
                     <div class="row mb-4 text-center">
                         <div class="col-4">
                             <div class="border rounded p-2">
-                                <small class="text-muted d-block">Năm SX</small>
+                                <small class="text-muted d-block">Year</small>
                                 <strong><?= $car['year'] ?></strong>
                             </div>
                         </div>
                         <div class="col-4">
                             <div class="border rounded p-2">
-                                <small class="text-muted d-block">Xuất xứ</small>
-                                <strong><?= $car['country'] ?></strong>
+                                <small class="text-muted d-block">Origin</small>
+                                <strong><?= htmlspecialchars($car['country']) ?></strong>
                             </div>
                         </div>
                         <div class="col-4">
                             <div class="border rounded p-2">
-                                <small class="text-muted d-block">Kho</small>
+                                <small class="text-muted d-block">Stock</small>
                                 <strong><?= $car['stock'] ?></strong>
                             </div>
                         </div>
                     </div>
 
-
                     <div class="d-flex gap-2">
                         <?php if (isset($_SESSION['username'])): ?>
                             <?php if ($car['stock'] > 0): ?>
                                 <button type="submit" class="btn btn-dark flex-grow-1 py-3 fw-bold rounded-pill">
-                                    <i class='bx bx-cart-add fs-4 align-middle'></i> Thêm vào giỏ
+                                    <i class='bx bx-cart-add fs-4 align-middle'></i> Add to Cart
                                 </button>
                             <?php else: ?>
                                 <button type="button" class="btn btn-secondary flex-grow-1 py-3 fw-bold rounded-pill" disabled>
-                                    Tạm hết hàng
+                                    Temporarily Out of Stock
                                 </button>
                             <?php endif; ?>
                             
@@ -147,18 +146,18 @@ if (isset($_GET['id'])) {
                             </button>
                         <?php else: ?>
                             <a href="login.php" class="btn btn-warning flex-grow-1 py-3 fw-bold rounded-pill">
-                                Đăng nhập để thêm vào giỏ
+                                Login to Add to Cart
                             </a>
                         <?php endif; ?>
                     </div>
 
                 </form> 
-                </div>
+            </div>
 
             <div class="col-12 mt-5 pt-4 border-top">
-                <h4 class="fw-bold mb-3">Mô tả sản phẩm</h4>
+                <h4 class="fw-bold mb-3">Product Description</h4>
                 <div class="text-secondary" style="line-height: 1.8; white-space: pre-line;">
-                    <?= $car['description'] ? $car['description'] : "Đang cập nhật mô tả..." ?>
+                    <?= $car['description'] ? htmlspecialchars($car['description']) : "Description updating..." ?>
                 </div>
             </div>
 
