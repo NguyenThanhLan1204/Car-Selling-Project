@@ -1,6 +1,6 @@
 <?php
-include("../admin/includes/header.php");
-include("../admin/db.php");
+include("header.php");
+include("dbconn.php");
 
 
 // =========================================
@@ -13,11 +13,11 @@ if (isset($_GET['order']) && isset($_GET['order_id'])) {
 
     // update bảng orders
     $sql1 = "UPDATE orders SET status = $newStatus WHERE order_id = $order_id";
-    mysqli_query($conn, $sql1);
+    mysqli_query($link, $sql1);
 
     // update bảng order_detail
     $sql2 = "UPDATE order_detail SET status = $newStatus WHERE order_id = $order_id";
-    mysqli_query($conn, $sql2);
+    mysqli_query($link, $sql2);
 
     header("Location: order.php?msg=updated");
     exit();
@@ -58,7 +58,7 @@ $sql .= "
     ORDER BY o.created_at DESC
 ";
 
-$orders = mysqli_query($conn, $sql);
+$orders = mysqli_query($link, $sql);
 
 ?>
 

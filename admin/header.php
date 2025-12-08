@@ -42,14 +42,14 @@ $page = basename($_SERVER['PHP_SELF']);
             </li>
 
             <li class="nav-item">
-                <a class="nav-link <?= $page == "vehicle.php" ? 'active' : '' ?>" href="vehicle.php">
+                <a class="nav-link <?= $page == "vehicle.php" ? 'active' : '' ?>" href="list_vehicle.php">
                     <div><i class="fas fa-car"></i></div>
                     <span class="nav-link-text">Vehicle manage</span>
                 </a>
             </li>
 
             <li class="nav-item">
-                <a class="nav-link <?= $page == "manufacturer.php" ? 'active' : '' ?>" href="manufacturer.php">
+                <a class="nav-link <?= $page == "manufacturer.php" ? 'active' : '' ?>" href="list_manufacturer.php">
                     <div><i class="fas fa-industry"></i></div>
                     <span class="nav-link-text">Manufacturers manage</span>
                 </a>

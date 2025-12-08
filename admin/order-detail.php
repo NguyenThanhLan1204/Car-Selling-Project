@@ -1,6 +1,6 @@
 <?php
-include("../admin/includes/header.php");
-include("../admin/db.php");
+include("header.php");
+include("dbconn.php");
 
 // Lấy order_id từ URL
 $order_id = isset($_GET['order_id']) ? (int)$_GET['order_id'] : 0;
@@ -20,7 +20,7 @@ $sqlOrder = "
     WHERE o.order_id = $order_id
 ";
 
-$orderInfo = mysqli_query($conn, $sqlOrder);
+$orderInfo = mysqli_query($link, $sqlOrder);
 
 if (!$orderInfo || mysqli_num_rows($orderInfo) == 0) {
     die("Order not found!");
@@ -40,7 +40,7 @@ $sqlDetail = "
     WHERE od.order_id = $order_id
 ";
 
-$details = mysqli_query($conn, $sqlDetail);
+$details = mysqli_query($link, $sqlDetail);
 
 // Tính tổng
 $total = 0;

@@ -1,7 +1,6 @@
 <?php
 include "dbconn.php";
-$users= getAll("users");
-$users = getAllUsers(1);
+$users = getAllCustomers();
 ?>
 
 <body>
@@ -14,66 +13,50 @@ $users = getAllUsers(1);
                             <h6 class="text-white text-capitalize ps-3">Customer table</h6>
                         </div>
                     </div>
+
                     <div class="card-body px-0 pb-2">
                         <div class="table-responsive p-0">
                             <table class="table align-items-center mb-0">
                                 <thead>
                                     <tr>
-                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Name</th>
-                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10 ps-2">Phone</th>
-                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-10 ps-2">Email</th>
-                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Age</th>
-                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Date of Birth</th>
-                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Total order</th>
-                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-10">Day come</th>
+                                        <th>Name</th>
+                                        <th>Phone</th>
+                                        <th>Email</th>
+                                        <th class="text-center">Age</th>
+                                        <th class="text-center">Date of Birth</th>
+                                        <th class="text-center">Total order</th>
+                                        <th class="text-center">Day come</th>
                                     </tr>
                                 </thead>
+
                                 <tbody>
                                     <?php foreach($users as $user) { ?>
                                         <tr>
-                                            <td>
-                                                <div class="d-flex px-2 py-1">
-                                                    <div class="d-flex flex-column justify-content-center">
-                                                        <h6 class="mb-0 text-sm"><?= $cus['name'] ?></h6>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <p class="text-xs font-weight-bold mb-0">
-                                                    <?= $cus['phone_number'] ?>
-                                                </p>
-                                            </td>
-                                            <td>
-                                                <p class="text-xs font-weight-bold mb-0">
-                                                    <?= $cus['email'] ?>
-                                                </p>
-                                            </td>
-                                            <td class="align-middle text-center text-sm">
-                                                <?= $cus['age'] ?>
+                                            <td><?= $user['name'] ?></td>
+
+                                            <td><?= $user['phone_number'] ?></td>
+
+                                            <td><?= $user['email'] ?></td>
+
+                                            <td class="text-center"><?= $user['age'] ?></td>
+
+                                            <td class="text-center">
+                                                <?= date('d-m-Y', strtotime($user['dob'])); ?>
                                             </td>
 
-                                            <td class="align-middle text-center">
-                                                <span class="text-secondary text-xs font-weight-bold">
-                                                    <?= date('d-m-Y', strtotime($cus['dob'])); ?>
-                                                </span>
-                                            </td>
-                                            <td class="align-middle text-center text-sm">
-                                                <?= $user['total_buy']?>
-                                            </td>
-                                            <td class="align-middle text-center">
-                                                <span class="text-secondary text-xs font-weight-bold">
-                                                    <?= date('d-m-Y', strtotime($user['creat_at'])); ?>
-                                                </span>
-                                            </td>
+                                            <!-- Chưa có dữ liệu nên để trống -->
+                                            <td class="text-center">-</td>
+                                            <td class="text-center">-</td>
                                         </tr>
                                     <?php } ?>
                                 </tbody>
+
                             </table>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
     </div>
 </body>
-<?php?>
