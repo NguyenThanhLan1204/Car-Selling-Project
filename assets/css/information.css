@@ -83,51 +83,16 @@ body {
     font-size: 36px; 
     font-weight: 700; 
     color: #000; 
-    margin-bottom: 35px; 
+    margin-bottom: 35px; /* Giữ khoảng cách đẹp mắt xuống phần thông số */
 }
 
-.color-label { 
-    font-weight: 700; 
-    margin-bottom: 12px; 
-    display: block; 
-    font-size: 14px; 
-}
-
-.color-options { 
-    display: flex; 
-    gap: 20px; /* Đã tăng khoảng cách giữa các nút lên 20px cho thoáng */
-    margin-bottom: 35px; 
-}
-
-.color-radio { 
-    display: none; 
-}
-
-/* --- PHẦN QUAN TRỌNG ĐÃ SỬA --- */
-.color-circle {
-    width: 30px; 
-    height: 30px; 
-    display: inline-block; 
-    border-radius: 50%; 
-    border: 1px solid #ccc; 
-    cursor: pointer;
-}
-/* ------------------------------- */
-
-.color-radio:checked + .color-circle { 
-    border: 2px solid #000; 
-    transform: scale(1.1);
-}
-
-.color-radio { 
-    display: none; 
-}
+/* --- ĐÃ XÓA CÁC CLASS LIÊN QUAN ĐẾN MÀU SẮC TẠI ĐÂY --- */
 
 .specs-grid { 
     display: grid; 
     grid-template-columns: repeat(3, 1fr); 
     gap: 15px; 
-    margin-bottom: 20px; 
+    margin-bottom: 35px; /* Tăng khoảng cách dưới một chút cho thoáng nút bấm */
 }
 
 .spec-box { 
@@ -155,6 +120,7 @@ body {
 .action-buttons { 
     display: flex; 
     gap: 15px; 
+    width: 100%; /* Đảm bảo khung chứa nút rộng full */
 }
 
 .btn-black {
@@ -165,36 +131,27 @@ body {
     border-radius: 14px; 
     font-size: 16px; 
     font-weight: 600; 
-    flex-grow: 1;
+    flex-grow: 1; /* Nút sẽ tự động giãn hết chiều ngang */
     display: flex; 
     align-items: center; 
     justify-content: center; 
     gap: 10px; 
     cursor: pointer;
+    transition: all 0.3s ease;
 }
 
 .btn-black:hover { 
     background-color: #333; 
+    transform: translateY(-2px); /* Hiệu ứng nổi nhẹ khi di chuột */
 }
 
-.btn-wishlist {
-    width: 65px; 
-    height: 65px; 
-    background: #fff; 
-    border: 1px solid #e0e0e0;
-    border-radius: 14px; 
-    display: flex; 
-    align-items: center; 
-    justify-content: center;
-    font-size: 26px; 
-    color: #333; 
-    cursor: pointer;
+.btn-black:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+    transform: none;
 }
 
-.btn-wishlist:hover { 
-    color: #ff4757; 
-    background: #f9f9f9; 
-}
+/* --- ĐÃ XÓA CLASS .btn-wishlist TẠI ĐÂY --- */
 
 @media (max-width: 991px) {
     .col-img, .col-info { 

@@ -92,29 +92,6 @@ if (isset($_GET['id'])) {
                         $<?= number_format($car['price'], 0, '.', ',') ?>
                     </h3>
 
-                    <div class="mb-4">
-                        <label class="fw-bold mb-2">Color: <span id="color-name" class="fw-normal">Standard</span></label>
-                        <div class="d-flex gap-3">
-                            <label>
-                                <input type="radio" name="color" value="White" class="color-radio" checked onclick="document.getElementById('color-name').innerText='White'">
-                                <span class="color-circle shadow-sm" style="background-color: #fff; border: 1px solid #ddd; width: 30px; height: 30px; display:inline-block; border-radius:50%; cursor:pointer;" title="White"></span>
-                            </label>
-                            <label>
-                                <input type="radio" name="color" value="Black" class="color-radio" onclick="document.getElementById('color-name').innerText='Black'">
-                                <span class="color-circle shadow-sm" style="background-color: #000; border: 1px solid #ddd; width: 30px; height: 30px; display:inline-block; border-radius:50%; cursor:pointer;" title="Black"></span>
-                            </label>
-                            <label>
-                                <input type="radio" name="color" value="Red" class="color-radio" onclick="document.getElementById('color-name').innerText='Red'">
-                                <span class="color-circle shadow-sm" style="background-color: #d63031; width: 30px; height: 30px; display:inline-block; border-radius:50%; cursor:pointer;" title="Red"></span>
-                            </label>
-                            <label>
-                                <input type="radio" name="color" value="Blue" class="color-radio" onclick="document.getElementById('color-name').innerText='Blue'">
-                                <span class="color-circle shadow-sm" style="background-color: #0984e3; width: 30px; height: 30px; display:inline-block; border-radius:50%; cursor:pointer;" title="Blue"></span>
-                            </label>
-                        </div>
-                        <style>.color-radio { display: none; } .color-radio:checked + span { outline: 3px solid #0d6efd; outline-offset: 2px; }</style>
-                    </div>
-
                     <div class="row mb-4 text-center">
                         <div class="col-4">
                             <div class="border rounded p-2">
@@ -147,10 +124,8 @@ if (isset($_GET['id'])) {
                                     Temporarily Out of Stock
                                 </button>
                             <?php endif; ?>
-                            <button type="button" class="btn btn-outline-danger px-4 rounded-pill">
-                                <i class='bx bx-heart fs-4'></i>
-                            </button>
-                        <?php else: ?>
+                            
+                            <?php else: ?>
                             <a href="login.php" class="btn btn-warning flex-grow-1 py-3 fw-bold rounded-pill">
                                 Login to Add to Cart
                             </a>
