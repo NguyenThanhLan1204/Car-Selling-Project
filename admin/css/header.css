@@ -4,13 +4,17 @@
 
 /* Sidebar container */
 .sidenav {
-    width: 260px;
     border-radius: 20px;
     padding-top: 15px;
     padding-bottom: 20px;
     background: linear-gradient(135deg, #e3b3b3, #e9b3b3);
     display: flex;
     flex-direction: column;
+    width: 260px !important;
+    min-width: 260px !important;
+    max-width: 260px !important;
+    flex-shrink: 0; /* Chặn bị kéo dãn */
+    position: fixed; 
 }
 
 /* Header Brand */
@@ -87,7 +91,7 @@
 
 /* ========= LOGOUT BUTTON ========= */
 .sidenav-footer {
-    margin-top: 260px;
+    margin-top: 230px;
 }
 
 .sidenav-footer .btn {

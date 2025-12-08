@@ -1,5 +1,4 @@
 <?php
-include("header.php");
 include("dbconn.php");
 
 if (isset($_POST["submit"])) {
@@ -23,7 +22,15 @@ if (isset($_POST["submit"])) {
     echo "<script>alert('Vehicle Added'); window.location='list_vehicle.php';</script>";
 }
 ?>
+<head>
+    <link rel="stylesheet" href="bootstrap.min.css">
+    <link rel="stylesheet" href="./css/add_vers.css"> 
+</head>
 
+<div class="layout">
+
+    <!-- SIDEBAR GỌI TỪ header.php -->
+    <?php include ("header.php"); ?>
 <div class="container mt-4">
     <div class="card">
         <div class="card-header">
@@ -72,3 +79,8 @@ if (isset($_POST["submit"])) {
         </div>
     </div>
 </div>
+</div>
+    <!-- KẾT THÚC CONTENT-AREA -->
+
+</div>
+<!-- KẾT THÚC LAYOUT -->

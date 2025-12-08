@@ -1,8 +1,14 @@
 <?php
-include("header.php");
 include("dbconn.php");
 ?>
+<head>
+    <link rel="stylesheet" href="bootstrap.min.css">
+    <link rel="stylesheet" href="./css/list_vers.css"> 
+</head>
+<div class="layout">
 
+    <!-- SIDEBAR GỌI TỪ header.php -->
+    <?php include ("header.php"); ?>
 <div class="container mt-4">
 
     <div class="card">
@@ -77,3 +83,8 @@ include("dbconn.php");
     </div>
 
 </div>
+</div>
+    <!-- KẾT THÚC CONTENT-AREA -->
+
+</div>
+<!-- KẾT THÚC LAYOUT -->

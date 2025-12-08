@@ -57,8 +57,16 @@ $sql .= "
 $orders = mysqli_query($link, $sql);
 
 ?>
-
+<head>
+    <link rel="stylesheet" href="bootstrap.min.css">
+    <link rel="stylesheet" href="./css/order.css"> 
+</head>
 <body>
+<div class="layout">
+
+    <!-- SIDEBAR GỌI TỪ header.php -->
+    <?php include ("header.php"); ?>
+
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
@@ -67,18 +75,19 @@ $orders = mysqli_query($link, $sql);
                 <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                     <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
                         <h6 class="text-white text-capitalize ps-3">Order table</h6>
+                        <h7 class="text-white blank"></h7>
+                        
+
+                        <a href="./order.php" class="badge bg-secondary mx-2">All</a>
+                        <a href="./order.php?type=2" class="badge bg-primary mx-2">Booked</a>
+                        <a href="./order.php?type=3" class="badge bg-info mx-2">Delivering</a>
+                        <a href="./order.php?type=4" class="badge bg-success mx-2">Success</a>
                     </div>
                 </div>
 
                 <div class="card-body px-0 pb-2">
                     <div class="table-responsive p-0">
-
                         <!-- FILTER -->
-                        <a href="./order.php" class="badge bg-secondary mx-2">All</a>
-                        <a href="./order.php?type=2" class="badge bg-primary mx-2">Booked</a>
-                        <a href="./order.php?type=3" class="badge bg-info mx-2">Delivering</a>
-                        <a href="./order.php?type=4" class="badge bg-success mx-2">Success</a>
-
                         <table class="table align-items-center mb-0 mt-3">
                             <thead>
                                 <tr>
@@ -142,7 +151,6 @@ $orders = mysqli_query($link, $sql);
 
                             </tbody>
                         </table>
-
                     </div>
                 </div>
 
@@ -151,4 +159,9 @@ $orders = mysqli_query($link, $sql);
         </div>
     </div>
 </div>
+</div>
+    <!-- KẾT THÚC CONTENT-AREA -->
+
+</div>
+<!-- KẾT THÚC LAYOUT -->
 </body>

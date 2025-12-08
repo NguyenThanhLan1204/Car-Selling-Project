@@ -1,5 +1,4 @@
 <?php
-include("header.php");
 include("dbconn.php");
 
 $id = $_GET["id"];
@@ -41,6 +40,15 @@ if (isset($_POST["update"])) {
     echo "<script>alert('Updated!'); window.location='list_vehicle.php';</script>";
 }
 ?>
+<head>
+    <link rel="stylesheet" href="bootstrap.min.css">
+    <link rel="stylesheet" href="./css/edit_vers.css"> 
+</head>
+
+<div class="layout">
+
+    <!-- SIDEBAR GỌI TỪ header.php -->
+    <?php include ("header.php"); ?>
 
 <div class="container mt-4">
     <div class="card">
@@ -90,3 +98,8 @@ if (isset($_POST["update"])) {
         </div>
     </div>
 </div>
+</div>
+    <!-- KẾT THÚC CONTENT-AREA -->
+
+</div>
+<!-- KẾT THÚC LAYOUT -->

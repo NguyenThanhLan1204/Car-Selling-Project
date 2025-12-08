@@ -1,16 +1,27 @@
 <?php
-include("header.php");
 include("dbconn.php");
 ?>
+<head>
+    <link rel="stylesheet" href="bootstrap.min.css">
+    <link rel="stylesheet" href="./css/list_manuf.css"> 
+</head>
 
+<div class="layout">
+
+    <!-- SIDEBAR GỌI TỪ header.php -->
+    <?php include ("header.php"); ?>
 <div class="container mt-4">
 
     <div class="card">
-        <div class="card-header d-flex justify-content-between">
-            <h4>Manufacturer List</h4>
-            <a href="add_manufacturer.php" class="btn btn-success">+ Add Manufacturer</a>
-        </div>
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h4 class="manuf-title">Manufacturer List</h4>
 
+            <button 
+                class="btn btn-success add-btn"
+                onclick="window.location.href='add_manufacturer.php'">
+                + Add Manufacturer
+            </button>
+        </div>
         <div class="card-body">
 
             <table class="table table-bordered table-striped text-center">
@@ -39,16 +50,20 @@ include("dbconn.php");
                             <td><?= $m["description"]; ?></td>
 
                             <td>
-                                <a href="edit_manufacturer.php?id=<?= $m['manufacturer_id']; ?>" 
-                                   class="btn btn-primary btn-sm">Edit</a>
+                            <button 
+                                class="btn btn-primary btn-sm"
+                                onclick="window.location.href='edit_manufacturer.php?id=<?= $m['manufacturer_id']; ?>'">
+                                Edit
+                            </button>
                             </td>
 
                             <td>
-                                <a href="delete_manufacturer.php?id=<?= $m['manufacturer_id']; ?>" 
-                                   class="btn btn-danger btn-sm"
-                                   onclick="return confirm('Delete this manufacturer?');">
-                                   Delete
-                                </a>
+                            <button 
+                                class="btn btn-danger btn-sm"
+                                onclick="if(confirm('Delete this manufacturer?')) 
+                                        window.location.href='delete_manufacturer.php?id=<?= $m['manufacturer_id']; ?>'">
+                                Delete
+                            </button>
                             </td>
                         </tr>
                     <?php 
@@ -65,3 +80,8 @@ include("dbconn.php");
     </div>
 
 </div>
+</div>
+    <!-- KẾT THÚC CONTENT-AREA -->
+
+</div>
+<!-- KẾT THÚC LAYOUT -->

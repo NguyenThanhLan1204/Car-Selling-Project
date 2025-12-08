@@ -1,95 +1,148 @@
-/* ====== LAYOUT CHUNG ====== */
-/* Layout chính: sidebar + content */
-.layout {
-    display: flex;
-    width: 100%;
-}
+/* ===============================
+   LAYOUT TỔNG QUAN DASHBOARD
+================================= */
 
-/* Sidebar lấy đúng kích thước hiện có trong header.php */
-.sidebar {
-    flex-shrink: 0;   /* KHÔNG co lại — giữ nguyên kích thước */
-}
-
-/* Khu vực nội dung */
 .content-area {
-    flex: 1;
-    padding: 30px;
+    margin-left: 240px; /* rộng sidebar */
+    padding: 25px;
+    width: calc(100% - 240px);
+}
+
+@media (max-width: 992px) {
+    .content-area {
+        margin-left: 0;
+        width: 100%;
+        padding: 15px;
+    }
+}
+
+/* ===============================
+   CARD LAYOUT – XẾP CẠNH NHAU
+================================= */
+
+.row.g-4 {
+    margin-left: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px; /* khoảng cách giữa các card */
+}
+
+.row.g-4 .col-xl-3,
+.row.g-4 .col-sm-6 {
+    flex: 1 1 240px;  /* mỗi card rộng tối thiểu 240px */
+    max-width: 260px; /* không quá rộng */
 }
 
 
-/* ====== CARD ====== */
+/* ===============================
+   CARD DASHBOARD
+================================= */
+
 .card {
-    border: none;
-    border-radius: 20px;
-    background: #fff;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-    position: relative;
+    border-radius: 14px;
+    background: #ffffff;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.08);
     overflow: hidden;
-    padding-top: 20px;
-    padding-bottom: 15px;
-    max-width: 100%;
+    transition: 0.25s;
+    border: none;
+    max-width: 260px; /* card width */
+    margin-left: auto;
+    margin-right: auto;
 }
 
-/* ====== HEADER ====== */
+.card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+}
+
+
+/* ===============================
+   HEADER CARD – icon + text
+================================= */
+
 .card-header {
-    border: none !important;
-    background: transparent !important;
-    padding: 0 20px !important;
-    position: relative;
-    min-height: 70px;
-}
-
-/* Icon */
-.icon-shape {
-    width: 70px;
-    height: 70px;
-    border-radius: 20px;
-    position: absolute;
-    top: -25px;
-    left: 20px;
     display: flex;
     align-items: center;
-    justify-content: center;
-    font-size: 32px;
+    justify-content: space-between;
+    padding: 18px 20px;
+    background: #85b4e8;
     color: #fff;
 }
 
-/* Fix text alignment */
-.text-end {
-    margin-left: 80px;
-    padding-top: 10px;
-}
-
-/* Footer */
-.card-footer {
-    border-top: none !important;
-    background: #fff !important;
-    padding: 20px !important;
-    font-size: 15px;
-}
-
-/* Colors */
-.bg-gradient-primary {
-    background: linear-gradient(135deg, #ff5f8d, #d6006c);
-}
-.bg-gradient-dark {
-    background: linear-gradient(135deg, #2b2b2b, #000);
-}
-.bg-gradient-success {
-    background: linear-gradient(135deg, #5cb85c, #3da53d);
-}
-
-/* Bootstrap override cho grid */
-.row {
+.card-header .icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.25);
     display: flex;
-    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    font-size: 28px;
 }
-.col-xl-3 {
-    flex: 0 0 25%;
+
+.card-header p {
+    margin: 0;
+    font-size: 15px;
+    color: #f2f2f2;
 }
-@media (max-width: 992px) {
-    .col-xl-3 { flex: 0 0 50%; }
+
+.card-header h4 {
+    margin: 4px 0 0 0;
+    font-size: 26px;
+    font-weight: 700;
+    color: #fff;
 }
-@media (max-width: 576px) {
-    .col-xl-3 { flex: 0 0 100%; }
+
+
+/* ===============================
+   FOOTER CARD – % tăng giảm
+================================= */
+
+.card-footer {
+    background: #f7f9fa;
+    padding: 15px 20px;
+}
+
+.card-footer p {
+    margin: 0;
+    font-size: 14px;
+}
+
+.card-footer .text-success {
+    color: #4caf50 !important;
+}
+
+.card-footer .text-danger {
+    color: #e53935 !important;
+}
+
+
+/* ===============================
+   ICON (material-icons)
+================================= */
+
+.material-icons {
+    font-size: 30px !important;
+    color: #fff;
+}
+
+
+/* ===============================
+   RESPONSIVE
+================================= */
+
+@media (max-width: 768px) {
+    .card-header {
+        flex-direction: row;
+        gap: 12px;
+        padding: 16px;
+    }
+
+    .card-header h4 {
+        font-size: 22px;
+    }
+
+    .material-icons {
+        font-size: 26px !important;
+    }
 }

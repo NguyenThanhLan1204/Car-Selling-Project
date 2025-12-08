@@ -23,7 +23,6 @@ function totalValue($table) {
 
 <!-- BẮT ĐẦU LAYOUT -->
 <div class="layout">
-
     <!-- SIDEBAR GỌI TỪ header.php -->
     <?php include ("header.php"); ?>
 
@@ -37,7 +36,7 @@ function totalValue($table) {
                 <div class="col-xl-3 col-sm-6">
                     <div class="card">
                         <div class="card-header">
-                            <div class="icon icon-shape bg-gradient-primary shadow position-absolute mt-n4">
+                            <div class="icon ">
                                 <i class="material-icons">person</i>
                             </div>
                             <div class="text-end pt-1">
@@ -58,7 +57,7 @@ function totalValue($table) {
                 <div class="col-xl-3 col-sm-6">
                     <div class="card">
                         <div class="card-header">
-                            <div class="icon icon-shape bg-gradient-dark shadow position-absolute mt-n4">
+                            <div class="icon ">
                                 <i class="material-icons">table_view</i>
                             </div>
                             <div class="text-end pt-1">
@@ -79,7 +78,7 @@ function totalValue($table) {
                 <div class="col-xl-3 col-sm-6">
                     <div class="card">
                         <div class="card-header">
-                            <div class="icon icon-shape bg-gradient-dark shadow position-absolute mt-n4">
+                            <div class="icon ">
                                 <i class="material-icons">factory</i>
                             </div>
                             <div class="text-end pt-1">
@@ -100,12 +99,12 @@ function totalValue($table) {
                 <div class="col-xl-3 col-sm-6">
                     <div class="card">
                         <div class="card-header">
-                            <div class="icon icon-shape bg-gradient-success shadow position-absolute mt-n4">
+                            <div class="icon ">
                                 <i class="material-icons">receipt_long</i>
                             </div>
                             <div class="text-end pt-1">
                                 <p class="text-sm mb-0 text-capitalize">Total Order</p>
-                                <h4 class="mb-0"><?= totalValue('order') ?></h4>
+                                <h4 class="mb-0"><?= totalValue('orders') ?></h4>
                             </div>
                         </div>
                         <div class="card-footer p-3">

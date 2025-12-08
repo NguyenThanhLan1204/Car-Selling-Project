@@ -1,0 +1,113 @@
+/* ===============================
+   LAYOUT
+================================= */
+
+.layout {
+    display: flex;
+    width: 100%;
+}
+
+/* Container content */
+.container {
+    margin-left: 260px; /* trừ sidebar */
+    padding: 20px;
+    max-width: calc(100% - 260px);
+    width: 80%;
+}
+
+/* Khi sidebar nằm fixed */
+.sidebar {  /* KHÔNG co lại — giữ nguyên kích thước */
+    flex-shrink: 0;
+}
+
+/* ===============================
+   CARD
+================================= */
+
+
+/* CARD */
+.card {
+    border-radius: 12px;
+    overflow: hidden;
+    background: #ffffff;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.card-header {
+    background: #85b4e8;
+    color: white;
+    padding: 15px 20px;
+}
+
+.card-header h4 {
+    margin: 0;
+    font-weight: 700;
+    font-size: 24px;
+}
+
+/* FORM */
+form {
+    display: flex;
+    flex-direction: column; /* mỗi input/label xuống dòng */
+    gap: 12px; /* khoảng cách giữa các dòng */
+}
+
+/* Label */
+form label {
+    font-weight: 600;
+    font-size: 15px;
+    color: #444;
+}
+
+/* Input, select, textarea */
+form input.form-control,
+form select.form-control,
+form textarea.form-control {
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid #ced4da;
+    font-size: 15px;
+    width: 100%;
+    transition: 0.2s;
+}
+
+/* Focus input */
+form input.form-control:focus,
+form select.form-control:focus,
+form textarea.form-control:focus {
+    border-color: #85b4e8;
+    box-shadow: 0 0 0 2px rgba(133, 180, 232, 0.2);
+    outline: none;
+}
+
+/* Image preview */
+form img {
+    border-radius: 8px;
+    margin-top: 6px;
+    border: 1px solid #ddd;
+}
+
+/* Button */
+form button.btn-primary {
+    width: fit-content;
+    padding: 10px 18px;
+    border-radius: 12px !important;
+    font-size: 16px;
+    font-weight: 600;
+    margin-top: 12px;
+    background: #7daee1;
+    border: none;
+    transition: 0.25s;
+}
+
+form button.btn-primary:hover {
+    background: #95c4f6;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+    .container {
+        margin-left: 0;
+        max-width: 100%;
+    }
+}

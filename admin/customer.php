@@ -1,10 +1,18 @@
 <?php
-include("header.php");
 include "dbconn.php";
 $users = getAllCustomers();
 ?>
 
 <body>
+    <body>
+    <head>
+    <link rel="stylesheet" href="bootstrap.min.css">
+    <link rel="stylesheet" href="./css/customer.css"> 
+</head>
+<div class="layout">
+
+    <!-- SIDEBAR GỌI TỪ header.php -->
+    <?php include ("header.php"); ?>
     <div class="container-fluid">
         <div class="row">
             <div class="col-12">

@@ -1,5 +1,4 @@
 <?php
-include("header.php");
 include("dbconn.php");
 
 if (isset($_POST["submit"])) {
@@ -14,7 +13,15 @@ if (isset($_POST["submit"])) {
     echo "<script>alert('Manufacturer Added'); window.location='list_manufacturer.php';</script>";
 }
 ?>
+<head>
+    <link rel="stylesheet" href="bootstrap.min.css">
+    <link rel="stylesheet" href="./css/add_manuf.css"> 
+</head>
 
+<div class="layout">
+
+    <!-- SIDEBAR GỌI TỪ header.php -->
+    <?php include ("header.php"); ?>
 <div class="container mt-4">
     <div class="card">
 
@@ -45,3 +52,8 @@ if (isset($_POST["submit"])) {
 
     </div>
 </div>
+</div>
+    <!-- KẾT THÚC CONTENT-AREA -->
+
+</div>
+<!-- KẾT THÚC LAYOUT -->

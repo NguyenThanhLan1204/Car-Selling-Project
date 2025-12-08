@@ -47,6 +47,14 @@ $total = 0;
 ?>
 
 <body>
+    <head>
+    <link rel="stylesheet" href="bootstrap.min.css">
+    <link rel="stylesheet" href="./css/order_de.css"> 
+</head>
+<div class="layout">
+
+    <!-- SIDEBAR GỌI TỪ header.php -->
+    <?php include ("header.php"); ?>
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
@@ -134,4 +142,9 @@ $total = 0;
         </div>
     </div>
 </div>
+</div>
+    <!-- KẾT THÚC CONTENT-AREA -->
+
+</div>
+<!-- KẾT THÚC LAYOUT -->
 </body>
