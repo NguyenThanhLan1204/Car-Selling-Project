@@ -18,7 +18,7 @@ session_start();
         <header class="header bg-main py-2">        
             <div class="header_top container-fluid position-relative d-flex align-items-center justify-content-around">
 
-                <h4 id="header_brand-slogen" class="text-decoration-none m-0 text-dark fw-bold fs-2">
+                <h4 id="header_brand-slogan" class="text-decoration-none m-0 text-dark fw-bold fs-2">
                     CHI LAN SHOWROOM
                 </h4>
                 
@@ -35,9 +35,11 @@ session_start();
                     </li>
 
                     <li class="user_menu-cart">
-                        <a href="?page=cart" class="">
-                            <i class="bx bx-cart fs-2 custom_hover"></i>
-                        </a>
+                        <?php if (isset($_SESSION['username'])): ?>
+                            <a href="?page=cart"><i class="bx bx-cart fs-2 custom_hover"></i></a>
+                        <?php else: ?>
+                            <a href="login.php"><i class="bx bx-cart fs-2 custom_hover"></i></a>
+                        <?php endif; ?>
                     </li>
 
                     <li class="user_menu-log menu-item position-relative">
@@ -55,13 +57,24 @@ session_start();
                         </ul>
                     </div>
                     <div class="dropdown-content" id="userDropdown">
-                        <h3 class="pt-2 pb-4 text-nowrap fw-bold">Xin chào Admin</h3>
-                        <ul class="list-unstyled">
-                            <li class="py-2"><a href="?page=user-profile" class="text-nowrap text-decoration-none custom_hover">Trang cá nhân</a></li>
-                            <li class="py-2"><a href="?page=order" class="text-nowrap text-decoration-none custom_hover">Đơn hàng</a></li>
-                            <li class="py-2"><a href="#" class="text-nowrap text-decoration-none custom_hover">Đăng Xuất</a></li>
-                        </ul>
-                    </div> 
+                        <?php if (isset($_SESSION['username'])): ?>
+                            <h3 class="pt-2 pb-4 text-nowrap fw-bold">Xin chào <?= $_SESSION['username'] ?></h3>
+                            <ul class="list-unstyled">
+                                <?php if ($_SESSION['role'] == 'admin'): ?>
+                                    <li class="py-2"><a href="./admin/header.php" class="text-nowrap text-decoration-none custom_hover">Trang Admin</a></li>
+                                <?php else: ?>
+                                    <li class="py-2"><a href="?page=user-profile" class="text-nowrap text-decoration-none custom_hover">Trang cá nhân</a></li>
+                                <?php endif; ?>
+                                <li class="py-2"><a href="?page=order" class="text-nowrap text-decoration-none custom_hover">Đơn hàng</a></li>
+                                <li class="py-2"><a href="logout.php" class="text-nowrap text-decoration-none custom_hover">Đăng Xuất</a></li>
+                            </ul>
+                        <?php else: ?>
+                            <ul class="list-unstyled">
+                                <li class="py-2"><a href="login.php" class="text-nowrap text-decoration-none custom_hover">Đăng nhập</a></li>
+                                <li class="py-2"><a href="registration.php" class="text-nowrap text-decoration-none custom_hover">Đăng ký</a></li>
+                            </ul>
+                        <?php endif; ?>
+                    </div>                
                 </div>               
             </div>           
         </header>
@@ -97,6 +110,8 @@ session_start();
                   include("./about.php");
                 } elseif ($page == 'user-profile') {
                   include("./user-profile.php");
+                } elseif ($page == 'information') {
+                  include("./information.php");
                 } else {
                   echo "<h2>Trang không tồn tại</h2>";
                 }

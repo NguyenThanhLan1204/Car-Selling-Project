@@ -1,15 +1,10 @@
 <?php
-
+session_start();
 require_once 'db.php';
 
-
-
 $cart_content = isset($_SESSION['cart']) ? $_SESSION['cart'] : [];
-
 $list_ids = array_keys($cart_content);
-
 $grand_total = 0;
-
 ?>
 
 

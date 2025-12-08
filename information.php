@@ -1,5 +1,8 @@
 <?php
-session_start();
+// Khởi tạo session an toàn (chỉ khi chưa có)
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 // Kết nối database
 require_once 'db.php';
 
@@ -31,27 +34,6 @@ if (isset($_GET['id'])) {
     exit();
 }
 ?>
-
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= $car['model'] ?> - Chi tiết xe</title>
-    
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="stylesheet" href="./assets/css/information.css">
-    
-    <style>
-        /* Fix nhanh CSS nếu file information.css chưa nhận */
-        .color-circle {
-            width: 30px; height: 30px; display: inline-block; border-radius: 50%; border: 1px solid #ccc; cursor: pointer;
-        }
-        .color-radio:checked + .color-circle { border: 2px solid #000; transform: scale(1.1); }
-        .color-radio { display: none; }
-    </style>
-</head>
 <body>
 
     <div class="container mt-5">
@@ -149,19 +131,26 @@ if (isset($_GET['id'])) {
                     </div>
 
                     <div class="d-flex gap-2">
-                        <?php if ($car['stock'] > 0): ?>
-                            <button type="submit" class="btn btn-dark flex-grow-1 py-3 fw-bold rounded-pill">
-                                <i class='bx bx-cart-add fs-4 align-middle'></i> Thêm vào giỏ
+                        <!-- NOTE: sửa chỗ thêm vào giỏ -->
+                        <?php if (isset($_SESSION['username'])): ?>
+                            <?php if ($car['stock'] > 0): ?>
+                                <button type="submit" class="btn btn-dark flex-grow-1 py-3 fw-bold rounded-pill">
+                                    <i class='bx bx-cart-add fs-4 align-middle'></i> Thêm vào giỏ
+                                </button>
+                            <?php else: ?>
+                                <button type="button" class="btn btn-secondary flex-grow-1 py-3 fw-bold rounded-pill" disabled>
+                                    Tạm hết hàng
+                                </button>
+                            <?php endif; ?>
+                            
+                            <button type="button" class="btn btn-outline-danger px-4 rounded-pill">
+                                <i class='bx bx-heart fs-4'></i>
                             </button>
                         <?php else: ?>
-                            <button type="button" class="btn btn-secondary flex-grow-1 py-3 fw-bold rounded-pill" disabled>
-                                Tạm hết hàng
-                            </button>
+                            <a href="login.php" class="btn btn-dark flex-grow-1 py-3 fw-bold rounded-pill">
+                                Đăng nhập để thêm vào giỏ
+                            </a>
                         <?php endif; ?>
-                        
-                        <button type="button" class="btn btn-outline-danger px-4 rounded-pill">
-                            <i class='bx bx-heart fs-4'></i>
-                        </button>
                     </div>
 
                 </form> 
