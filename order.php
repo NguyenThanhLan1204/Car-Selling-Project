@@ -22,6 +22,8 @@ if (!isset($_SESSION['customer_id'])) {
 
 $customer_id = $_SESSION['customer_id'];
 
+$statusFilter = isset($_GET['status']) ? intval($_GET['status']) : 0;
+
 // Lấy dữ liệu đơn hàng chi tiết
 $sql = "SELECT od.order_detail_id, od.order_id, od.amount, od.quantity, od.payment_method, od.status,
                o.created_at, v.model, v.image_url, m.name AS manufacturer
@@ -29,11 +31,20 @@ $sql = "SELECT od.order_detail_id, od.order_id, od.amount, od.quantity, od.payme
         JOIN orders o ON od.order_id = o.order_id
         JOIN vehicle v ON od.vehicle_id = v.vehicle_id
         JOIN manufacturer m ON v.manufacturer_id = m.manufacturer_id
-        WHERE od.customer_id = ?
-        ORDER BY o.created_at DESC";
+        WHERE od.customer_id = ?";
+
+if ($statusFilter > 0) {
+    $sql .= " AND od.status = ?";
+}
+
+$sql .= " ORDER BY o.created_at DESC";
 
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $customer_id);
+if ($statusFilter > 0) {
+    $stmt->bind_param("ii", $customer_id, $statusFilter);
+} else {
+    $stmt->bind_param("i", $customer_id);
+}
 $stmt->execute();
 $result = $stmt->get_result();
 ?>
@@ -46,20 +57,20 @@ $result = $stmt->get_result();
                 <h5 class="fw-bold mb-3">Bộ lọc Trạng thái</h5>
                 <div class="mb-3">
                     <label class="form-check mb-2">
-                        <input class="form-check-input" type="radio" name="shipping" checked>
-                        <a href="#" class="form-check-label text-decoration-none">Tất cả Đơn hàng</a>
+                        <input class="form-check-input" type="radio" name="shipping" <?php if($statusFilter==0) echo 'checked'; ?>>
+                        <a href="order.php" class="form-check-label text-decoration-none">Tất cả Đơn hàng</a>
                     </label>
                     <label class="form-check mb-2">
-                        <input class="form-check-input" type="radio" name="shipping">
-                        <a href="#" class="form-check-label text-decoration-none">Đang chờ xử lý</a>
+                        <input class="form-check-input" type="radio" name="shipping" <?php if($statusFilter==2) echo 'checked'; ?>>
+                        <a href="order.php?status=2" class="form-check-label text-decoration-none">Đang chờ xử lý</a>
                     </label>
                     <label class="form-check mb-2">
-                        <input class="form-check-input" type="radio" name="shipping">
-                        <a href="#" class="form-check-label text-decoration-none">Đang giao hàng</a>
+                        <input class="form-check-input" type="radio" name="shipping" <?php if($statusFilter==3) echo 'checked'; ?>>
+                        <a href="order.php?status=3" class="form-check-label text-decoration-none">Đang giao hàng</a>
                     </label>
                     <label class="form-check">
-                        <input class="form-check-input" type="radio" name="shipping">
-                        <a href="#" class="form-check-label text-decoration-none">Đã hoàn thành</a>
+                        <input class="form-check-input" type="radio" name="shipping" <?php if($statusFilter==4) echo 'checked'; ?>>
+                        <a href="order.php?status=4" class="form-check-label text-decoration-none">Đã hoàn thành</a>
                     </label>
                 </div>
                 
@@ -76,10 +87,9 @@ $result = $stmt->get_result();
                     $statusText = "";
                     $badgeClass = "";
                     switch ($row['status']) {
-                        case 1: $statusText = "Đang chờ xử lý"; $badgeClass = "bg-secondary"; break;
-                        case 2: $statusText = "Đang giao hàng"; $badgeClass = "bg-warning text-dark"; break;
-                        case 4: $statusText = "Đã hoàn thành"; $badgeClass = "bg-success"; break;
-                        case 5: $statusText = "Đã hủy"; $badgeClass = "bg-danger"; break;
+                        case 2: $statusText = "Đang chờ xử lý"; $badgeClass = "bg-secondary"; break;
+                        case 3: $statusText = "Đang giao hàng"; $badgeClass = "bg-warning text-dark"; break;
+                        case 4: $statusText = "Đã thanh toán"; $badgeClass = "bg-success"; break;
                         default: $statusText = "Không xác định"; $badgeClass = "bg-dark"; break;
                     }
 
