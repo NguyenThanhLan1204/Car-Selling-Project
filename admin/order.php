@@ -2,7 +2,6 @@
 include("header.php");
 include("dbconn.php");
 
-
 // =========================================
 // XỬ LÝ UPDATE STATUS ĐƠN HÀNG
 // =========================================
@@ -23,13 +22,10 @@ if (isset($_GET['order']) && isset($_GET['order_id'])) {
     exit();
 }
 
-
-
 // =========================================
 // LẤY FILTER STATUS (type)
 // =========================================
 $type = isset($_GET['type']) ? (int)$_GET['type'] : -1;
-
 
 // =========================================
 // LẤY DANH SÁCH ORDER (KHÔNG DÙNG HÀM)
@@ -90,6 +86,7 @@ $orders = mysqli_query($link, $sql);
                                     <th>Customer</th>
                                     <th>Vehicle</th>
                                     <th>Address</th>
+                                    <th>Phone</th>              <!-- CỘT MỚI -->
                                     <th class="text-center">Status</th>
                                     <th class="text-center">Order time</th>
                                 </tr>
@@ -114,8 +111,13 @@ $orders = mysqli_query($link, $sql);
                                         Quantity: <?= $order['quantity'] ?>
                                     </td>
 
+                                    <!-- Chỉ còn địa chỉ -->
                                     <td>
-                                        <?= $order['address'] ?><br>
+                                        <?= $order['address'] ?>
+                                    </td>
+
+                                    <!-- Cột số điện thoại mới -->
+                                    <td>
                                         <small><?= $order['phone_number'] ?></small>
                                     </td>
 
