@@ -5,10 +5,11 @@ include("dbconn.php");
     <link rel="stylesheet" href="bootstrap.min.css">
     <link rel="stylesheet" href="./css/list_vers.css"> 
 </head>
+
 <div class="layout">
 
-    <!-- SIDEBAR GỌI TỪ header.php -->
-    <?php include ("header.php"); ?>
+<?php include("header.php"); ?>
+
 <div class="container mt-4">
 
     <div class="card">
@@ -24,6 +25,7 @@ include("dbconn.php");
                     <tr>
                         <th>ID</th>
                         <th>Model</th>
+                        <th>Category</th>
                         <th>Manufacturer</th>
                         <th>Image</th>
                         <th>Year</th>
@@ -39,7 +41,8 @@ include("dbconn.php");
                 $sql = "
                     SELECT v.*, m.name AS manufacturer_name
                     FROM vehicle v
-                    LEFT JOIN manufacturer m ON v.manufacturer_id = m.manufacturer_id
+                    LEFT JOIN manufacturer m 
+                        ON v.manufacturer_id = m.manufacturer_id
                 ";
                 $vehicles = mysqli_query($link, $sql);
 
@@ -49,6 +52,7 @@ include("dbconn.php");
                     <tr>
                         <td><?= $item["vehicle_id"]; ?></td>
                         <td><?= $item["model"]; ?></td>
+                        <td><?= $item["category"]; ?></td>
                         <td><?= $item["manufacturer_name"]; ?></td>
 
                         <td>
@@ -68,13 +72,13 @@ include("dbconn.php");
                             <a href="delete_vehicle.php?id=<?= $item['vehicle_id']; ?>" 
                                class="btn btn-danger btn-sm"
                                onclick="return confirm('Delete this vehicle?');">
-                               Delete
+                                Delete
                             </a>
                         </td>
                     </tr>
 
                 <?php } } else { ?>
-                    <tr><td colspan="9">No Vehicles Found</td></tr>
+                    <tr><td colspan="10">No Vehicles Found</td></tr>
                 <?php } ?>
                 </tbody>
 
@@ -84,7 +88,3 @@ include("dbconn.php");
 
 </div>
 </div>
-    <!-- KẾT THÚC CONTENT-AREA -->
-
-</div>
-<!-- KẾT THÚC LAYOUT -->
