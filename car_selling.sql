@@ -98,9 +98,28 @@ INSERT INTO customer (name, age, phone_number, email, dob, username, password, r
 ('Lanlitdo', 35, '0901239876', 'trumcho@gmail.com', '1989-07-27', 'lan', 'lan123', 'user');
 
 -- 4. Tạo Orders
-INSERT INTO `order` (customer_id, vehicle_id, amount, payment_method, status, payment_date) VALUES
-(2, 1, 458000000, 'Cash', 'Completed', '2024-01-15 10:30:00'),          
-(3, 3, 665000000, 'Bank Transfer', 'Processing', '2024-02-20 14:15:00'),   
-(4, 2, 559000000, 'Credit Card', 'Completed', '2024-03-05 09:00:00'),      
-(2, 5, 1090000000, 'Bank Transfer', 'Pending', '2024-04-10 16:45:00'),     
-(5, 4, 1050000000, 'Cash', 'Cancelled', '2024-05-01 11:20:00');   
+INSERT INTO orders (customer_id, status, created_at) VALUES
+(2, 4, '2024-01-15 10:30:00'),   -- Completed
+(3, 2, '2024-02-20 14:15:00'),   -- Booked
+(4, 4, '2024-03-05 09:00:00'),   -- Completed
+(2, 2, '2024-04-10 16:45:00'),   -- Booked
+(5, 1, '2024-05-01 11:20:00');   -- Cancelled / Pending / your rule
+
+-- 5. Tạo Order Detail phù hợp bảng order_detail
+INSERT INTO order_detail 
+(customer_id, vehicle_id, order_id, amount, quantity, payment_method, status) 
+VALUES
+-- Order #1 của customer 2
+(2, 1, 1, 458000000, 1, 'Cash', 4),
+
+-- Order #2 của customer 3
+(3, 3, 2, 665000000, 1, 'Bank Transfer', 2),
+
+-- Order #3 của customer 4
+(4, 2, 3, 559000000, 1, 'Credit Card', 4),
+
+-- Order #4 của customer 2
+(2, 5, 4, 1090000000, 1, 'Bank Transfer', 2),
+
+-- Order #5 của customer 5
+(5, 4, 5, 1050000000, 1, 'Cash', 5);
