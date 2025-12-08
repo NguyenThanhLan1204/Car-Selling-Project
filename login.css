@@ -1,0 +1,87 @@
+body, html {
+    height: 100%;
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.login-wrapper {
+    background-image: url('https://images6.alphacoders.com/121/thumb-1920-1214058.png'); 
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100vh;
+    width: 100%;
+}
+
+.login-card {
+    background: rgba(255, 255, 255, 0.55); 
+    
+    backdrop-filter: blur(15px); 
+    -webkit-backdrop-filter: blur(15px);
+    
+    border-radius: 30px; 
+    
+    padding: 40px 35px;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37); 
+    border: 1px solid rgba(255, 255, 255, 0.18); 
+}
+
+.login-card h2 {
+    color: #1a237e; 
+    font-weight: 700;
+    font-size: 2.5rem; 
+}
+
+.form-label {
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 5px;
+    font-size: 1rem;
+}
+
+.custom-input {
+    background: transparent; 
+    border: 1px solid #888; 
+    border-radius: 12px; 
+    padding: 12px 15px;
+    color: #000;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.custom-input:focus {
+    background: rgba(255, 255, 255, 0.3);
+    border-color: #0d6efd; /* Đổi màu viền khi focus */
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.15);
+}
+
+.custom-btn {
+    background-color: #0066ff; 
+    border: none;
+    border-radius: 12px; 
+    padding: 12px 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-top: 15px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1); 
+}
+
+.custom-btn:hover {
+    background-color: #0052cc;
+    transform: translateY(-1px); 
+}
+
+.registration-link p {
+    color: #333;
+    font-size: 0.95rem;
+}
+
+.registration-link a {
+    text-decoration: none;
+    color: #0066ff;
+    font-weight: 600;
+}
+
+.registration-link a:hover {
+    text-decoration: underline;
+}
