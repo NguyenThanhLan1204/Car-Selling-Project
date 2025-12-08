@@ -7,14 +7,12 @@
     width: 100%;
 }
 
-/* Khu vực content (bên phải sidebar) */
 .container-fluid {
-    margin-left: 260px;  /* rộng sidebar */
+    margin-left: 260px;
     padding: 25px;
     max-width: calc(100% - 260px);
 }
 
-/* Sidebar cố định không co lại */
 .sidebar {
     flex-shrink: 0;
 }
@@ -33,48 +31,89 @@
 
 .card-header {
     display: flex;
-    flex-direction: column; /* giờ tiêu đề + badge thành 2 dòng */
-    align-items: flex-start; /* căn trái */
-    gap: 10px; /* khoảng cách giữa tiêu đề và badge */
-    padding: 15px 20px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+    padding: 18px 20px;
     background: #85b4e8;
     color: #fff;
-    border-top-left-radius: 12px;
-    border-top-right-radius: 12px;
 }
 
 .card-header h6 {
     margin: 0;
     font-weight: 700;
-    font-size: 20px;
+    font-size: 22px;
 }
 
 /* ===============================
-   FILTER BADGES
+   🔥 FILTER BADGES – NEW STYLE
 ================================= */
 
-.card-header .badge {
+/* FILTER AREA */
+.filter-group {
+    display: flex;
+    gap: 12px;
+    margin-top: 18px;     /* kéo xuống dưới */
+    margin-bottom: 18px;  /* đẩy xa header bảng xuống */
+    padding-left: 12px;   /* căn lệch theo tiêu đề */
+}
+
+.filter-btn {
+    padding: 7px 22px;
+    border-radius: 25px;
+    font-size: 13px;         /* chữ nhỏ lại */
+    font-weight: 600;
     cursor: pointer;
-    padding: 6px 14px;
-    font-size: 14px;
-    font-weight: 500;
-    border-radius: 12px;
+    border: none;
+    color: #fff;
     text-decoration: none;
-    transition: 0.25s;
-    margin-left: 8px;
+    transition: 0.25s ease;
+    display: inline-block;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.15);
 }
 
-.card-header .badge:hover {
-    opacity: 0.8;
+.filter-btn:hover {
+    transform: translateY(-2px);
+    opacity: 0.92;
 }
 
-.badge.bg-primary { background: #007bff; }
-.badge.bg-info    { background: #17a2b8; }
-.badge.bg-success { background: #28a745; }
-.badge.bg-secondary { background: #6c757d; }
+.filter-btn.active {
+    box-shadow: 0 4px 14px rgba(0,0,0,0.25);
+    transform: translateY(-2px);
+}
+
+/* COLORS */
+.filter-btn.all {
+    background: #4a4a4a;
+}
+
+.filter-btn.booked {
+    background: #d61a63;
+}
+
+.filter-btn.delivered {
+    background: #2a78ff;
+}
+
+.filter-btn.success {
+    background: #32a84d;
+}
+
+
+/* Hover */
+.filter-btn:hover {
+    transform: translateY(-2px);
+    opacity: 0.9;
+}
+
+/* Khi đang chọn */
+.filter-btn.active {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.28);
+    transform: translateY(-2px);
+}
 
 /* ===============================
-   TABLE STYLING
+   TABLE
 ================================= */
 
 .table {
@@ -112,7 +151,6 @@
     text-align: center;
 }
 
-/* Link xem chi tiết */
 .table a {
     color: #4a90e2;
     text-decoration: none;
@@ -121,13 +159,6 @@
 
 .table a:hover {
     text-decoration: underline;
-}
-
-/* Khi không có dữ liệu */
-.table td[colspan] {
-    padding: 20px;
-    font-size: 16px;
-    color: #777;
 }
 
 /* ===============================
@@ -180,7 +211,6 @@
         max-width: 100%;
     }
 
-    /* Table chuyển sang dạng list card trên mobile */
     .table thead {
         display: none;
     }
