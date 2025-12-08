@@ -58,7 +58,7 @@ CREATE TABLE order_detail (
   CONSTRAINT fk_orderdetail_customer FOREIGN KEY (customer_id) REFERENCES customer(customer_id),
   CONSTRAINT fk_orderdetail_vehicle FOREIGN KEY (vehicle_id) REFERENCES vehicle(vehicle_id),
   CONSTRAINT fk_orderdetail_orders FOREIGN KEY (order_id) REFERENCES orders(order_id)
-)
+);
 
 -- 1.Tạo Manufacturers
 INSERT INTO manufacturer (name, country, description) VALUES
