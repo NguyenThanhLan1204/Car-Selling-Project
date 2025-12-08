@@ -110,7 +110,7 @@ $total = 0;
                         <?php while ($item = mysqli_fetch_assoc($details)) { ?>
                             <tr>
                                 <td>
-                                    <img src="../images/<?= $item['image_url'] ?>" width="60"><br>
+                                    <img src="..assets/images/<?= $item['image_url'] ?>" width="60"><br>
                                     <?= $item['model'] ?>
                                 </td>
 
