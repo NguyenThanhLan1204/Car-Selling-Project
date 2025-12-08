@@ -62,32 +62,43 @@ CREATE TABLE order_detail (
 
 -- 1.Tạo Manufacturers
 INSERT INTO manufacturer (name, country, description) VALUES
-('Toyota', 'Japan', 'Reliable and durable automotive brand from Japan.'),
-('Honda', 'Japan', 'Famous for sporty design and powerful engines.'),
-('Ford', 'USA', 'American brand specializing in pickup trucks and SUVs.'),
-('Hyundai', 'South Korea', 'Korean manufacturer known for modern design and technology.'),
-('VinFast', 'Vietnam', 'Vietnamese smart electric vehicle manufacturer.'),
-('Ferrari', 'Italy', 'Famous Italian sports car manufacturer.'),          
-('BMW', 'Germany', 'German luxury vehicle brand.'),                      
-('Lamborghini', 'Italy', 'Iconic Italian brand known for luxury supercars.'), 
-('Mercedes-Benz', 'Germany', 'One of the leading luxury car brands in the world.'), 
-('Kia', 'South Korea', 'South Korean manufacturer, popular for city cars.'), 
-('Mazda', 'Japan', 'Japanese automaker known for Kodo design language.');
+('Mercedes-Benz', 'Germany', 'Luxury vehicles, vans, trucks, buses, coaches and ambulances.'), 
+('BMW', 'Germany', 'German multinational manufacturer of luxury vehicles and motorcycles.'),  
+('Toyota', 'Japan', 'Japanese multinational automotive manufacturer.'),                        
+('Ferrari', 'Italy', 'Italian luxury sports car manufacturer based in Maranello.'),              
+('Audi', 'Germany', 'German automotive manufacturer of luxury vehicles.');
 
 -- 2. Tạo Vehicles
 INSERT INTO vehicle (manufacturer_id, model, year, price, image_url, stock, description) VALUES
-(1, 'Toyota Vios', 2024, 458000000, './assets/img/vios.jpg', 20, 'The national sedan, fuel-efficient and highly durable.'),
-(2, 'Honda City', 2024, 559000000, './assets/img/city.jpg', 15, 'Sporty sedan with the best driving sensation in its class.'),
-(3, 'Ford Ranger', 2023, 665000000, './assets/img/ranger.jpg', 10, 'King of pickup trucks, powerful off-road capabilities.'),
-(4, 'Hyundai SantaFe', 2024, 1050000000, './assets/img/santafe.jpg', 8, 'Spacious 7-seater SUV, packed with modern technology.'),
-(5, 'VinFast VF8', 2024, 1090000000, './assets/img/vf8.jpg', 12, 'Luxury electric SUV with sophisticated Italian design.'),
-(6, 'Ferrari SF90 Stradale', 2024, 34000000000, './assets/img/sf90.jpg', 2, '1000hp Plug-in Hybrid supercar, 0-100km/h in 2.5 seconds.'),
-(7, 'BMW i7 xDrive60', 2024, 7200000000, './assets/img/bmw_i7.jpg', 5, 'Flagship electric luxury sedan with high-tech interior.'),
-(8, 'Lamborghini Huracán Tecnica', 2023, 19000000000, './assets/img/huracan.jpg', 3, 'V10 naturally aspirated supercar with aerodynamic design.'),
-(9, 'Mercedes-Maybach S680', 2024, 17000000000, './assets/img/maybach.jpg', 4, 'The pinnacle of luxury sedans, featuring a smooth V12 engine.'),
-(9, 'Mercedes-AMG G63', 2024, 11800000000, './assets/img/g63.jpg', 6, 'The off-road king, iconic boxy design with powerful performance.'),
-(10, 'Kia Morning Premium', 2024, 429000000, './assets/img/morning.jpg', 25, 'Compact urban hatchback, fuel-efficient and flexible.'),
-(11, 'Mazda 2 Sport', 2024, 550000000, './assets/img/mazda2.jpg', 18, 'Stylish hatchback with the best sporty driving feel in its class.');
+-- --- 1. SEDAN 
+(1, 'Mercedes-Maybach S680', 2024, 17000000000, './assets/img/maybach.jpg', 3, 'The absolute pinnacle of luxury sedans, V12 engine.'), 
+(3, 'Toyota Camry 2.5Q', 2024, 1405000000, './assets/img/camry.jpg', 10, 'Business sedan, spacious and reliable.'),
+(2, 'BMW 740i Pure Excellence', 2024, 6599000000, './assets/img/740i.jpg', 5, 'Flagship luxury sedan with theater screen.'),
+
+-- --- 2. HATCHBACK 
+(3, 'Toyota Yaris', 2024, 684000000, './assets/img/yaris.jpg', 15, 'Compact hatchback, easy to drive in city.'),
+(1, 'Mercedes A-Class', 2024, 2400000000, './assets/img/aclass.jpg', 8, 'Luxury compact hatchback with modern tech.'),
+(2, 'BMW 118i SportLine', 2024, 1800000000, './assets/img/bmw118i.jpg', 6, 'Sporty hatchback, driving pleasure.'),
+
+-- --- 3. SUV 
+(5, 'Audi Q7 45 TFSI', 2024, 3770000000, './assets/img/audi_q7.jpg', 5, 'Versatile 7-seater SUV, quattro technology.'), 
+(1, 'Mercedes-AMG G63', 2024, 11750000000, './assets/img/g63.jpg', 2, 'The off-road king, iconic boxy design.'),
+(2, 'BMW X7 xDrive40i', 2024, 6299000000, './assets/img/x7.jpg', 4, 'The President, 7-seater luxury SUV.'),
+
+-- --- 4. MPV 
+(3, 'Toyota Alphard', 2024, 4370000000, './assets/img/alphard.jpg', 3, 'Luxury MPV, business class on wheels.'),
+(1, 'Mercedes V-Class V250', 2024, 3039000000, './assets/img/v250.jpg', 5, 'Premium MPV for family and business.'),
+(3, 'Toyota Innova Cross', 2024, 990000000, './assets/img/innova.jpg', 12, 'Popular MPV, hybrid option available.'),
+
+-- --- 5. PICKUP 
+(3, 'Toyota Hilux Adventure', 2024, 1077000000, './assets/img/hilux.jpg', 8, 'Tough and durable pickup truck.'),
+(3, 'Toyota Hilux E', 2024, 850000000, './assets/img/hilux_e.jpg', 10, 'Standard pickup for work.'),
+
+-- --- 6. SUPERCAR 
+(4, 'Ferrari SF90 Stradale', 2024, 34000000000, './assets/img/sf90.jpg', 1, '1000HP Hybrid Supercar, 0-100km/h in 2.5s.'), 
+(4, 'Ferrari 296 GTB', 2024, 23000000000, './assets/img/296gtb.jpg', 2, 'V6 Hybrid, defining fun to drive.'), 
+(4, 'Ferrari 296 Speciale A', 2024, 29000000000, './assets/img/296speciale.jpg', 1, 'Open-top special edition, pure emotion.'), 
+(5, 'Audi RS e-tron GT', 2024, 5900000000, './assets/img/audi_rs.jpg', 3, 'Electric high-performance grand tourer.'); 
 
 -- 3. Tạo Customers 
 INSERT INTO customer (name, age, phone_number, email, dob, username, password, role, address) VALUES
