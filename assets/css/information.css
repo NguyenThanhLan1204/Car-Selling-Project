@@ -105,24 +105,22 @@ body {
 
 /* --- PHẦN QUAN TRỌNG ĐÃ SỬA --- */
 .color-circle {
-    /* Thêm !important để bắt buộc trình duyệt phải nhận kích thước này */
-    width: 35px; 
-    height: 35px; 
-    
+    width: 30px; 
+    height: 30px; 
+    display: inline-block; 
     border-radius: 50%; 
+    border: 1px solid #ccc; 
     cursor: pointer;
-    border: 1px solid #ddd; 
-    transition: transform 0.2s;
-    
-    /* Đảm bảo hiển thị dạng khối để nhận kích thước */
-    display: inline-block;
-    box-sizing: border-box;
 }
 /* ------------------------------- */
 
 .color-radio:checked + .color-circle { 
-    transform: scale(1.15); 
     border: 2px solid #000; 
+    transform: scale(1.1);
+}
+
+.color-radio { 
+    display: none; 
 }
 
 .specs-grid { 

@@ -41,7 +41,7 @@
                                 </ul>
                                 <div class="mt-auto">
                                     <p class="fw-bold text-danger mb-2">458,000,000 VND</p>
-                                    <a href="information.php?id=1" class="btn btn-primary w-100 btn-sm">Order Now</a>
+                                    <a href="base.php?page=information&id=1" class="btn btn-primary w-100 btn-sm">Order Now</a>
                                 </div>
                             </div>
                         </div>
@@ -58,7 +58,7 @@
                                 </ul>
                                 <div class="mt-auto">
                                     <p class="fw-bold text-danger mb-2">559,000,000 VND</p>
-                                    <a href="information.php?id=2" class="btn btn-primary w-100 btn-sm">Order Now</a>
+                                    <a href="base.php?page=information&id=2" class="btn btn-primary w-100 btn-sm">Order Now</a>
                                 </div>
                             </div>
                         </div>
@@ -75,7 +75,7 @@
                                 </ul>
                                 <div class="mt-auto">
                                     <p class="fw-bold text-danger mb-2">7,200,000,000 VND</p>
-                                    <a href="information.php?id=7" class="btn btn-primary w-100 btn-sm">Order Now</a>
+                                    <a href="base.php?page=information&id=7" class="btn btn-primary w-100 btn-sm">Order Now</a>
                                 </div>
                             </div>
                         </div>
@@ -92,7 +92,7 @@
                                 </ul>
                                 <div class="mt-auto">
                                     <p class="fw-bold text-danger mb-2">17,000,000,000 VND</p>
-                                    <a href="information.php?id=9" class="btn btn-primary w-100 btn-sm">Order Now</a>
+                                    <a href="base.php?page=information&id=9" class="btn btn-primary w-100 btn-sm">Order Now</a>
                                 </div>
                             </div>
                         </div>
@@ -109,7 +109,7 @@
                                 <h5 class="card-title fw-bold">Kia Morning Premium</h5>
                                 <div class="mt-auto">
                                     <p class="fw-bold text-danger fs-5 mb-2">429,000,000 VND</p>
-                                    <a href="information.php?id=11" class="btn btn-primary w-100">Order Now</a>
+                                    <a href="base.php?page=information&id=11" class="btn btn-primary w-100">Order Now</a>
                                 </div>
                             </div>
                         </div>
@@ -121,7 +121,7 @@
                                 <h5 class="card-title fw-bold">Mazda 2 Sport</h5>
                                 <div class="mt-auto">
                                     <p class="fw-bold text-danger fs-5 mb-2">550,000,000 VND</p>
-                                    <a href="information.php?id=12" class="btn btn-primary w-100">Order Now</a>
+                                    <a href="base.php?page=information&id=12" class="btn btn-primary w-100">Order Now</a>
                                 </div>
                             </div>
                         </div>
@@ -138,7 +138,7 @@
                                 <h5 class="card-title fw-bold">Hyundai SantaFe</h5>
                                 <div class="mt-auto">
                                     <p class="fw-bold text-danger fs-5 mb-2">1,050,000,000 VND</p>
-                                    <a href="information.php?id=4" class="btn btn-primary w-100">Order Now</a>
+                                    <a href="base.php?page=information&id=4" class="btn btn-primary w-100">Order Now</a>
                                 </div>
                             </div>
                         </div>
@@ -150,7 +150,7 @@
                                 <h5 class="card-title fw-bold">VinFast VF8</h5>
                                 <div class="mt-auto">
                                     <p class="fw-bold text-danger fs-5 mb-2">1,090,000,000 VND</p>
-                                    <a href="information.php?id=5" class="btn btn-primary w-100">Order Now</a>
+                                    <a href="base.php?page=information&id=5" class="btn btn-primary w-100">Order Now</a>
                                 </div>
                             </div>
                         </div>
@@ -162,7 +162,7 @@
                                 <h5 class="card-title fw-bold">Mercedes-AMG G63</h5>
                                 <div class="mt-auto">
                                     <p class="fw-bold text-danger fs-5 mb-2">11,800,000,000 VND</p>
-                                    <a href="information.php?id=10" class="btn btn-primary w-100">Order Now</a>
+                                    <a href="base.php?page=information&id=10" class="btn btn-primary w-100">Order Now</a>
                                 </div>
                             </div>
                         </div>
@@ -183,7 +183,7 @@
                                 <h5 class="card-title fw-bold">Ford Ranger</h5>
                                 <div class="mt-auto">
                                     <p class="fw-bold text-danger fs-5 mb-2">665,000,000 VND</p>
-                                    <a href="information.php?id=3" class="btn btn-primary w-100">Order Now</a>
+                                    <a href="base.php?page=information&id=3" class="btn btn-primary w-100">Order Now</a>
                                 </div>
                             </div>
                         </div>
@@ -200,7 +200,7 @@
                                 <h5 class="card-title fw-bold">Ferrari SF90</h5>
                                 <div class="mt-auto">
                                     <p class="fw-bold text-danger fs-5 mb-2">34,000,000,000 VND</p>
-                                    <a href="information.php?id=6" class="btn btn-primary w-100">Order Now</a>
+                                    <a href="base.php?page=information&id=6" class="btn btn-primary w-100">Order Now</a>
                                 </div>
                             </div>
                         </div>
@@ -212,7 +212,7 @@
                                 <h5 class="card-title fw-bold">Lamborghini Huracan</h5>
                                 <div class="mt-auto">
                                     <p class="fw-bold text-danger fs-5 mb-2">19,000,000,000 VND</p>
-                                    <a href="information.php?id=8" class="btn btn-primary w-100">Order Now</a>
+                                    <a href="base.php?page=information&id=8" class="btn btn-primary w-100">Order Now</a>
                                 </div>
                             </div>
                         </div>

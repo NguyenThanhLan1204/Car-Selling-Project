@@ -4,12 +4,12 @@
   <form class="mx-auto" style="max-width: 600px;">
     <div class="mb-3">
       <label for="name" class="form-label">Họ và tên</label>
-      <input type="text" class="form-control" id="name" placeholder="chokhai">
+      <input type="text" class="form-control" id="name" placeholder="">
     </div>
 
     <div class="mb-3">
       <label for="email" class="form-label">Email</label>
-      <input type="email" class="form-control" id="email" placeholder="khaicho@gmail.com">
+      <input type="email" class="form-control" id="email" placeholder="">
     </div>
 
     <div class="mb-3">
