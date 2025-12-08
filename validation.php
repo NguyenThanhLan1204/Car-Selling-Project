@@ -1,39 +1,39 @@
 <?php
 session_start();
 
-$con = mysqli_connect('localhost', 'root', '', 'user_car_system');
+// 1. Gọi file kết nối database
+// Lệnh này bắt buộc phải có file db.php thì mới chạy được
+require_once 'db.php'; 
 
-if (!$con) {
-    die("Connection failed: " . mysqli_connect_error());
-}
+// 2. Lấy dữ liệu từ form login
+if (isset($_POST['user']) && isset($_POST['password'])) {
+    $username = $_POST['user'];
+    $password = $_POST['password'];
 
-$name = mysqli_real_escape_string($con, $_POST['user']);
-$pass = mysqli_real_escape_string($con, $_POST['password']);
+    // 3. Xử lý chuỗi để tránh lỗi SQL Injection
+    // Nếu $conn chưa được định nghĩa ở bước 1, dòng này sẽ báo lỗi như bạn gặp
+    $username = mysqli_real_escape_string($conn, $username);
+    $password = mysqli_real_escape_string($conn, $password);
 
-// Kiểm tra username và password
-$s = "SELECT * FROM users WHERE username='$name' AND password='$pass'";
-$result = mysqli_query($con, $s);
+    // 4. Kiểm tra trong bảng customer
+    $sql = "SELECT * FROM customer WHERE username = '$username' AND password = '$password'";
+    $result = $conn->query($sql);
 
-if ($result) {
-    if (mysqli_num_rows($result) == 1) {
-        $row = mysqli_fetch_assoc($result);
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        $_SESSION['username'] = $username;
+        $_SESSION['customer_id'] = $row['customer_id'];
+        $_SESSION['role'] = $row['role']; // Lưu quyền admin/user
 
-        // ✅ Lưu thêm user_id để dùng ở home.php
-        $_SESSION['username'] = $row['username'];
-        $_SESSION['user_id'] = $row['id'];
-
-        header('Location: home.php');
-        exit();
+        // Đăng nhập thành công -> Về trang chủ
+        // SỬA: Chuyển hướng về base.php thay vì home.php
+    header('Location: base.php?page=home');
     } else {
-        echo "<script>
-                alert('Invalid username or password! Please try again.');
-                window.location.href = 'login.php';
-              </script>";
-        exit();
+        // Sai mật khẩu -> Quay lại login
+        header('Location: login.php?error=1');
     }
 } else {
-    echo "SQL Error: " . mysqli_error($con);
+    // Nếu truy cập trực tiếp file này mà không qua form login
+    header('Location: login.php');
 }
-
-mysqli_close($con);
 ?>

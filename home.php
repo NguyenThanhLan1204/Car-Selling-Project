@@ -3,24 +3,14 @@
         <div class="text-content position-relative">
             <div class="slide">           
                 <div class="img">
-                    <img 
-                    src="./assets/img/101-anh-sieu-xe-4k-tai-free-lam-hinh-nen-dt-may-tinh.jpg" 
-                    alt=""
-                    class="d-block w-75 mx-auto p-3"
-                    >
+                    <img src="./assets/img/101-anh-sieu-xe-4k-tai-free-lam-hinh-nen-dt-may-tinh.jpg" alt="" class="d-block w-75 mx-auto p-3">
                 </div>
                 <div class="info-content position-absolute start-50 translate-middle-x text-center text-white z-1">
                     <h2 class="text-heading">Car World</h2>
                     <div class="text-description">Find your dream car at the best price today</div>
                 </div>
             </div>
-            <button class="slide-control btn btn-dark bg-opacity-50 border-0 position-absolute top-50 start-0 translate-middle-y z-2 ms-2 p-2">
-                <i class="bx bxs-chevron-left text-white fs-3"></i>
-            </button>
-            <button class="slide-control btn btn-dark bg-opacity-50 border-0 position-absolute top-50 end-0 translate-middle-y z-2 me-2 p-2">
-                <i class="bx bxs-chevron-right text-white fs-3"></i>
-            </button>
-        </div>
+            </div>
     </div>
 
     <div class="container py-5">
@@ -48,12 +38,10 @@
                                 <ul class="list-unstyled mb-3 small flex-grow-1">
                                     <li><strong>Brand:</strong> Toyota (Japan)</li>
                                     <li><strong>Engine:</strong> 1.5L Petrol</li>
-                                    <li><strong>Seats:</strong> 5 Seats</li>
-                                    <li><strong>Description:</strong> National sedan, durable.</li>
                                 </ul>
                                 <div class="mt-auto">
                                     <p class="fw-bold text-danger mb-2">458,000,000 VND</p>
-                                    <button class="btn btn-primary w-100 btn-sm">Order Now</button>
+                                    <a href="information.php?id=1" class="btn btn-primary w-100 btn-sm">Order Now</a>
                                 </div>
                             </div>
                         </div>
@@ -67,12 +55,10 @@
                                 <ul class="list-unstyled mb-3 small flex-grow-1">
                                     <li><strong>Brand:</strong> Honda (Japan)</li>
                                     <li><strong>Engine:</strong> 1.5L DOHC</li>
-                                    <li><strong>Seats:</strong> 5 Seats</li>
-                                    <li><strong>Description:</strong> Sporty, best driving feel.</li>
                                 </ul>
                                 <div class="mt-auto">
                                     <p class="fw-bold text-danger mb-2">559,000,000 VND</p>
-                                    <button class="btn btn-primary w-100 btn-sm">Order Now</button>
+                                    <a href="information.php?id=2" class="btn btn-primary w-100 btn-sm">Order Now</a>
                                 </div>
                             </div>
                         </div>
@@ -86,12 +72,10 @@
                                 <ul class="list-unstyled mb-3 small flex-grow-1">
                                     <li><strong>Brand:</strong> BMW (Germany)</li>
                                     <li><strong>Engine:</strong> Electric Motor</li>
-                                    <li><strong>Seats:</strong> 5 Seats</li>
-                                    <li><strong>Description:</strong> Flagship luxury EV.</li>
                                 </ul>
                                 <div class="mt-auto">
                                     <p class="fw-bold text-danger mb-2">7,200,000,000 VND</p>
-                                    <button class="btn btn-primary w-100 btn-sm">Order Now</button>
+                                    <a href="information.php?id=7" class="btn btn-primary w-100 btn-sm">Order Now</a>
                                 </div>
                             </div>
                         </div>
@@ -105,124 +89,84 @@
                                 <ul class="list-unstyled mb-3 small flex-grow-1">
                                     <li><strong>Brand:</strong> Mercedes (Ger)</li>
                                     <li><strong>Engine:</strong> V12 Twin-Turbo</li>
-                                    <li><strong>Seats:</strong> 4 Seats (VIP)</li>
-                                    <li><strong>Description:</strong> The ultimate luxury.</li>
                                 </ul>
                                 <div class="mt-auto">
                                     <p class="fw-bold text-danger mb-2">17,000,000,000 VND</p>
-                                    <button class="btn btn-primary w-100 btn-sm">Order Now</button>
+                                    <a href="information.php?id=9" class="btn btn-primary w-100 btn-sm">Order Now</a>
                                 </div>
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
 
             <div class="tab-pane fade" id="hatchback" role="tabpanel">
                 <div class="row g-4 justify-content-center">
-                    
                     <div class="col-md-4">
                         <div class="card h-100 shadow-sm">
                             <img src="./assets/img/morning.jpg" class="card-img-top" alt="Kia Morning" style="height: 220px; object-fit: cover;">
                             <div class="card-body d-flex flex-column">
                                 <h5 class="card-title fw-bold">Kia Morning Premium</h5>
-                                <ul class="list-unstyled mb-3 flex-grow-1">
-                                    <li><strong>Brand:</strong> Kia (Korea)</li>
-                                    <li><strong>Engine:</strong> 1.25L Kappa</li>
-                                    <li><strong>Seats:</strong> 5 Seats</li>
-                                    <li><strong>Description:</strong> Compact city car.</li>
-                                </ul>
                                 <div class="mt-auto">
                                     <p class="fw-bold text-danger fs-5 mb-2">429,000,000 VND</p>
-                                    <button class="btn btn-primary w-100">Order Now</button>
+                                    <a href="information.php?id=11" class="btn btn-primary w-100">Order Now</a>
                                 </div>
                             </div>
                         </div>
                     </div>
-
                     <div class="col-md-4">
                         <div class="card h-100 shadow-sm">
-                            <img src="./assets/img/mazda2.jpg" class="card-img-top" alt="Mazda 2 Sport" style="height: 220px; object-fit: cover;">
+                            <img src="./assets/img/mazda2.jpg" class="card-img-top" alt="Mazda 2" style="height: 220px; object-fit: cover;">
                             <div class="card-body d-flex flex-column">
                                 <h5 class="card-title fw-bold">Mazda 2 Sport</h5>
-                                <ul class="list-unstyled mb-3 flex-grow-1">
-                                    <li><strong>Brand:</strong> Mazda (Japan)</li>
-                                    <li><strong>Engine:</strong> 1.5L SkyActiv</li>
-                                    <li><strong>Seats:</strong> 5 Seats</li>
-                                    <li><strong>Description:</strong> Stylish & Sporty.</li>
-                                </ul>
                                 <div class="mt-auto">
                                     <p class="fw-bold text-danger fs-5 mb-2">550,000,000 VND</p>
-                                    <button class="btn btn-primary w-100">Order Now</button>
+                                    <a href="information.php?id=12" class="btn btn-primary w-100">Order Now</a>
                                 </div>
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
 
             <div class="tab-pane fade" id="suv" role="tabpanel">
                 <div class="row g-4 justify-content-center">
-                    
                     <div class="col-md-4">
                         <div class="card h-100 shadow-sm">
                             <img src="./assets/img/santafe.jpg" class="card-img-top" alt="Hyundai SantaFe" style="height: 220px; object-fit: cover;">
                             <div class="card-body d-flex flex-column">
                                 <h5 class="card-title fw-bold">Hyundai SantaFe</h5>
-                                <ul class="list-unstyled mb-3 flex-grow-1">
-                                    <li><strong>Brand:</strong> Hyundai (Korea)</li>
-                                    <li><strong>Engine:</strong> 2.5L SmartStream</li>
-                                    <li><strong>Seats:</strong> 7 Seats</li>
-                                    <li><strong>Description:</strong> Spacious & Modern.</li>
-                                </ul>
                                 <div class="mt-auto">
                                     <p class="fw-bold text-danger fs-5 mb-2">1,050,000,000 VND</p>
-                                    <button class="btn btn-primary w-100">Order Now</button>
+                                    <a href="information.php?id=4" class="btn btn-primary w-100">Order Now</a>
                                 </div>
                             </div>
                         </div>
                     </div>
-
                     <div class="col-md-4">
                         <div class="card h-100 shadow-sm">
                             <img src="./assets/img/vf8.jpg" class="card-img-top" alt="VinFast VF8" style="height: 220px; object-fit: cover;">
                             <div class="card-body d-flex flex-column">
                                 <h5 class="card-title fw-bold">VinFast VF8</h5>
-                                <ul class="list-unstyled mb-3 flex-grow-1">
-                                    <li><strong>Brand:</strong> VinFast (Vietnam)</li>
-                                    <li><strong>Engine:</strong> Dual Motor (402HP)</li>
-                                    <li><strong>Seats:</strong> 5 Seats</li>
-                                    <li><strong>Description:</strong> Luxury Electric SUV.</li>
-                                </ul>
                                 <div class="mt-auto">
                                     <p class="fw-bold text-danger fs-5 mb-2">1,090,000,000 VND</p>
-                                    <button class="btn btn-primary w-100">Order Now</button>
+                                    <a href="information.php?id=5" class="btn btn-primary w-100">Order Now</a>
                                 </div>
                             </div>
                         </div>
                     </div>
-
                     <div class="col-md-4">
                         <div class="card h-100 shadow-sm">
                             <img src="./assets/img/g63.jpg" class="card-img-top" alt="Mercedes G63" style="height: 220px; object-fit: cover;">
                             <div class="card-body d-flex flex-column">
                                 <h5 class="card-title fw-bold">Mercedes-AMG G63</h5>
-                                <ul class="list-unstyled mb-3 flex-grow-1">
-                                    <li><strong>Brand:</strong> Mercedes (Ger)</li>
-                                    <li><strong>Engine:</strong> V8 Biturbo</li>
-                                    <li><strong>Seats:</strong> 5 Seats</li>
-                                    <li><strong>Description:</strong> The Off-road King.</li>
-                                </ul>
                                 <div class="mt-auto">
                                     <p class="fw-bold text-danger fs-5 mb-2">11,800,000,000 VND</p>
-                                    <button class="btn btn-primary w-100">Order Now</button>
+                                    <a href="information.php?id=10" class="btn btn-primary w-100">Order Now</a>
                                 </div>
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
 
@@ -237,15 +181,9 @@
                             <img src="./assets/img/ranger.jpg" class="card-img-top" alt="Ford Ranger" style="height: 220px; object-fit: cover;">
                             <div class="card-body d-flex flex-column">
                                 <h5 class="card-title fw-bold">Ford Ranger</h5>
-                                <ul class="list-unstyled mb-3 flex-grow-1">
-                                    <li><strong>Brand:</strong> Ford (USA)</li>
-                                    <li><strong>Engine:</strong> 2.0L Bi-Turbo</li>
-                                    <li><strong>Seats:</strong> 5 Seats</li>
-                                    <li><strong>Description:</strong> King of Pickups.</li>
-                                </ul>
                                 <div class="mt-auto">
                                     <p class="fw-bold text-danger fs-5 mb-2">665,000,000 VND</p>
-                                    <button class="btn btn-primary w-100">Order Now</button>
+                                    <a href="information.php?id=3" class="btn btn-primary w-100">Order Now</a>
                                 </div>
                             </div>
                         </div>
@@ -255,52 +193,33 @@
 
             <div class="tab-pane fade" id="supercar" role="tabpanel">
                 <div class="row g-4 justify-content-center">
-                    
                     <div class="col-md-4">
                         <div class="card h-100 shadow-sm">
                             <img src="./assets/img/sf90.jpg" class="card-img-top" alt="Ferrari SF90" style="height: 220px; object-fit: cover;">
                             <div class="card-body d-flex flex-column">
                                 <h5 class="card-title fw-bold">Ferrari SF90</h5>
-                                <ul class="list-unstyled mb-3 flex-grow-1">
-                                    <li><strong>Brand:</strong> Ferrari (Italy)</li>
-                                    <li><strong>Engine:</strong> V8 Hybrid (1000HP)</li>
-                                    <li><strong>0-100km/h:</strong> 2.5 seconds</li>
-                                    <li><strong>Description:</strong> Ultimate Hybrid Supercar.</li>
-                                </ul>
                                 <div class="mt-auto">
                                     <p class="fw-bold text-danger fs-5 mb-2">34,000,000,000 VND</p>
-                                    <button class="btn btn-primary w-100">Order Now</button>
+                                    <a href="information.php?id=6" class="btn btn-primary w-100">Order Now</a>
                                 </div>
                             </div>
                         </div>
                     </div>
-
                     <div class="col-md-4">
                         <div class="card h-100 shadow-sm">
                             <img src="./assets/img/huracan.jpg" class="card-img-top" alt="Lamborghini Huracan" style="height: 220px; object-fit: cover;">
                             <div class="card-body d-flex flex-column">
                                 <h5 class="card-title fw-bold">Lamborghini Huracan</h5>
-                                <ul class="list-unstyled mb-3 flex-grow-1">
-                                    <li><strong>Brand:</strong> Lamborghini (Italy)</li>
-                                    <li><strong>Engine:</strong> V10 Naturally Asp.</li>
-                                    <li><strong>Design:</strong> Aerodynamic</li>
-                                    <li><strong>Description:</strong> Pure driving emotion.</li>
-                                </ul>
                                 <div class="mt-auto">
                                     <p class="fw-bold text-danger fs-5 mb-2">19,000,000,000 VND</p>
-                                    <button class="btn btn-primary w-100">Order Now</button>
+                                    <a href="information.php?id=8" class="btn btn-primary w-100">Order Now</a>
                                 </div>
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
 
         </div>
-    </div>
-
-    <div class="container">
-        <h2 class="text-center fw-bold mb-5">Best Selling Cars</h2>
     </div>
 </body>

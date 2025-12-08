@@ -1,178 +1,182 @@
 <?php
-// ==========================================
-// PHẦN 1: KẾT NỐI DATABASE (Nằm chung ở đây)
-// ==========================================
-$servername = "localhost";
-$username   = "root";
-$password   = "";             // Mật khẩu XAMPP mặc định thường để trống
-$dbname     = "car_showroom"; // TÊN DATABASE CỦA BẠN (Kiểm tra kỹ cái này!)
+session_start();
+// Kết nối database
+require_once 'db.php';
 
-// Tạo kết nối
-$conn = new mysqli($servername, $username, $password, $dbname);
+// Kiểm tra tham số ID trên URL
+if (isset($_GET['id'])) {
+    $id = intval($_GET['id']);
 
-// Kiểm tra kết nối
-if ($conn->connect_error) {
-    die("Kết nối thất bại: " . $conn->connect_error);
-}
+    // Truy vấn thông tin xe + hãng sản xuất
+    $sql = "SELECT v.*, m.name AS manufacturer_name, m.country 
+            FROM vehicle v 
+            JOIN manufacturer m ON v.manufacturer_id = m.manufacturer_id 
+            WHERE v.vehicle_id = $id";
+            
+    $result = $conn->query($sql);
 
-// ==========================================
-// PHẦN 2: LẤY DỮ LIỆU TỪ 3 BẢNG
-// ==========================================
-
-// Lấy ID xe từ thanh địa chỉ (ví dụ: information.php?id=1)
-// Nếu không có ID thì mặc định là 0
-$id = isset($_GET['id']) ? intval($_GET['id']) : 0;
-
-// Câu lệnh SQL "thần thánh" nối 3 bảng dựa trên sơ đồ bạn gửi
-$sql = "SELECT 
-            v.vehicle_id, 
-            v.sale_price, 
-            v.quantity, 
-            v.color,
-            vm.name AS model_name, 
-            vm.trim, 
-            vm.body_type, 
-            vm.year, 
-            vm.base_price,
-            -- Lưu ý: Bạn cần chắc chắn bảng vehicle_model có cột 'image' và 'description'
-            -- Nếu chưa có thì vào phpMyAdmin thêm vào nhé, hoặc sửa tên cột dưới đây cho đúng
-            vm.image,  
-            vm.description,
-            m.name AS brand_name, 
-            m.country
-        FROM vehicle v
-        JOIN vehicle_model vm ON v.model_id = vm.model_id
-        JOIN manufacturer m ON vm.manufacturer_id = m.manufacturer_id
-        WHERE v.vehicle_id = $id";
-
-$result = $conn->query($sql);
-
-// Kiểm tra xem có tìm thấy xe không
-if ($result && $result->num_rows > 0) {
-    $row = $result->fetch_assoc();
+    if ($result->num_rows > 0) {
+        $car = $result->fetch_assoc();
+    } else {
+        // Không tìm thấy xe
+        echo "<div class='container py-5 text-center'>
+                <h2>Không tìm thấy xe yêu cầu!</h2>
+                <a href='index.php' class='btn btn-primary mt-3'>Về trang chủ</a>
+              </div>";
+        exit();
+    }
 } else {
-    // Nếu không tìm thấy xe, gán giá trị rỗng hoặc báo lỗi nhẹ
-    // Để tránh web bị trắng trang, mình sẽ tạo dữ liệu giả để bạn test giao diện
-    $row = [
-        'brand_name' => 'Không tìm thấy',
-        'model_name' => 'Sản phẩm',
-        'trim' => '',
-        'sale_price' => 0,
-        'base_price' => 0,
-        'quantity' => 0,
-        'color' => 'N/A',
-        'year' => 'N/A',
-        'body_type' => 'N/A',
-        'country' => 'N/A',
-        'image' => 'default.png', // Ảnh mặc định
-        'description' => 'Không tìm thấy dữ liệu xe này trong Database.'
-    ];
+    // Không có ID -> Về trang chủ
+    header("Location: index.php");
+    exit();
 }
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo $row['brand_name'] . ' ' . $row['model_name']; ?> - Chi tiết</title>
+    <title><?= $car['model'] ?> - Chi tiết xe</title>
     
-    <link rel="stylesheet" href="information.css"> 
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="./assets/css/information.css">
     
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Fix nhanh CSS nếu file information.css chưa nhận */
+        .color-circle {
+            width: 30px; height: 30px; display: inline-block; border-radius: 50%; border: 1px solid #ccc; cursor: pointer;
+        }
+        .color-radio:checked + .color-circle { border: 2px solid #000; transform: scale(1.1); }
+        .color-radio { display: none; }
+    </style>
 </head>
 <body>
 
-    <div class="product-wrapper">
-        
-        <div class="col-img">
-            <div class="main-image-container">
-                <img src="img/<?php echo $row['image']; ?>" alt="Car Image" onerror="this.src='img/default.png'">
-            </div>
-        </div>
-
-        <div class="col-info">
-            <div class="brand-header">
-                <span><?php echo $row['brand_name']; ?> Official</span>
-                
-                <?php if($row['quantity'] > 0): ?>
-                    <span style="background:#e8f5e9; color:#2e7d32; padding:4px 12px; border-radius:20px; font-size:12px;">Available</span>
-                <?php else: ?>
-                    <span style="background:#ffebee; color:#c62828; padding:4px 12px; border-radius:20px; font-size:12px;">Out of Stock</span>
-                <?php endif; ?>
+    <div class="container mt-5">
+        <div class="product-wrapper row bg-white rounded shadow-sm p-4">
+            
+            <div class="col-12 mb-3">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="base.php?page=home" class="text-decoration-none">Trang chủ</a></li>
+                        <li class="breadcrumb-item active" aria-current="page"><?= $car['manufacturer_name'] ?></li>
+                        <li class="breadcrumb-item active" aria-current="page"><?= $car['model'] ?></li>
+                    </ol>
+                </nav>
             </div>
 
-            <h1 class="product-title">
-                <?php echo $row['brand_name'] . ' ' . $row['model_name']; ?> 
-                <span style="font-weight:300; color:#888; font-size: 0.8em;"><?php echo $row['trim']; ?></span>
-            </h1>
-
-            <div class="review-stars">
-                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
-                <span style="color:#888; margin-left:5px;">(New Arrival)</span>
-            </div>
-
-            <div class="product-price">
-                $<?php echo number_format($row['sale_price']); ?>
-                
-                <?php if($row['base_price'] > $row['sale_price']): ?>
-                    <span style="font-size:18px; color:#aaa; text-decoration:line-through; font-weight:400; margin-left:10px;">
-                        $<?php echo number_format($row['base_price']); ?>
-                    </span>
-                <?php endif; ?>
-            </div>
-
-            <span class="color-label">Selected Color: <strong><?php echo $row['color']; ?></strong></span>
-            <div class="color-options">
-                <label>
-                    <input type="radio" name="color" class="color-radio" checked>
-                    <div class="color-circle" style="background-color: #333;"></div>
-                </label>
-            </div>
-
-            <div class="specs-grid">
-                <div class="spec-box">
-                    <span>Year</span>
-                    <strong><?php echo $row['year']; ?></strong>
-                </div>
-                <div class="spec-box">
-                    <span>Body Type</span>
-                    <strong><?php echo $row['body_type']; ?></strong>
-                </div>
-                <div class="spec-box">
-                    <span>Origin</span>
-                    <strong><?php echo $row['country']; ?></strong>
+            <div class="col-md-7 mb-4">
+                <div class="main-image-container d-flex align-items-center justify-content-center bg-light rounded" style="min-height: 400px;">
+                    <img src="<?= !empty($car['image_url']) ? $car['image_url'] : 'https://via.placeholder.com/600x400' ?>" 
+                         class="img-fluid rounded shadow-sm"
+                         alt="<?= $car['model'] ?>"
+                         style="max-height: 400px;">
                 </div>
             </div>
 
-            <p style="font-size: 13px; color: #666; margin-bottom: 25px;">
-                <i class="fas fa-box-open"></i> Stock Quantity: <strong><?php echo $row['quantity']; ?> vehicles</strong>
-            </p>
+            <div class="col-md-5">
+                <form action="cart_add.php" method="POST">
+                    
+                    <input type="hidden" name="vehicle_id" value="<?= $car['vehicle_id'] ?>">
 
-            <div class="action-buttons">
-                <button class="btn-black">
-                    <i class="fas fa-shopping-cart"></i> Add to Cart
-                </button>
-                <button class="btn-wishlist">
-                    <i class="far fa-heart"></i>
-                </button>
+                    <div class="brand-header d-flex justify-content-between align-items-center mb-2">
+                        <span class="text-muted"><i class='bx bxs-check-circle text-primary'></i> <?= $car['manufacturer_name'] ?> Chính hãng</span>
+                        <?php if ($car['stock'] > 0): ?>
+                            <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-3">Còn hàng</span>
+                        <?php else: ?>
+                            <span class="badge bg-danger bg-opacity-10 text-danger rounded-pill px-3">Hết hàng</span>
+                        <?php endif; ?>
+                    </div>
+
+                    <h2 class="fw-bold mb-3"><?= $car['model'] ?></h2>
+
+                    <div class="mb-3">
+                        <i class='bx bxs-star text-warning'></i>
+                        <i class='bx bxs-star text-warning'></i>
+                        <i class='bx bxs-star text-warning'></i>
+                        <i class='bx bxs-star text-warning'></i>
+                        <i class='bx bxs-star-half text-warning'></i>
+                        <small class="text-muted">(Đánh giá khách hàng)</small>
+                    </div>
+
+                    <h3 class="text-danger fw-bold mb-4">
+                        $<?= number_format($car['price'], 0, ',', '.') ?>
+                    </h3>
+
+                    <div class="mb-4">
+                        <label class="fw-bold mb-2">Màu sắc: <span id="color-name" class="fw-normal">Tiêu chuẩn</span></label>
+                        <div class="d-flex gap-3">
+                            <label>
+                                <input type="radio" name="color" value="Trắng" class="color-radio" checked onclick="document.getElementById('color-name').innerText='Trắng'">
+                                <span class="color-circle shadow-sm" style="background-color: #fff;" title="Trắng"></span>
+                            </label>
+                            <label>
+                                <input type="radio" name="color" value="Đen" class="color-radio" onclick="document.getElementById('color-name').innerText='Đen'">
+                                <span class="color-circle shadow-sm" style="background-color: #000;" title="Đen"></span>
+                            </label>
+                            <label>
+                                <input type="radio" name="color" value="Đỏ" class="color-radio" onclick="document.getElementById('color-name').innerText='Đỏ'">
+                                <span class="color-circle shadow-sm" style="background-color: #d63031;" title="Đỏ"></span>
+                            </label>
+                            <label>
+                                <input type="radio" name="color" value="Xanh" class="color-radio" onclick="document.getElementById('color-name').innerText='Xanh'">
+                                <span class="color-circle shadow-sm" style="background-color: #0984e3;" title="Xanh"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="row mb-4 text-center">
+                        <div class="col-4">
+                            <div class="border rounded p-2">
+                                <small class="text-muted d-block">Năm SX</small>
+                                <strong><?= $car['year'] ?></strong>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="border rounded p-2">
+                                <small class="text-muted d-block">Xuất xứ</small>
+                                <strong><?= $car['country'] ?></strong>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="border rounded p-2">
+                                <small class="text-muted d-block">Kho</small>
+                                <strong><?= $car['stock'] ?></strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <?php if ($car['stock'] > 0): ?>
+                            <button type="submit" class="btn btn-dark flex-grow-1 py-3 fw-bold rounded-pill">
+                                <i class='bx bx-cart-add fs-4 align-middle'></i> Thêm vào giỏ
+                            </button>
+                        <?php else: ?>
+                            <button type="button" class="btn btn-secondary flex-grow-1 py-3 fw-bold rounded-pill" disabled>
+                                Tạm hết hàng
+                            </button>
+                        <?php endif; ?>
+                        
+                        <button type="button" class="btn btn-outline-danger px-4 rounded-pill">
+                            <i class='bx bx-heart fs-4'></i>
+                        </button>
+                    </div>
+
+                </form> 
+                </div>
+
+            <div class="col-12 mt-5 pt-4 border-top">
+                <h4 class="fw-bold mb-3">Mô tả sản phẩm</h4>
+                <div class="text-secondary" style="line-height: 1.8; white-space: pre-line;">
+                    <?= $car['description'] ? $car['description'] : "Đang cập nhật mô tả..." ?>
+                </div>
             </div>
+
         </div>
     </div>
 
-    <div style="max-width: 1200px; margin: 0 auto; padding: 0 40px;">
-        <h3>Description</h3>
-        <p style="color:#666; line-height:1.6;">
-            <?php 
-                // Nếu có mô tả thì hiện, không thì hiện chữ mặc định
-                if (!empty($row['description'])) {
-                    echo $row['description']; 
-                } else {
-                    echo "No description available for this vehicle.";
-                }
-            ?>
-        </p>
-    </div>
-
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
