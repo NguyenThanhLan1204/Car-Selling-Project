@@ -36,12 +36,64 @@
                             <div class="card-body d-flex flex-column">
                                 <h5 class="card-title fw-bold">Mercedes-Maybach S680</h5>
                                 <ul class="list-unstyled mb-3 small flex-grow-1">
-                                    <li><strong>Brand:</strong> Mercedes-Benz</li>
+                                    <li><strong>Brand:</strong> Toyota (Japan)</li>
+                                    <li><strong>Engine:</strong> 1.5L Petrol</li>
+                                </ul>
+                                <div class="mt-auto">
+                                    <p class="fw-bold text-danger mb-2">458,000,000 VND</p>
+                                    <a href="information.php?id=1" class="btn btn-primary w-100 btn-sm">Order Now</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="card h-100 shadow-sm">
+                            <img src="./assets/img/city.jpg" class="card-img-top" alt="Honda City" style="height: 200px; object-fit: cover;">
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title fw-bold">Honda City</h5>
+                                <ul class="list-unstyled mb-3 small flex-grow-1">
+                                    <li><strong>Brand:</strong> Honda (Japan)</li>
+                                    <li><strong>Engine:</strong> 1.5L DOHC</li>
+                                </ul>
+                                <div class="mt-auto">
+                                    <p class="fw-bold text-danger mb-2">559,000,000 VND</p>
+                                    <a href="information.php?id=2" class="btn btn-primary w-100 btn-sm">Order Now</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="card h-100 shadow-sm">
+                            <img src="./assets/img/bmw_i7.jpg" class="card-img-top" alt="BMW i7" style="height: 200px; object-fit: cover;">
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title fw-bold">BMW i7 xDrive60</h5>
+                                <ul class="list-unstyled mb-3 small flex-grow-1">
+                                    <li><strong>Brand:</strong> BMW (Germany)</li>
+                                    <li><strong>Engine:</strong> Electric Motor</li>
+                                </ul>
+                                <div class="mt-auto">
+                                    <p class="fw-bold text-danger mb-2">7,200,000,000 VND</p>
+                                    <a href="information.php?id=7" class="btn btn-primary w-100 btn-sm">Order Now</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="card h-100 shadow-sm">
+                            <img src="./assets/img/maybach.jpg" class="card-img-top" alt="Maybach S680" style="height: 200px; object-fit: cover;">
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title fw-bold">Maybach S680</h5>
+                                <ul class="list-unstyled mb-3 small flex-grow-1">
+                                    <li><strong>Brand:</strong> Mercedes (Ger)</li>
                                     <li><strong>Engine:</strong> V12 Twin-Turbo</li>
                                 </ul>
                                 <div class="mt-auto">
                                     <p class="fw-bold text-danger mb-2">17,000,000,000 VND</p>
                                     <a href="information.php?id=1" class="btn btn-primary w-100 btn-sm">Order Now</a>
+
                                 </div>
                             </div>
                         </div>
@@ -95,6 +147,7 @@
                                 <div class="mt-auto">
                                     <p class="fw-bold text-danger fs-5 mb-2">684,000,000 VND</p>
                                     <a href="information.php?id=4" class="btn btn-primary w-100">Order Now</a>
+
                                 </div>
                             </div>
                         </div>
@@ -106,6 +159,7 @@
                             <div class="card-body d-flex flex-column">
                                 <h5 class="card-title fw-bold">Mercedes A-Class</h5>
                                 <div class="mt-auto">
+
                                     <p class="fw-bold text-danger fs-5 mb-2">2,400,000,000 VND</p>
                                     <a href="information.php?id=5" class="btn btn-primary w-100">Order Now</a>
                                 </div>
@@ -131,6 +185,7 @@
                                 <div class="mt-auto">
                                     <p class="fw-bold text-danger fs-5 mb-2">3,770,000,000 VND</p>
                                     <a href="information.php?id=7" class="btn btn-primary w-100">Order Now</a>
+
                                 </div>
                             </div>
                         </div>
@@ -187,6 +242,7 @@
                                 <div class="mt-auto">
                                     <p class="fw-bold text-danger fs-5 mb-2">3,039,000,000 VND</p>
                                     <a href="information.php?id=11" class="btn btn-primary w-100">Order Now</a>
+
                                 </div>
                             </div>
                         </div>
@@ -204,6 +260,7 @@
                                 <div class="mt-auto">
                                     <p class="fw-bold text-danger fs-5 mb-2">1,077,000,000 VND</p>
                                     <a href="information.php?id=13" class="btn btn-primary w-100">Order Now</a>
+
                                 </div>
                             </div>
                         </div>
@@ -222,6 +279,7 @@
                                 <div class="mt-auto">
                                     <p class="fw-bold text-danger mb-2">34,000,000,000 VND</p>
                                     <a href="information.php?id=15" class="btn btn-primary w-100 btn-sm">Order Now</a>
+
                                 </div>
                             </div>
                         </div>
@@ -235,6 +293,7 @@
                                 <div class="mt-auto">
                                     <p class="fw-bold text-danger mb-2">23,000,000,000 VND</p>
                                     <a href="information.php?id=16" class="btn btn-primary w-100 btn-sm">Order Now</a>
+
                                 </div>
                             </div>
                         </div>

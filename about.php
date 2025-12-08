@@ -1,6 +1,6 @@
 <div class="container py-5">
   <!-- Tiêu đề -->
-  <h2 class="text-center fw-bold mb-5">CHI LAN SHOWROOM</h2>
+  <h2 class="text-center fw-bold mb-5">EM RỂ TK KHẢI</h2>
 
   <div class="row g-4">
     <!-- Cột trái: Về chúng tôi -->
