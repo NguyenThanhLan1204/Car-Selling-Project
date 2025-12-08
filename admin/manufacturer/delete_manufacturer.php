@@ -1,5 +1,5 @@
 <?php
-include("../config/dbcon.php");
+include("dbconn.php");
 
 $id = $_GET["id"];
 

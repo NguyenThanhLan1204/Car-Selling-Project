@@ -1,5 +1,5 @@
 <?php
-include "dbconnect.php";
+include "dbconn.php";
 $users= getAll("users");
 $users = getAllUsers(1);
 ?>

@@ -1,6 +1,6 @@
 <?php
-include("../admin/includes/header.php");
-include("../config/dbcon.php");
+include("header.php");
+include("dbconn.php");
 
 if (isset($_POST["submit"])) {
     $manufacturer_id = $_POST["manufacturer_id"];
