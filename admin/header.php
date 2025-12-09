@@ -62,6 +62,7 @@ $page = basename($_SERVER['PHP_SELF']);
     <!-- Footer -->
     <div class="sidenav-footer text-center">
         <a class="btn bg-gradient-primary text-white w-75" href="../logout.php">Logout</a>
+        <a class="btn bg-gradient-secondary text-white w-75 mt-2" href="../base.php">Home</a>
     </div>
 
 </aside>
