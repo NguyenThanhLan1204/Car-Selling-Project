@@ -69,7 +69,7 @@ if ($result->num_rows > 0) {
                     echo '      </ul>';
                     echo '      <div class="mt-auto">';
                     echo '        <p class="fw-bold text-danger fs-5 mb-2">'.number_format($car['price'],0,',','.').' $</p>';
-                    echo '        <a href="base.php?page=information&id='.$car['vehicle_id'].'" class="btn btn-primary w-100">Order Now</a>';
+                    echo '        <a href="base.php?page=information&id='.$car['vehicle_id'].'" class="btn btn-dark w-100">Order Now</a>';
                     echo '      </div>';
                     echo '    </div>';
                     echo '  </div>';
