@@ -62,8 +62,6 @@ session_start();
                             <ul class="list-unstyled">
                                 <?php if ($_SESSION['role'] == 'admin'): ?>
                                     <li class="py-2"><a href="./admin/index.php" class="text-nowrap text-decoration-none custom_hover">Admin Page</a></li>
-                                <?php else: ?>
-                                    <li class="py-2"><a href="?page=user-profile" class="text-nowrap text-decoration-none custom_hover">Profile Page</a></li>
                                 <?php endif; ?>
                                 <li class="py-2"><a href="?page=order" class="text-nowrap text-decoration-none custom_hover">My Orders</a></li>
                                 <li class="py-2"><a href="logout.php" class="text-nowrap text-decoration-none custom_hover">Logout</a></li>
@@ -104,8 +102,6 @@ session_start();
                   include("./order.php");
                 } elseif ($page == 'about') {
                   include("./about.php");
-                } elseif ($page == 'user-profile') {
-                  include("./user-profile.php");
                 } elseif ($page == 'information') {
                   include("./information.php");
                 } else {
