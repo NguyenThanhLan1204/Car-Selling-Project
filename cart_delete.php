@@ -12,5 +12,5 @@ if (isset($_GET['id'])) {
 }
 
 // 3. Quay trở lại trang giỏ hàng
-header("Location: cart.php");
+header("Location: base.php?page=cart");
 exit();
