@@ -1,5 +1,4 @@
 <?php
-include("header.php");
 include("dbconn.php");
 
 // Lấy order_id từ URL
@@ -46,105 +45,104 @@ $details = mysqli_query($link, $sqlDetail);
 $total = 0;
 ?>
 
-<body>
-    <head>
+<head>
     <link rel="stylesheet" href="bootstrap.min.css">
     <link rel="stylesheet" href="./css/order_de.css"> 
 </head>
+
+<body>
 <div class="layout">
 
-    <!-- SIDEBAR GỌI TỪ header.php -->
-    <?php include ("header.php"); ?>
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-12">
+    <!-- SIDEBAR -->
+    <?php include("header.php"); ?>
 
-            <div class="card my-4">
-                <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
-                    <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
-                        <h6 class="text-white text-capitalize ps-3">Order Detail</h6>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+
+                <div class="card my-4">
+                    <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                        <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
+                            <h6 class="text-white text-capitalize ps-3">Order Detail</h6>
+                        </div>
+                    </div>
+
+                    <div class="card-body px-4">
+
+                        <h5>Buyer Information</h5>
+                        Buyer Name: <?= $first['name'] ?><br>
+                        Phone: <?= $first['phone_number'] ?><br>
+                        Email: <?= $first['email'] ?><br>
+                        Address: <?= $first['address'] ?><br>
+
+                        <br>
+                        <strong>Status:</strong>
+                        <?php
+                            if ($first['status'] == 2)
+                                echo '<span class="badge bg-primary">Booked</span>';
+                            else if ($first['status'] == 3)
+                                echo '<span class="badge bg-info">Delivering</span>';
+                            else if ($first['status'] == 4)
+                                echo '<span class="badge bg-success">Success</span>';
+                        ?>
+
+                        <br><br><strong>Update to:</strong>
+                        <?php
+                            if ($first['status'] == 2)
+                                echo "<a href='order.php?order=3&order_id=$order_id' class='badge bg-info'>Delivering</a>";
+                            else if ($first['status'] == 3)
+                                echo "<a href='order.php?order=4&order_id=$order_id' class='badge bg-success'>Delivered</a>";
+                            else
+                                echo "<span class='badge bg-secondary'>Done</span>";
+                        ?>
+
+                        <hr>
+
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Vehicle</th>
+                                    <th>Info</th>
+                                    <th>Order time</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                            <?php while ($item = mysqli_fetch_assoc($details)) { ?>
+                                <tr>
+                                    <td>
+                                        <img src="../<?= $item['image_url'] ?>" width="60"><br>
+                                        <?= $item['model'] ?>
+                                    </td>
+
+                                    <td>
+                                        Price: $<?= number_format($item['amount']) ?><br>
+                                        Qty: <?= $item['quantity'] ?><br>
+                                        Total:
+                                        <?php
+                                            $tmp = $item['quantity'] * $item['amount'];
+                                            $total += $tmp;
+                                            echo "$" . number_format($tmp);
+                                        ?>
+                                    </td>
+
+                                    <td>
+                                        <?= date('d-m-Y', strtotime($item['created_at'])) ?>
+                                    </td>
+                                </tr>
+                            <?php } ?>
+
+                            </tbody>
+                        </table>
+
+                        <h3>Total: $<?= number_format($total) ?></h3>
+
                     </div>
                 </div>
 
-                <div class="card-body px-4">
-
-                    <h5>Buyer Information</h5>
-                    Buyer Name: <?= $first['name'] ?><br>
-                    Phone: <?= $first['phone_number'] ?><br>
-                    Email: <?= $first['email'] ?><br>
-                    Address: <?= $first['address'] ?><br>
-
-                    <br>
-                    <strong>Status:</strong>
-                    <?php
-                        if ($first['status'] == 2)
-                            echo '<span class="badge bg-primary">Booked</span>';
-                        else if ($first['status'] == 3)
-                            echo '<span class="badge bg-info">Delivering</span>';
-                        else if ($first['status'] == 4)
-                            echo '<span class="badge bg-success">Success</span>';
-                    ?>
-
-                    <br><br><strong>Update to:</strong>
-                    <?php
-                        if ($first['status'] == 2)
-                            echo "<a href='order.php?order=3&id=$order_id' class='badge bg-info'>Delivering</a>";
-                        else if ($first['status'] == 3)
-                            echo "<a href='order.php?order=4&id=$order_id' class='badge bg-success'>Delivered</a>";
-                        else
-                            echo "<span class='badge bg-secondary'>Done</span>";
-                    ?>
-
-                    <hr>
-
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th>Vehicle</th>
-                                <th>Info</th>
-                                <th>Order time</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-
-                        <?php while ($item = mysqli_fetch_assoc($details)) { ?>
-                            <tr>
-                                <td>
-                                    <img src="..assets/img/<?= $item['image_url'] ?>" width="60"><br>
-                                    <?= $item['model'] ?>
-                                </td>
-
-                                <td>
-                                    Price: $<?= number_format($item['amount']) ?><br>
-                                    Qty: <?= $item['quantity'] ?><br>
-                                    Total:
-                                    <?php
-                                        $tmp = $item['quantity'] * $item['amount'];
-                                        $total += $tmp;
-                                        echo "$" . number_format($tmp);
-                                    ?>
-                                </td>
-
-                                <td>
-                                    <?= date('d-m-Y', strtotime($item['created_at'])) ?>
-                                </td>
-                            </tr>
-                        <?php } ?>
-
-                        </tbody>
-                    </table>
-
-                    <h3>Total: $<?= number_format($total) ?></h3>
-
-                </div>
             </div>
-
         </div>
     </div>
-</div>
-</div>
-    <!-- KẾT THÚC CONTENT-AREA -->
 
 </div>
-<!-- KẾT THÚC LAYOUT -->
 </body>

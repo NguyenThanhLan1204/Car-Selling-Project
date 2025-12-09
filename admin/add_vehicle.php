@@ -2,6 +2,7 @@
 include("dbconn.php");
 
 if (isset($_POST["submit"])) {
+
     $manufacturer_id = $_POST["manufacturer_id"];
     $category = $_POST["category"];
     $model = $_POST["model"];
@@ -10,13 +11,28 @@ if (isset($_POST["submit"])) {
     $stock = $_POST["stock"];
     $description = $_POST["description"];
 
-    // File upload (simple)
+    /* ========================================
+       UPLOAD IMAGE: LƯU VÀO assets/img/
+    ========================================= */
     $image = $_FILES["image"]["name"];
-    $path = "../uploads/vehicles/" . $image;
-    move_uploaded_file($_FILES["image"]["tmp_name"], $path);
 
-    $sql = "INSERT INTO vehicle (manufacturer_id, model, category, year, price, stock, description, image_url)
-            VALUES ('$manufacturer_id', '$model', '$category', '$year', '$price', '$stock', '$description', '$path')";
+    // Thư mục ảnh nằm ngoài admin -> ../assets/img/
+    $target_dir = "../assets/img/";
+    $target_file = $target_dir . basename($image);
+
+    // Di chuyển file upload
+    move_uploaded_file($_FILES["image"]["tmp_name"], $target_file);
+
+    // Đường link lưu vào DB (KHÔNG có dấu ../)
+    $db_image_path = "assets/img/" . $image;
+
+    /* ========================================
+       INSERT VÀO DATABASE
+    ========================================= */
+    $sql = "INSERT INTO vehicle 
+            (manufacturer_id, model, category, year, price, stock, description, image_url)
+            VALUES 
+            ('$manufacturer_id', '$model', '$category', '$year', '$price', '$stock', '$description', '$db_image_path')";
 
     mysqli_query($link, $sql);
 
@@ -30,61 +46,60 @@ if (isset($_POST["submit"])) {
 
 <div class="layout">
 
-    <!-- SIDEBAR GỌI TỪ header.php -->
+    <!-- SIDEBAR -->
     <?php include ("header.php"); ?>
-<div class="container mt-4">
-    <div class="card">
-        <div class="card-header">
-            <h4>Add Vehicle</h4>
+
+    <div class="container mt-4">
+
+        <div class="card">
+            <div class="card-header">
+                <h4>Add Vehicle</h4>
+            </div>
+
+            <div class="card-body">
+
+                <form method="POST" enctype="multipart/form-data">
+
+                    <label>Manufacturer</label>
+                    <select name="manufacturer_id" class="form-control" required>
+                        <option>Select Manufacturer</option>
+                        <?php 
+                            $manu = mysqli_query($link, "SELECT * FROM manufacturer");
+                            foreach ($manu as $m) {
+                                echo "<option value='{$m['manufacturer_id']}'>{$m['name']}</option>";
+                            }
+                        ?>
+                    </select>
+
+                    <label>Model</label>
+                    <input type="text" name="model" class="form-control" required>
+
+                    <label>Category</label>
+                    <input type="text" name="category" class="form-control" required>
+
+                    <label>Year</label>
+                    <input type="number" name="year" class="form-control" required>
+
+                    <label>Price</label>
+                    <input type="number" name="price" class="form-control" required>
+
+                    <label>Stock</label>
+                    <input type="number" name="stock" class="form-control">
+
+                    <label>Description</label>
+                    <textarea name="description" class="form-control"></textarea>
+
+                    <label>Image</label>
+                    <input type="file" name="image" class="form-control" required>
+
+                    <button type="submit" name="submit" class="btn btn-success mt-3">
+                        Save Vehicle
+                    </button>
+
+                </form>
+
+            </div>
         </div>
 
-        <div class="card-body">
-
-            <form method="POST" enctype="multipart/form-data">
-                
-                <label>Manufacturer</label>
-                <select name="manufacturer_id" class="form-control" required>
-                    <option>Select Manufacturer</option>
-                    <?php 
-                        $manu = mysqli_query($link, "SELECT * FROM manufacturer");
-                        foreach ($manu as $m) {
-                            echo "<option value='{$m['manufacturer_id']}'>{$m['name']}</option>";
-                        }
-                    ?>
-                </select>
-
-                <label>Model</label>
-                <input type="text" name="model" class="form-control" required>
-
-                <label>Category</label>
-                <input type="text" name="category" class="form-control" required>
-
-                <label>Year</label>
-                <input type="number" name="year" class="form-control" required>
-
-                <label>Price</label>
-                <input type="number" name="price" class="form-control" required>
-
-                <label>Stock</label>
-                <input type="number" name="stock" class="form-control">
-
-                <label>Description</label>
-                <textarea name="description" class="form-control"></textarea>
-
-                <label>Image</label>
-                <input type="file" name="image" class="form-control" required>
-
-                <button type="submit" name="submit" class="btn btn-success mt-3">
-                    Save Vehicle
-                </button>
-
-            </form>
-
-        </div>
     </div>
 </div>
-</div>
-    <!-- KẾT THÚC CONTENT-AREA -->
-
-</div>
-<!-- KẾT THÚC LAYOUT -->
