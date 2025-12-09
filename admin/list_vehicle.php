@@ -15,7 +15,7 @@ include("dbconn.php");
     <div class="card">
         <div class="card-header d-flex justify-content-between">
             <h4>Vehicle List</h4>
-            <a href="add_vehicle.php" class="btn btn-success">+ Add Vehicle</a>
+            <button class="btn btn-success" onclick="window.location.href='add_vehicle.php'">+ Add Vehicle</button>
         </div>
 
         <div class="card-body">
@@ -25,7 +25,6 @@ include("dbconn.php");
                     <tr>
                         <th>ID</th>
                         <th>Model</th>
-                        <th>Category</th>
                         <th>Manufacturer</th>
                         <th>Image</th>
                         <th>Year</th>
@@ -52,7 +51,6 @@ include("dbconn.php");
                     <tr>
                         <td><?= $item["vehicle_id"]; ?></td>
                         <td><?= $item["model"]; ?></td>
-                        <td><?= $item["category"]; ?></td>
                         <td><?= $item["manufacturer_name"]; ?></td>
 
                         <td>
@@ -64,16 +62,17 @@ include("dbconn.php");
                         <td><?= $item["stock"]; ?></td>
 
                         <td>
-                            <a href="edit_vehicle.php?id=<?= $item['vehicle_id']; ?>" 
-                               class="btn btn-primary btn-sm">Edit</a>
+                            <button class="btn btn-primary btn-sm" 
+                                onclick="window.location.href='edit_vehicle.php?id=<?= $item['vehicle_id']; ?>'">
+                                Edit
+                            </button>
                         </td>
 
                         <td>
-                            <a href="delete_vehicle.php?id=<?= $item['vehicle_id']; ?>" 
-                               class="btn btn-danger btn-sm"
-                               onclick="return confirm('Delete this vehicle?');">
+                            <button class="btn btn-danger btn-sm" 
+                                onclick="if(confirm('Delete this vehicle?')) window.location.href='delete_vehicle.php?id=<?= $item['vehicle_id']; ?>'">
                                 Delete
-                            </a>
+                            </button>
                         </td>
                     </tr>
 

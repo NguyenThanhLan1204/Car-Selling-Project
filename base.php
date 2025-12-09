@@ -11,6 +11,11 @@ session_start();
     <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="./assets/css/main.css">
     <link rel="stylesheet" href="./assets/css/base.css">
+    <link rel="stylesheet" href="/test/Car-Selling-Project/assets/css/main.css">
+    <link rel="stylesheet" href="/test/Car-Selling-Project/assets/css/base.css">
+
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <link rel="stylesheet" href="/assets/css/base.css">
     <title>Car</title>
 </head>
 <body>
@@ -19,7 +24,7 @@ session_start();
             <div class="header_top container-fluid position-relative d-flex align-items-center justify-content-around">
 
                 <h4 id="header_brand-slogan" class="text-decoration-none m-0 text-dark fw-bold fs-2">
-                    CHI LAN SHOWROOM
+                    MEGASIX SHOWROOM
                 </h4>
                 
                 <div class="search_box position-relative d-flex">

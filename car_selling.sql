@@ -14,7 +14,6 @@ CREATE TABLE vehicle (
     vehicle_id INT AUTO_INCREMENT PRIMARY KEY,
     manufacturer_id INT, 
     model VARCHAR(255) NOT NULL,
-    category VARCHAR(50) NOT NULL,
     year INT,
     price DECIMAL(15, 2), 
     image_url VARCHAR(500),
@@ -69,37 +68,46 @@ INSERT INTO manufacturer (name, country, description) VALUES
 ('Ferrari', 'Italy', 'Italian luxury sports car manufacturer based in Maranello.'),              
 ('Audi', 'Germany', 'German automotive manufacturer of luxury vehicles.');
 
--- 2. Tạo Vehicles
-INSERT INTO vehicle (manufacturer_id, model, category, year, price, image_url, stock, description) VALUES
--- --- 1. SEDAN 
-(1, 'Mercedes-Maybach S680','sedan', 2024, 170000, './assets/img/maybach.jpg', 3, 'The absolute pinnacle of luxury sedans, V12 engine.'), 
-(3, 'Toyota Camry 2.5Q','sedan', 2024, 140500, './assets/img/camry.jpg', 10, 'Business sedan, spacious and reliable.'),
-(2, 'BMW 740i Pure Excellence','sedan', 2024, 659900, './assets/img/740i.jpg', 5, 'Flagship luxury sedan with theater screen.'),
+INSERT INTO vehicle (manufacturer_id, model, year, price, image_url, stock, description) VALUES
 
--- --- 2. HATCHBACK 
-(3, 'Toyota Yaris','hatchback', 2024, 6840, './assets/img/yaris.jpg', 15, 'Compact hatchback, easy to drive in city.'),
-(1, 'Mercedes A-Class','hatchback', 2024, 240000, './assets/img/aclass.jpg', 8, 'Luxury compact hatchback with modern tech.'),
-(2, 'BMW 118i SportLine','hatchback', 2024, 180000, './assets/img/bmw118i.jpg', 6, 'Sporty hatchback, driving pleasure.'),
+-- ==========================
+-- 1. MERCEDES-BENZ (ID = 1)
+-- ==========================
+(1, 'Mercedes-Maybach S680', 2024, 170000, './assets/img/maybach.jpg', 3, 'The absolute pinnacle of luxury sedans, V12 engine.'),
+(1, 'Mercedes A-Class', 2024, 240000, './assets/img/aclass.jpg', 8, 'Luxury compact hatchback with modern tech.'),
+(1, 'Mercedes V-Class V250', 2024, 303900, './assets/img/v250.jpg', 5, 'Premium MPV for family and business.'),
+(1, 'Mercedes-AMG G63', 2024, 1175000, './assets/img/g63.jpg', 2, 'The off-road king, iconic boxy design.'),
 
--- --- 3. SUV 
-(5, 'Audi Q7 45 TFSI','suv', 2024, 377000, './assets/img/audi_q7.jpg', 5, 'Versatile 7-seater SUV, quattro technology.'), 
-(1, 'Mercedes-AMG G63','suv', 2024, 1175000, './assets/img/g63.jpg', 2, 'The off-road king, iconic boxy design.'),
-(2, 'BMW X7 xDrive40i','suv', 2024, 629900, './assets/img/x7.jpg', 4, 'The President, 7-seater luxury SUV.'),
+-- ==========================
+-- 2. BMW (ID = 2)
+-- ==========================
+(2, 'BMW 740i Pure Excellence', 2024, 659900, './assets/img/740i.jpg', 5, 'Flagship luxury sedan with theater screen.'),
+(2, 'BMW 118i SportLine', 2024, 180000, './assets/img/bmw118i.jpg', 6, 'Sporty hatchback, driving pleasure.'),
+(2, 'BMW X7 xDrive40i', 2024, 629900, './assets/img/40i.jpg', 4, 'The President, 7-seater luxury SUV.'),
 
--- --- 4. MPV 
-(3, 'Toyota Alphard','mpv', 2024, 437000, './assets/img/alphard.jpg', 3, 'Luxury MPV, business class on wheels.'),
-(1, 'Mercedes V-Class V250','mpv', 2024, 303900, './assets/img/v250.jpg', 5, 'Premium MPV for family and business.'),
-(3, 'Toyota Innova Cross','mpv', 2024, 99000, './assets/img/innova.jpg', 12, 'Popular MPV, hybrid option available.'),
+-- ==========================
+-- 3. TOYOTA (ID = 3)
+-- ==========================
+(3, 'Toyota Camry 2.5Q', 2024, 140500, './assets/img/camry.jpg', 10, 'Business sedan, spacious and reliable.'),
+(3, 'Toyota Yaris', 2024, 6840, './assets/img/yaris.jpg', 15, 'Compact hatchback, easy to drive in city.'),
+(3, 'Toyota Alphard', 2024, 437000, './assets/img/alphard.jpg', 3, 'Luxury MPV, business class on wheels.'),
+(3, 'Toyota Innova Cross', 2024, 99000, './assets/img/innova.jpg', 12, 'Popular MPV, hybrid option available.'),
+(3, 'Toyota Hilux Adventure', 2024, 107700, './assets/img/hilux.jpg', 8, 'Tough and durable pickup truck.'),
+(3, 'Toyota Hilux E', 2024, 85000, './assets/img/hilux_e.jpg', 10, 'Standard pickup for work.'),
 
--- --- 5. PICKUP 
-(3, 'Toyota Hilux Adventure','pickup', 2024, 107700, './assets/img/hilux.jpg', 8, 'Tough and durable pickup truck.'),
-(3, 'Toyota Hilux E','pickup', 2024, 85000, './assets/img/hilux_e.jpg', 10, 'Standard pickup for work.'),
+-- ==========================
+-- 4. FERRARI (ID = 4)
+-- ==========================
+(4, 'Ferrari SF90 Stradale', 2024, 3400000, './assets/img/sf90.jpg', 1, '1000HP Hybrid Supercar, 0-100km/h in 2.5s.'),
+(4, 'Ferrari 296 GTB', 2024, 2300000, './assets/img/296gtb.jpg', 2, 'V6 Hybrid, defining fun to drive.'),
+(4, 'Ferrari 296 Speciale A', 2024, 2900000, './assets/img/296speciale.jpg', 1, 'Open-top special edition, pure emotion.'),
 
--- --- 6. SUPERCAR 
-(4, 'Ferrari SF90 Stradale','supercar', 2024, 3400000, './assets/img/sf90.jpg', 1, '1000HP Hybrid Supercar, 0-100km/h in 2.5s.'), 
-(4, 'Ferrari 296 GTB','supercar', 2024, 2300000, './assets/img/296gtb.jpg', 2, 'V6 Hybrid, defining fun to drive.'), 
-(4, 'Ferrari 296 Speciale A','supercar', 2024, 2900000, './assets/img/296speciale.jpg', 1, 'Open-top special edition, pure emotion.'), 
-(5, 'Audi RS e-tron GT','supercar', 2024, 590000, './assets/img/audi_rs.jpg', 3, 'Electric high-performance grand tourer.'); 
+-- ==========================
+-- 5. AUDI (ID = 5)
+-- ==========================
+(5, 'Audi Q7 45 TFSI', 2024, 377000, './assets/img/audi_q7.jpg', 5, 'Versatile 7-seater SUV, quattro technology.'),
+(5, 'Audi RS e-tron GT', 2024, 590000, './assets/img/audi_rs.jpg', 3, 'Electric high-performance grand tourer.');
+
 
 -- 3. Tạo Customers 
 INSERT INTO customer (name, age, phone_number, email, dob, username, password, role, address) VALUES

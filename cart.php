@@ -19,6 +19,7 @@ $grand_total = 0;
                 </div>
             <?php else: ?>
                 <?php
+                // CHỈ THỰC HIỆN TRUY VẤN CSDL KHI GIỎ HÀNG KHÔNG RỖNG (Sửa lỗi Fatal Error SQL)
                 $ids_str = implode(',', $list_ids);
                 $sql = "SELECT * FROM vehicle WHERE vehicle_id IN ($ids_str)";
                 $result = $conn->query($sql);
@@ -56,12 +57,12 @@ $grand_total = 0;
                                         </p>
                                     </div>
                                 </div>
-                                <a href="cart_delete.php?id=<?= $curr_id ?>" 
-                                   class="btn btn-sm text-danger position-absolute top-0 end-0 m-3" 
-                                   title="Remove item"
-                                   onclick="return confirm('Are you sure you want to remove this vehicle from your cart?')">
-                                    <i class='bx bx-trash'></i> Remove
-                                </a>
+                            <a href="cart_delete.php?id=<?= $curr_id ?>" 
+                            class="btn btn-sm text-danger position-absolute top-0 end-0 m-3" 
+                            title="Remove item"
+                            onclick="return confirm('Are you sure you want to remove this vehicle from your cart?')">
+                                <i class='bx bx-trash'></i> Remove
+                            </a>
                             </div>
                         </div>
                     </div>
@@ -111,7 +112,6 @@ $grand_total = 0;
     </div>
 </div>
 
-
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     const qtyInputs = document.querySelectorAll('.qty-input');
@@ -137,7 +137,7 @@ document.addEventListener('DOMContentLoaded', function () {
             row.querySelector('.subtotal-display').innerText = '$' + itemSubtotal.toLocaleString();
             grandSubtotal += itemSubtotal;
             
-      
+            // TODO: Tại đây cần gọi AJAX để lưu số lượng (qty) mới vào $_SESSION['cart']
         });
 
         // Tính tổng tiền cuối cùng (bao gồm phí ship)
