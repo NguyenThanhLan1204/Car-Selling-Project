@@ -3,55 +3,61 @@ include("dbconn.php");
 
 $id = $_GET["id"];
 
-// Lấy dữ liệu xe hiện tại
+// Lấy dữ liệu xe
 $vehicle = mysqli_fetch_assoc(
     mysqli_query($link, "SELECT * FROM vehicle WHERE vehicle_id = $id")
 );
 
 if (isset($_POST["update"])) {
-
     $manufacturer_id = $_POST["manufacturer_id"];
     $model = $_POST["model"];
+    $category = $_POST["category"];
     $year = $_POST["year"];
     $price = $_POST["price"];
     $stock = $_POST["stock"];
     $description = $_POST["description"];
 
-    // ----------------------------
-    // XỬ LÝ ẢNH UPDATE
-    // ----------------------------
+    /* ========================================
+       XỬ LÝ ẢNH (assets/img/)
+    ========================================= */
     if (!empty($_FILES["image"]["name"])) {
 
-        // Tên file ảnh mới
+        // Tên file mới
         $image = $_FILES["image"]["name"];
 
-        // Đường dẫn lưu vào DB
-        $image_url = "assets/img/" . $image;
-
-        // Đường dẫn thực tế để upload
-        $upload_path = "../assets/img/" . $image;
+        // Đường dẫn thư mục lưu file (TRONG project)
+        $target_dir = "../assets/img/";
+        $target_file = $target_dir . basename($image);
 
         // Upload file
-        move_uploaded_file($_FILES["image"]["tmp_name"], $upload_path);
+        move_uploaded_file($_FILES["image"]["tmp_name"], $target_file);
+
+        // Đường dẫn lưu vào DB (không có ../)
+        $db_image_path = "assets/img/" . $image;
+
+        // Xóa ảnh cũ nếu tồn tại
+        if (!empty($vehicle["image_url"]) && file_exists("../" . $vehicle["image_url"])) {
+            unlink("../" . $vehicle["image_url"]);
+        }
 
     } else {
-
         // Không upload ảnh mới → giữ ảnh cũ
-        $image_url = $vehicle["image_url"];
+        $db_image_path = $vehicle["image_url"];
     }
 
-    // ----------------------------
-    // CHẠY LỆNH UPDATE
-    // ----------------------------
+    /* ========================================
+       UPDATE DATABASE
+    ========================================= */
     $sql = "
         UPDATE vehicle SET
-            manufacturer_id='$manufacturer_id',
-            model='$model',
-            year='$year',
-            price='$price',
-            stock='$stock',
-            description='$description',
-            image_url='$image_url'
+        manufacturer_id='$manufacturer_id',
+        model='$model',
+        category='$category',
+        year='$year',
+        price='$price',
+        stock='$stock',
+        description='$description',
+        image_url='$db_image_path'
         WHERE vehicle_id = $id
     ";
 
@@ -66,58 +72,63 @@ if (isset($_POST["update"])) {
 </head>
 
 <div class="layout">
-    <?php include ("header.php"); ?>
 
-<div class="container mt-4">
-    <div class="card">
-        <div class="card-header">
-            <h4>Edit Vehicle</h4>
+    <?php include("header.php"); ?>
+
+    <div class="container mt-4">
+
+        <div class="card">
+            <div class="card-header">
+                <h4>Edit Vehicle</h4>
+            </div>
+
+            <div class="card-body">
+
+                <form method="POST" enctype="multipart/form-data">
+
+                    <label>Manufacturer</label>
+                    <select name="manufacturer_id" class="form-control">
+                        <?php 
+                            $manu = mysqli_query($link, "SELECT * FROM manufacturer");
+                            foreach ($manu as $m) {
+                                $sel = $m['manufacturer_id'] == $vehicle['manufacturer_id'] ? "selected" : "";
+                                echo "<option value='{$m['manufacturer_id']}' $sel>{$m['name']}</option>";
+                            }
+                        ?>
+                    </select>
+
+                    <label>Model</label>
+                    <input type="text" name="model" class="form-control" value="<?= $vehicle['model']; ?>">
+
+                    <label>Category</label>
+                    <input type="text" name="category" class="form-control" value="<?= $vehicle['category']; ?>">
+
+                    <label>Year</label>
+                    <input type="number" name="year" class="form-control" value="<?= $vehicle['year']; ?>">
+
+                    <label>Price</label>
+                    <input type="number" name="price" class="form-control" value="<?= $vehicle['price']; ?>">
+
+                    <label>Stock</label>
+                    <input type="number" name="stock" class="form-control" value="<?= $vehicle['stock']; ?>">
+
+                    <label>Description</label>
+                    <textarea name="description" class="form-control"><?= $vehicle['description']; ?></textarea>
+
+                    <label>Image</label>
+                    <input type="file" name="image" class="form-control">
+
+                    <img src="../<?= $vehicle['image_url']; ?>" width="150" class="mt-2">
+
+                    <button type="submit" name="update" class="btn btn-primary mt-3">
+                        Update Vehicle
+                    </button>
+
+                </form>
+
+            </div>
         </div>
 
-        <div class="card-body">
-
-            <form method="POST" enctype="multipart/form-data">
-
-                <label>Manufacturer</label>
-                <select name="manufacturer_id" class="form-control">
-                    <?php 
-                        $manu = mysqli_query($link, "SELECT * FROM manufacturer");
-                        foreach ($manu as $m) {
-                            $sel = $m['manufacturer_id'] == $vehicle['manufacturer_id'] ? "selected" : "";
-                            echo "<option value='{$m['manufacturer_id']}' $sel>{$m['name']}</option>";
-                        }
-                    ?>
-                </select>
-
-                <label>Model</label>
-                <input type="text" name="model" class="form-control" value="<?= $vehicle['model']; ?>">
-
-                <label>Year</label>
-                <input type="number" name="year" class="form-control" value="<?= $vehicle['year']; ?>">
-
-                <label>Price</label>
-                <input type="number" name="price" class="form-control" value="<?= $vehicle['price']; ?>">
-
-                <label>Stock</label>
-                <input type="number" name="stock" class="form-control" value="<?= $vehicle['stock']; ?>">
-
-                <label>Description</label>
-                <textarea name="description" class="form-control"><?= $vehicle['description']; ?></textarea>
-
-                <label>Image</label>
-                <input type="file" name="image" class="form-control">
-
-                <!-- Preview ảnh cũ -->
-                <img src="../<?= $vehicle['image_url']; ?>" width="120" class="mt-2">
-
-                <button type="submit" name="update" class="btn btn-primary mt-3">
-                    Update Vehicle
-                </button>
-
-            </form>
-
-        </div>
     </div>
-</div>
 
 </div>

@@ -2,20 +2,21 @@
 session_start();
 
 /* Kết nối database */
-$con = mysqli_connect('localhost', 'root', '');
-mysqli_select_db($con, "user_car_system");
+include("db.php");
 
 /* Lấy dữ liệu từ form */
-$username    = $_POST['user'];
-$email       = $_POST['email'];
-$password    = $_POST['password'];
-$dob         = $_POST['dob'];
-$nationality = $_POST['nationality'];
-$phone       = $_POST['phonenumber'];
+$name       = $_POST['name'];
+$age        = $_POST['age'];
+$username   = $_POST['user'];
+$email      = $_POST['email'];
+$password   = $_POST['password'];
+$dob        = $_POST['dob'];
+$phone      = $_POST['phonenumber'];
+$address    = $_POST['address'];
 
 /* Kiểm tra username đã tồn tại chưa */
-$s = "SELECT * FROM users WHERE username = '$username'";
-$result = mysqli_query($con, $s);
+$s = "SELECT * FROM customer WHERE username = '$username'";
+$result = mysqli_query($conn, $s);
 $num = mysqli_num_rows($result);
 
 if ($num == 1) {
@@ -25,10 +26,11 @@ if ($num == 1) {
             window.location.href = 'registration.php';
           </script>";
 } else {
-    // Nếu username chưa tồn tại thì thêm người dùng mới
-    $reg = "INSERT INTO users (username, email, password, dob, nationality, phonenumber)
-            VALUES ('$username', '$email', '$password', '$dob', '$nationality', '$phone')";
-    mysqli_query($con, $reg);
+    // Thêm user mới vào bảng customer
+    $reg = "INSERT INTO customer (name, age, phone_number, email, dob, username, password, address, role)
+            VALUES ('$name', '$age', '$phone', '$email', '$dob', '$username', '$password', '$address', 'user')";
+    
+    mysqli_query($conn, $reg);
 
     echo "<script>
             alert('Registration successful! Please login.');
@@ -36,5 +38,5 @@ if ($num == 1) {
           </script>";
 }
 
-mysqli_close($con);
+mysqli_close($conn);
 ?>

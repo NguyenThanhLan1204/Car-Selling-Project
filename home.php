@@ -1,11 +1,5 @@
 <?php
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "car_selling";
-
-$conn = new mysqli($servername, $username, $password, $dbname);
-$conn->set_charset("utf8");
+include("db.php");
 
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
@@ -74,7 +68,7 @@ if ($result->num_rows > 0) {
                     echo '        <li><strong>Year:</strong> '.$car['year'].'</li>';
                     echo '      </ul>';
                     echo '      <div class="mt-auto">';
-                    echo '        <p class="fw-bold text-danger fs-5 mb-2">'.number_format($car['price'],0,',','.').' VND</p>';
+                    echo '        <p class="fw-bold text-danger fs-5 mb-2">'.number_format($car['price'],0,',','.').' $</p>';
                     echo '        <a href="base.php?page=information&id='.$car['vehicle_id'].'" class="btn btn-primary w-100">Order Now</a>';
                     echo '      </div>';
                     echo '    </div>';
