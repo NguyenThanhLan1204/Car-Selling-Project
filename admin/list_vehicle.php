@@ -25,7 +25,6 @@ include("dbconn.php");
                     <tr>
                         <th>ID</th>
                         <th>Model</th>
-                        <th>Category</th>
                         <th>Manufacturer</th>
                         <th>Image</th>
                         <th>Year</th>
@@ -52,7 +51,6 @@ include("dbconn.php");
                     <tr>
                         <td><?= $item["vehicle_id"]; ?></td>
                         <td><?= $item["model"]; ?></td>
-                        <td><?= $item["category"]; ?></td>
                         <td><?= $item["manufacturer_name"]; ?></td>
 
                         <td>
