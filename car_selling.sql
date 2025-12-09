@@ -84,7 +84,7 @@ INSERT INTO vehicle (manufacturer_id, model, category, year, price, image_url, s
 -- --- 3. SUV 
 (5, 'Audi Q7 45 TFSI','suv', 2024, 377000, './assets/img/audi_q7.jpg', 5, 'Versatile 7-seater SUV, quattro technology.'), 
 (1, 'Mercedes-AMG G63','suv', 2024, 1175000, './assets/img/g63.jpg', 2, 'The off-road king, iconic boxy design.'),
-(2, 'BMW X7 xDrive40i','suv', 2024, 629900, './assets/img/x7.jpg', 4, 'The President, 7-seater luxury SUV.'),
+(2, 'BMW X7 xDrive40i','suv', 2024, 629900, './assets/img/40i.jpg', 4, 'The President, 7-seater luxury SUV.'),
 
 -- --- 4. MPV 
 (3, 'Toyota Alphard','mpv', 2024, 437000, './assets/img/alphard.jpg', 3, 'Luxury MPV, business class on wheels.'),
