@@ -22,7 +22,7 @@ $page = basename($_SERVER['PHP_SELF']);
         <ul class="navbar-nav">
 
             <li class="nav-item">
-                <a class="nav-link <?= $page == "index.php" ? 'active' : '' ?>" href="../admin/index.php">
+                <a class="nav-link <?= $page == "index.php" ? 'active' : '' ?>" href="index.php">
                     <div><i class="fas fa-chart-line"></i></div>
                     <span class="nav-link-text">Dashboard</span>
                 </a>
