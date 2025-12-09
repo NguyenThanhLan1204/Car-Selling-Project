@@ -58,7 +58,7 @@ session_start();
                     </div>
                     <div class="dropdown-content" id="userDropdown">
                         <?php if (isset($_SESSION['username'])): ?>
-                            <h3 class="pt-2 pb-4 text-nowrap fw-bold">Xin chào <?= $_SESSION['username'] ?></h3>
+                            <h3 class="pt-2 pb-4 text-nowrap fw-bold">Hello <?= $_SESSION['username'] ?></h3>
                             <ul class="list-unstyled">
                                 <?php if ($_SESSION['role'] == 'admin'): ?>
                                     <li class="py-2"><a href="./admin/index.php" class="text-nowrap text-decoration-none custom_hover">Admin Page</a></li>

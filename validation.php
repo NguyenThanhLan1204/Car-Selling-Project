@@ -24,6 +24,7 @@ if (isset($_POST['user']) && isset($_POST['password'])) {
         $_SESSION['username'] = $username;
         $_SESSION['customer_id'] = $row['customer_id'];
         $_SESSION['role'] = $row['role']; // Lưu quyền admin/user
+        $_SESSION['name'] = $row['name'];
 
         // Đăng nhập thành công -> Về trang chủ
         // SỬA: Chuyển hướng về base.php thay vì home.php

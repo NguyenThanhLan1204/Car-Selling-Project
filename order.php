@@ -58,19 +58,19 @@ $result = $stmt->get_result();
                 <div class="mb-3">
                     <label class="form-check mb-2">
                         <input class="form-check-input" type="radio" name="shipping" <?php if($statusFilter==0) echo 'checked'; ?>>
-                        <a href="order.php" class="form-check-label text-decoration-none">Tất cả Đơn hàng</a>
+                        <a href="base.php?page=order" class="form-check-label text-decoration-none">Tất cả Đơn hàng</a>
                     </label>
                     <label class="form-check mb-2">
                         <input class="form-check-input" type="radio" name="shipping" <?php if($statusFilter==2) echo 'checked'; ?>>
-                        <a href="order.php?status=2" class="form-check-label text-decoration-none">Đang chờ xử lý</a>
+                        <a href="base.php?page=order&status=2" class="form-check-label text-decoration-none">Đang chờ xử lý</a>
                     </label>
                     <label class="form-check mb-2">
                         <input class="form-check-input" type="radio" name="shipping" <?php if($statusFilter==3) echo 'checked'; ?>>
-                        <a href="order.php?status=3" class="form-check-label text-decoration-none">Đang giao hàng</a>
+                        <a href="base.php?page=order&status=3" class="form-check-label text-decoration-none">Đang giao hàng</a>
                     </label>
                     <label class="form-check">
                         <input class="form-check-input" type="radio" name="shipping" <?php if($statusFilter==4) echo 'checked'; ?>>
-                        <a href="order.php?status=4" class="form-check-label text-decoration-none">Đã hoàn thành</a>
+                        <a href="base.php?page=order&status=4" class="form-check-label text-decoration-none">Đã hoàn thành</a>
                     </label>
                 </div>
                 

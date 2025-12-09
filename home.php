@@ -5,16 +5,16 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-$sql = "SELECT v.vehicle_id, v.model, v.category, v.year, v.price, v.image_url, v.description, m.name AS manufacturer
+$sql = "SELECT v.vehicle_id, v.model, v.year, v.price, v.image_url, v.description, m.manufacturer_id, m.name AS manufacturer
         FROM vehicle v
         JOIN manufacturer m ON v.manufacturer_id = m.manufacturer_id
-        ORDER BY v.category, v.model";
+        ORDER BY m.manufacturer_id, v.model";
 $result = $conn->query($sql);
 
 $cars = [];
 if ($result->num_rows > 0) {
     while($row = $result->fetch_assoc()) {
-        $cars[$row['category']][] = $row;
+        $cars[$row['manufacturer']][] = $row;
     }
 }
 ?>
@@ -40,9 +40,9 @@ if ($result->num_rows > 0) {
         <ul class="nav nav-tabs justify-content-center mb-4" id="carTabs" role="tablist">
           <?php 
           $first = true;
-          foreach ($cars as $category => $list) {
+          foreach ($cars as $manufacturer => $list) {
               echo '<li class="nav-item">';
-              echo '<button class="nav-link '.($first?'active':'').'" data-bs-toggle="tab" data-bs-target="#'.$category.'" type="button">'.ucfirst($category).'</button>';
+              echo '<button class="nav-link '.($first?'active':'').'" data-bs-toggle="tab" data-bs-target="#'.$manufacturer.'" type="button">'.ucfirst($manufacturer).'</button>';
               echo '</li>';
               $first = false;
           }
@@ -53,8 +53,8 @@ if ($result->num_rows > 0) {
             
             <?php 
             $first = true;
-            foreach ($cars as $category => $list) {
-                echo '<div class="tab-pane fade '.($first?'show active':'').'" id="'.$category.'" role="tabpanel">';
+            foreach ($cars as $manufacturer => $list) {
+                echo '<div class="tab-pane fade '.($first?'show active':'').'" id="'.$manufacturer.'" role="tabpanel">';
                 echo '<div class="row g-4 justify-content-center">';
                 
                 foreach ($list as $car) {
