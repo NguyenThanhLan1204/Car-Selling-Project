@@ -52,7 +52,6 @@ if (isset($_POST["update"])) {
         UPDATE vehicle SET
         manufacturer_id='$manufacturer_id',
         model='$model',
-        category='$category',
         year='$year',
         price='$price',
         stock='$stock',
@@ -99,9 +98,6 @@ if (isset($_POST["update"])) {
 
                     <label>Model</label>
                     <input type="text" name="model" class="form-control" value="<?= $vehicle['model']; ?>">
-
-                    <label>Category</label>
-                    <input type="text" name="category" class="form-control" value="<?= $vehicle['category']; ?>">
 
                     <label>Year</label>
                     <input type="number" name="year" class="form-control" value="<?= $vehicle['year']; ?>">
