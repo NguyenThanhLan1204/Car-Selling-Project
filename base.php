@@ -19,7 +19,7 @@ session_start();
             <div class="header_top container-fluid position-relative d-flex align-items-center justify-content-around">
 
                 <h4 id="header_brand-slogan" class="text-decoration-none m-0 text-dark fw-bold fs-2">
-                    MEGASIX SHOWROOM
+                    CHI LAN SHOWROOM
                 </h4>
                 
                 <div class="search_box position-relative d-flex">
