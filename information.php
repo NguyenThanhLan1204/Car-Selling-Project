@@ -186,33 +186,36 @@ if (isset($_GET['id'])) {
                         </div>
                     </div>
 
-                    <div class="d-flex gap-2">
-                        <?php if (isset($_SESSION['username'])): ?>
-                            <?php if ($car['stock'] > 0): ?>
-                                <button type="submit" class="btn btn-dark flex-grow-1 py-3 fw-bold rounded-pill">
-                                    <i class='bx bx-cart-add fs-4 align-middle'></i> Add to Cart
-                                </button>
-                            <?php else: ?>
-                                <button type="button" class="btn btn-secondary flex-grow-1 py-3 fw-bold rounded-pill" disabled>
-                                    Temporarily Out of Stock
-                                </button>
+                    <div class="col-12 mt-5 pt-4 border-top">
+                        <h4 class="fw-bold mb-3">Product Description</h4>
+                        <div class="text-secondary" style="line-height: 1.8; white-space: pre-line;">
+                            <?= $car['description'] ? htmlspecialchars($car['description']) : "Description updating..." ?>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <div class="d-flex gap-2">
+                            <?php if (isset($_SESSION['username'])): ?>
+                                <?php if ($car['stock'] > 0): ?>
+                                    <button type="submit" class="btn btn-warning flex-grow-1 py-3 fw-bold rounded-pill">
+                                        <i class='bx bx-cart-add fs-4 align-middle'></i> Add to Cart
+                                    </button>
+                                <?php else: ?>
+                                    <button type="button" class="btn btn-secondary flex-grow-1 py-3 fw-bold rounded-pill" disabled>
+                                        Temporarily Out of Stock
+                                    </button>
+                                <?php endif; ?>
+                                
+                                <?php else: ?>
+                                <a href="login.php" class="btn btn-warning flex-grow-1 py-3 fw-bold rounded-pill">
+                                    Login to Add to Cart
+                                </a>
                             <?php endif; ?>
-                            
-                            <?php else: ?>
-                            <a href="login.php" class="btn btn-warning flex-grow-1 py-3 fw-bold rounded-pill">
-                                Login to Add to Cart
-                            </a>
-                        <?php endif; ?>
+                        </div>
                     </div>
                 </form> 
             </div>
 
-            <div class="col-12 mt-5 pt-4 border-top">
-                <h4 class="fw-bold mb-3">Product Description</h4>
-                <div class="text-secondary" style="line-height: 1.8; white-space: pre-line;">
-                    <?= $car['description'] ? htmlspecialchars($car['description']) : "Description updating..." ?>
-                </div>
-            </div>
+            
 
         </div>
     </div>
