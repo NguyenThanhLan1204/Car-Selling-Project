@@ -27,6 +27,7 @@ include("dbconn.php");
                         <th>Model</th>
                         <th>Manufacturer</th>
                         <th>Image</th>
+                        <th>Video</th>
                         <th>Year</th>
                         <th>Price</th>
                         <th>Stock</th>
@@ -55,6 +56,12 @@ include("dbconn.php");
 
                         <td>
                             <img src="../<?= $item["image_url"]; ?>" width="70" height="50">
+                        </td>
+                        <td>
+                            <video width="70" height="50" controls>
+                                <source src="../<?= $item["video_url"]; ?>" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
                         </td>
 
                         <td><?= $item["year"]; ?></td>

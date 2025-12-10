@@ -11,7 +11,6 @@ $vehicle = mysqli_fetch_assoc(
 if (isset($_POST["update"])) {
     $manufacturer_id = $_POST["manufacturer_id"];
     $model = $_POST["model"];
-    $category = $_POST["category"];
     $year = $_POST["year"];
     $price = $_POST["price"];
     $stock = $_POST["stock"];
@@ -46,17 +45,47 @@ if (isset($_POST["update"])) {
     }
 
     /* ========================================
+       XỬ LÝ VIDEO (assets/video/)
+    ========================================= */
+    if (!empty($_FILES["video"]["name"])) {
+
+        $video = $_FILES["video"]["name"];
+
+        // Thư mục lưu video
+        $target_dir_video = "../assets/video/";
+        $target_file_video = $target_dir_video . basename($video);
+
+        // Upload video
+        move_uploaded_file($_FILES["video"]["tmp_name"], $target_file_video);
+
+        // Đường dẫn lưu DB
+        $db_video_path = "assets/video/" . $video;
+
+        // Xóa video cũ
+        if (!empty($vehicle["video_url"]) && file_exists("../" . $vehicle["video_url"])) {
+            unlink("../" . $vehicle["video_url"]);
+        }
+
+    } else {
+        // Không upload → giữ video cũ
+        $db_video_path = $vehicle["video_url"];
+    }
+
+
+    /* ========================================
        UPDATE DATABASE
     ========================================= */
     $sql = "
         UPDATE vehicle SET
         manufacturer_id='$manufacturer_id',
         model='$model',
+        category='$category',
         year='$year',
         price='$price',
         stock='$stock',
         description='$description',
-        image_url='$db_image_path'
+        image_url='$db_image_path',
+        video_url='$db_video_path'
         WHERE vehicle_id = $id
     ";
 
@@ -113,9 +142,15 @@ if (isset($_POST["update"])) {
 
                     <label>Image</label>
                     <input type="file" name="image" class="form-control">
-
                     <img src="../<?= $vehicle['image_url']; ?>" width="150" class="mt-2">
 
+                    <label class="mt-3">Video</label>
+                    <input type="file" name="video" class="form-control">
+                    <video width="150" class="mt-2" controls>
+                        <source src="../<?= !empty($vehicle['video_url']) ? $vehicle['video_url'] : 'uploads/no-video.mp4'; ?>" 
+                                type="video/mp4">
+                    </video>
+                    
                     <button type="submit" name="update" class="btn btn-primary mt-3">
                         Update Vehicle
                     </button>

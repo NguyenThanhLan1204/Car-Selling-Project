@@ -56,13 +56,86 @@ if (isset($_GET['id'])) {
             </div>
 
             <div class="col-md-7 mb-4">
-                <div class="main-image-container d-flex align-items-center justify-content-center bg-light rounded" style="min-height: 400px;">
-                    <img src="<?= !empty($car['image_url']) ? $car['image_url'] : 'https://via.placeholder.com/600x400' ?>" 
-                         class="img-fluid rounded shadow-sm"
-                         alt="<?= htmlspecialchars($car['model']) ?>"
-                         style="max-height: 400px;">
+                <div id="mediaViewer"
+                    class="main-media-container position-relative d-flex align-items-center justify-content-center bg-light rounded"
+                    style="width: 500px; height: 500px; margin: auto; overflow:hidden;">
+
+                    <?php 
+                        $media = []; 
+
+                        if (!empty($car['video_url'])) {
+                            $media[] = ['type' => 'video', 'url' => $car['video_url']];
+                        }
+
+                        $media[] = [
+                            'type' => 'image',
+                            'url' => !empty($car['image_url']) ? $car['image_url'] : 'https://via.placeholder.com/600x400'
+                        ];
+                    ?>
+
+                    <!-- KHUNG HIỂN THỊ MEDIA -->
+                    <div id="mediaContent" 
+                        style="width:100%; height:100%; display:flex; align-items:center; justify-content:center;">
+                        
+                        <?php if ($media[0]['type'] === 'video'): ?>
+                            <video controls autoplay muted style="height:100%; width:auto; object-fit:cover;">
+                                <source src="<?= $media[0]['url'] ?>" type="video/mp4">
+                            </video>
+                        <?php else: ?>
+                            <img src="<?= $media[0]['url'] ?>" 
+                                style="max-width:100%; max-height:100%; object-fit:contain;">
+                        <?php endif; ?>
+
+                    </div>
+
+                    <!-- Nút chuyển -->
+                    <div onclick="prevMedia()" 
+                        style="position:absolute; left:10px; top:50%; transform:translateY(-50%); cursor:pointer; font-size:30px;">❮</div>
+
+                    <div onclick="nextMedia()" 
+                        style="position:absolute; right:10px; top:50%; transform:translateY(-50%); cursor:pointer; font-size:30px;">❯</div>
+
                 </div>
             </div>
+
+            <script>
+                const mediaList = <?= json_encode($media) ?>;
+                let currentIndex = 0;
+
+                function renderMedia() {
+                    const container = document.getElementById('mediaContent');
+                    const item = mediaList[currentIndex];
+
+                    // Làm trống nội dung
+                    container.innerHTML = "";
+
+                    // VIDEO
+                    if (item.type === "video") {
+                        container.innerHTML = `
+                            <video controls autoplay muted style="height:100%; width:auto; object-fit:cover;">
+                                <source src="${item.url}" type="video/mp4">
+                            </video>
+                        `;
+                    } 
+                    // ẢNH
+                    else {
+                        container.innerHTML = `
+                            <img src="${item.url}"
+                                style="max-width:100%; max-height:100%; object-fit:contain;">
+                        `;
+                    }
+                }
+
+                function nextMedia() {
+                    currentIndex = (currentIndex + 1) % mediaList.length;
+                    renderMedia();
+                }
+
+                function prevMedia() {
+                    currentIndex = (currentIndex - 1 + mediaList.length) % mediaList.length;
+                    renderMedia();
+                }
+            </script>
 
             <div class="col-md-5">
                 <form action="cart_add.php" method="POST">

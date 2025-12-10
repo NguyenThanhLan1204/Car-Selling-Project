@@ -11,32 +11,41 @@ if (isset($_POST["submit"])) {
     $description = $_POST["description"];
 
     /* ========================================
-       UPLOAD IMAGE: LƯU VÀO assets/img/
+    UPLOAD IMAGE → assets/img/
     ========================================= */
     $image = $_FILES["image"]["name"];
 
-    // Thư mục ảnh nằm ngoài admin -> ../assets/img/
     $target_dir = "../assets/img/";
     $target_file = $target_dir . basename($image);
 
-    // Di chuyển file upload
     move_uploaded_file($_FILES["image"]["tmp_name"], $target_file);
 
-    // Đường link lưu vào DB (KHÔNG có dấu ../)
     $db_image_path = "assets/img/" . $image;
 
     /* ========================================
-       INSERT VÀO DATABASE
+    UPLOAD VIDEO → assets/video/
+    ========================================= */
+    $video = $_FILES["video"]["name"];   // <-- thêm input name="video" trong form
+
+    $video_target_dir = "../assets/video/";
+    $video_target_file = $video_target_dir . basename($video);
+
+    move_uploaded_file($_FILES["video"]["tmp_name"], $video_target_file);
+
+    $db_video_path = "assets/video/" . $video;
+
+
+    /* ========================================
+    INSERT VÀO DATABASE
     ========================================= */
     $sql = "INSERT INTO vehicle 
-            (manufacturer_id, model, year, price, stock, description, image_url)
+            (manufacturer_id, model, year, price, stock, description, image_url, video_url)
             VALUES 
-            ('$manufacturer_id', '$model', '$year', '$price', '$stock', '$description', '$db_image_path')";
+            ('$manufacturer_id', '$model', '$year', '$price', '$stock', '$description', '$db_image_path', '$db_video_path')";
 
     mysqli_query($link, $sql);
 
-    echo "<script>alert('Vehicle Added'); window.location='list_vehicle.php';</script>";
-}
+    echo "<script>alert('Vehicle Added'); window.location='list_vehicle.php';</script>";}
 ?>
 <head>
     <link rel="stylesheet" href="bootstrap.min.css">
@@ -87,6 +96,10 @@ if (isset($_POST["submit"])) {
 
                     <label>Image</label>
                     <input type="file" name="image" class="form-control" required>
+
+                    <label class="mt-3">Video</label>
+                    <input type="file" name="video" class="form-control" required>
+
 
                     <button type="submit" name="submit" class="btn btn-success mt-3">
                         Save Vehicle
