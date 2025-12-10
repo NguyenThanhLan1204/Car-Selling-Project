@@ -104,13 +104,15 @@ session_start();
                 } elseif ($page == 'cart') {
                   include("./cart.php");
                 } elseif ($page == 'order') {
-                  include("./order.php");
+                include("./order.php");
+                } elseif ($page == 'order_detail') {
+                    include("./order_detail.php"); 
                 } elseif ($page == 'about') {
-                  include("./about.php");
+                    include("./about.php");
                 } elseif ($page == 'information') {
-                  include("./information.php");
+                    include("./information.php");
                 } else {
-                  echo "<h2>Trang không tồn tại</h2>";
+                    echo "<h2>Trang không tồn tại</h2>";
                 }
             ?>
         </main>
