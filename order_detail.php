@@ -78,7 +78,7 @@ if ($first_item) {
     <div class="row">
         <div class="col-lg-12">
             <h2 class="fw-bold mb-4">Order Details #<?= $order_id ?></h2>
-            <a href="base.php?page=order" class="btn btn-sm btn-outline-secondary mb-4"><i class='bx bx-arrow-back'></i> Quay lại Danh sách Đơn hàng</a>
+            <a href="base.php?page=order" class="btn btn-sm btn-outline-secondary mb-4"><i class='bx bx-arrow-back'></i> Return to Order List</a>
 
             <div class="card mb-4 shadow-sm">
                 <div class="card-header bg-light">
