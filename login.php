@@ -1,5 +1,19 @@
 <?php
 session_start();
+
+// --- BỔ SUNG: NẠP GIỎ HÀNG TỪ COOKIE VÀO SESSION (NẾU CHƯA ĐĂNG NHẬP) ---
+if (!isset($_SESSION['username'])) {
+    if (isset($_COOKIE['user_cart']) && !isset($_SESSION['cart'])) {
+        // Nếu có Cookie giỏ hàng và Session giỏ hàng chưa tồn tại,
+        // thì nạp giỏ hàng từ Cookie vào Session để hiển thị
+        $cookie_cart = json_decode($_COOKIE['user_cart'], true);
+        if ($cookie_cart) {
+            $_SESSION['cart'] = $cookie_cart;
+        }
+    }
+}
+// --------------------------------------------------------------------------
+
 if (isset($_SESSION['username'])) {
     header("Location: base.php?page=home");
     exit();
