@@ -162,3 +162,20 @@ VALUES
 
 -- Order #5 của customer 5
 (5, 4, 5, 1050000000, 1, 'Cash', 5);
+
+
+ALTER TABLE orders
+ADD COLUMN total_amount DECIMAL(10, 2) NOT NULL DEFAULT 0.00;
+
+ALTER TABLE orders
+ADD COLUMN shipping_fee DECIMAL(10, 2) DEFAULT 0;
+
+CREATE TABLE payment_methods (
+    payment_method_id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(50) NOT NULL UNIQUE
+);
+
+INSERT INTO payment_methods (name) VALUES 
+('Bank Transfer'), 
+('Cash'),
+('Credit Card');
