@@ -79,6 +79,5 @@ if (isset($_POST['user']) && isset($_POST['password'])) {
     // Nếu truy cập trực tiếp file này mà không qua form login
     header('Location: login.php');
     exit();
-
 }
 ?>
