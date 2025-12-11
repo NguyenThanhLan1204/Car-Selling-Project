@@ -1,15 +1,18 @@
 <?php
 include("db.php");
 
+
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
+
 
 $sql = "SELECT v.vehicle_id, v.model, v.year, v.price, v.image_url, v.description, m.manufacturer_id, m.name AS manufacturer
         FROM vehicle v
         JOIN manufacturer m ON v.manufacturer_id = m.manufacturer_id
         ORDER BY m.manufacturer_id, v.model";
 $result = $conn->query($sql);
+
 
 $cars = [];
 if ($result->num_rows > 0) {
@@ -19,10 +22,11 @@ if ($result->num_rows > 0) {
 }
 ?>
 
+
 <body>
     <div class="slider position-relative w-100">
         <div class="text-content position-relative">
-            <div class="slide">           
+            <div class="slide">          
                 <div class="img">
                     <video autoplay muted loop class="d-block w-75 mx-auto p-3">
                         <source src="./assets/video/\Recording 2025-12-10 213401.mp4" type="video/mp4">
@@ -37,12 +41,13 @@ if ($result->num_rows > 0) {
         </div>
     </div>
 
+
     <div class="container py-5">
         <h2 class="text-center fw-bold mb-4">DISCOVER OUR MODELS</h2>
-      
+     
         <!-- TABS HÃNG XE -->
         <ul class="nav nav-tabs justify-content-center mb-4" id="carTabs" role="tablist">
-        <?php 
+        <?php
         $first = true;
         foreach ($cars as $brand => $list) {
             // Bỏ dấu cách để tạo id cho tab
@@ -56,19 +61,21 @@ if ($result->num_rows > 0) {
         }
         ?>
         </ul>
-      
+     
         <!-- TAB CONTENT -->
         <div class="tab-content" id="carTabsContent">
-            
-            <?php 
+           
+            <?php
             $first = true;
             foreach ($cars as $brand => $list) {
 
+
                 $id = preg_replace('/\s+/', '', $brand);
+
 
                 echo '<div class="tab-pane fade '.($first?'show active':'').'" id="'.$id.'" role="tabpanel">';
                 echo '<div class="row g-4 justify-content-center">';
-                
+               
                 foreach ($list as $car) {
                     echo '<div class="col-md-4">';
                     echo '  <div class="card h-100 shadow-sm">';
@@ -87,7 +94,7 @@ if ($result->num_rows > 0) {
                     echo '  </div>';
                     echo '</div>';
                 }
-                
+               
                 echo '</div>';
                 echo '</div>';
                 $first = false;

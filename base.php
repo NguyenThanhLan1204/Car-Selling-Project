@@ -14,6 +14,7 @@ session_start();
     <link rel="stylesheet" href="/test/Car-Selling-Project/assets/css/main.css">
     <link rel="stylesheet" href="/test/Car-Selling-Project/assets/css/base.css">
 
+
     <link rel="stylesheet" href="/assets/css/main.css">
     <link rel="stylesheet" href="/assets/css/base.css">
     <title>Car</title>
@@ -23,21 +24,23 @@ session_start();
         <header class="header bg-main py-2">        
             <div class="header_top container-fluid position-relative d-flex align-items-center justify-content-around">
 
+
                 <h4 id="header_brand-slogan" class="text-decoration-none m-0 text-dark fw-bold fs-2">
                     MEGASIX SHOWROOM
                 </h4>
-                
+               
                 <div class="search_box position-relative d-flex">
                     <input type="search" id="search" class="form-control h-100 w-100 px-4 rounded-3 border-0" name="search" placeholder="Search...">
                     <i class="bx bx-search-alt custom_hover position-absolute top-50 end-0 translate-middle-y me-3"></i>
-                </div>                                     
-    
+                </div>                                    
+   
                 <ul class="user_menu list-unstyled d-flex m-0 gap-3">
-                    <li class="user_menu-notice menu-item position-relative">                     
+                    <li class="user_menu-notice menu-item position-relative">                    
                         <a href="#" class="dropdown_btn" data-target="#bellDropdown">
                             <i class="bx bx-bell fs-2 custom_hover"></i>
                         </a>
                     </li>
+
 
                     <li class="user_menu-cart">
                         <?php if (isset($_SESSION['username'])): ?>
@@ -47,12 +50,13 @@ session_start();
                         <?php endif; ?>
                     </li>
 
+
                     <li class="user_menu-log menu-item position-relative">
                         <a href="" class="dropdown_btn" data-target="#userDropdown">
                             <i class="bx bx-user-circle fs-2 custom_hover"></i>
                         </a>                    
-                    </li>                   
-                </ul> 
+                    </li>                  
+                </ul>
                 <div class="user-dropdown position-absolute rounded-2 p-3 shadow-lg" id="mainDropdown">
                     <div class="dropdown-content" id="bellDropdown">
                         <h3 class="pt-2 pb-4 text-nowrap fw-bold">Notification</h3>
@@ -78,27 +82,28 @@ session_start();
                             </ul>
                         <?php endif; ?>
                     </div>        
-                </div>               
-            </div>           
+                </div>              
+            </div>          
         </header>
         <div id="myNavbar" class="navbar w-100 p-0 sticky-top d-flex align-items-center" >
             <ul class="navbar__list list-unstyled align-items-center justify-content-center d-flex gap-5 m-0 py-2 w-100">
-                
+               
                 <li class="navbar__item">
                     <a href="?page=home" class="custom_hover fw-bold text-uppercase text-decoration-none text-nowrap">Home</a>
                 </li>
 
+
                 <li class="navbar__item">
                     <a href="?page=about" class="custom_hover fw-bold text-uppercase text-decoration-none text-nowrap">About</a>
                 </li>
-                
+               
             </ul>
         </div>
-            
+           
         <main>
             <?php
                 $page = isset($_GET['page']) ? $_GET['page'] : 'home';
-          
+         
                 if ($page == 'home') {
                   include("./home.php");
                 } elseif ($page == 'cart') {
@@ -116,6 +121,7 @@ session_start();
                 }
             ?>
         </main>
+
 
         <footer class="footer">
             <div class="container">
@@ -149,6 +155,7 @@ session_start();
             </div>
         </footer>
     </div>
+
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
