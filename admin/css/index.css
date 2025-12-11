@@ -1,12 +1,13 @@
 /* ===============================
    LAYOUT TỔNG QUAN DASHBOARD
 ================================= */
-
-.content-area {
-    margin-left: 240px; /* rộng sidebar */
+.container {
+    margin-left: 300px; 
     padding: 25px;
-    width: calc(100% - 240px);
+    width: calc(100% - 320px); /* thay max-width → width */
+    max-width: 100%; 
 }
+
 
 @media (max-width: 992px) {
     .content-area {
@@ -48,6 +49,7 @@
     max-width: 260px; /* card width */
     margin-left: auto;
     margin-right: auto;
+    
 }
 
 .card:hover {
