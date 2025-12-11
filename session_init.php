@@ -17,8 +17,7 @@ if (isset($_SESSION['LAST_ACTIVITY'])) {
             );
         }
         session_destroy();
-
-        setcookie("remember_login", "", time() - 3600, "/");
+        
         setcookie("username", "", time() - 3600, "/");
         setcookie("role", "", time() - 3600, "/");
         setcookie("name", "", time() - 3600, "/");

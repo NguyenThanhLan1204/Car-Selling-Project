@@ -15,7 +15,7 @@ if (isset($_POST["submit"])) {
 ?>
 <head>
     <link rel="stylesheet" href="bootstrap.min.css">
-    <link rel="stylesheet" href="./css/add_manuf.css"> 
+    <link rel="stylesheet" href="./css/ver_manuf.css"> 
 </head>
 
 <div class="layout">
@@ -26,7 +26,7 @@ if (isset($_POST["submit"])) {
     <div class="card">
 
         <div class="card-header">
-            <h4>Add Manufacturer</h4>
+            <h2>Add Manufacturer</h2>
         </div>
 
         <div class="card-body">

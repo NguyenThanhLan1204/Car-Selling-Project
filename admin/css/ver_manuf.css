@@ -1,0 +1,198 @@
+/* ===============================
+   LAYOUT CHUNG
+================================= */
+
+.layout {
+    display: flex;
+    width: 100%;
+}
+
+/* Phần content bên phải sidebar */
+.container {
+    margin-left: 320px; 
+    padding: 25px;
+    width: calc(100% - 320px); /* thay max-width → width */
+    max-width: 100%; 
+}
+
+/* Sidebar cố định không co lại */
+.sidebar {
+    flex-shrink: 0;
+}
+
+
+/* ===============================
+   CARD + HEADER
+================================= */
+
+.card {
+    border-radius: 12px;
+    overflow: hidden;
+    background: #fdfefe;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    border: none;
+}
+
+.card-header {
+    background: #85b4e8;
+    color: white;
+    padding: 15px 20px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card-body {
+    padding: 0; /* bỏ padding để table sát mép */
+}
+
+
+/* ===============================
+   FORM ELEMENTS
+================================= */
+.card-body form label {
+    margin-top: 14px;
+    font-weight: 600;
+    font-size: 15px;
+}
+
+.form-control {
+    padding: 10px;
+    border-radius: 6px;
+    margin-top: 4px;
+    border: 1px solid #c8d6e5;
+    
+}
+
+.form-control:focus {
+    border-color: #85b4e8;
+    box-shadow: 0 0 0 0.2rem rgba(133, 180, 232, 0.3);
+}
+
+
+/* ===============================
+   TABLE STYLING
+================================= */
+.table {
+    margin-top: 10px;
+    border-radius: 8px;
+    overflow: hidden;
+    width: 100%;
+    margin: 0;
+    border-radius: 0; 
+}
+
+.table thead tr {
+    background: #91beea;
+    color: #ffffff;
+}
+
+.table thead th {
+    padding: 12px;
+    font-size: 15px;
+    font-weight: 600;
+     border-bottom: none;
+}
+
+.table td,
+.table th {
+    vertical-align: middle;
+    padding: 12px;
+}
+
+/* ===============================
+   BUTTONS
+================================= */
+form button {
+    width: auto !important;
+    align-self: center;
+    padding: 8px 22px;
+}
+.btn {
+    padding: 6px 14px;
+    border-radius: 6px !important;
+    font-weight: 500;
+}
+/* Nút Add */
+.btn-success {
+    background: #deb2e0;
+    color: #f7f5f5;
+    border: none;
+    font-weight: 700;
+}
+.btn-success:hover {
+    background: #8689e4;
+    color: rgb(255, 255, 255);
+}
+/* Nút Edit */
+.btn-primary {
+    background: #7daee1;
+    border: none;
+}
+.btn-primary:hover {
+    background: #95c4f6;
+}
+
+/* Nút Delete */
+.btn-danger {
+    background: #dc3545;
+    border: none;
+}
+.btn-danger:hover {
+    background: #c82333;
+}
+/* ===============================
+   ẢNH & VIDEO PREVIEW TRONG FORM
+================================= */
+.preview-image, .preview-video {
+    margin-top: 10px;
+    border-radius: 6px;
+}
+
+.preview-image {
+    width: 150px;
+}
+
+.preview-video {
+    width: 150px;
+}
+
+/* ===============================
+   Focus input/textarea
+================================= */
+form input.form-control,
+form textarea.form-control {
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid #ced4da;
+    font-size: 15px;
+    width: 100%;
+    transition: 0.2s;
+}
+
+form input.form-control:focus,
+form textarea.form-control:focus {
+    border-color: #85b4e8;
+    box-shadow: 0 0 0 2px rgba(133, 180, 232, 0.2);
+    outline: none;
+}
+
+form {
+    display: flex;
+    flex-direction: column; /* mỗi input/label xuống dòng */
+    gap: 12px; /* khoảng cách giữa các dòng */
+}
+/* ===============================
+   RESPONSIVE
+================================= */
+
+@media (max-width: 992px) {
+    .container {
+        margin-left: 0;
+        max-width: 100%;
+        padding: 15px;
+    }
+}

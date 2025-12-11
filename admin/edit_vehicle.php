@@ -79,7 +79,6 @@ if (isset($_POST["update"])) {
         UPDATE vehicle SET
         manufacturer_id='$manufacturer_id',
         model='$model',
-        category='$category',
         year='$year',
         price='$price',
         stock='$stock',
@@ -96,7 +95,7 @@ if (isset($_POST["update"])) {
 ?>
 <head>
     <link rel="stylesheet" href="bootstrap.min.css">
-    <link rel="stylesheet" href="./css/edit_vers.css"> 
+    <link rel="stylesheet" href="./css/ver_manuf.css"> 
 </head>
 
 <div class="layout">
@@ -107,7 +106,7 @@ if (isset($_POST["update"])) {
 
         <div class="card">
             <div class="card-header">
-                <h4>Edit Vehicle</h4>
+                <h2>Edit Vehicle</h2>
             </div>
 
             <div class="card-body">

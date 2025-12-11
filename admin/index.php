@@ -23,7 +23,6 @@ function totalValue($table) {
 
 <body>
 
-<!-- BẮT ĐẦU LAYOUT -->
 <div class="layout">
     <!-- SIDEBAR GỌI TỪ header.php -->
     <?php include ("header.php"); ?>
@@ -34,97 +33,48 @@ function totalValue($table) {
         <div class="container mt-5">
             <div class="row g-4">
 
-                <!-- Total Users -->
-                <div class="col-xl-3 col-sm-6">
-                    <div class="card">
-                        <div class="card-header">
-                            <div class="icon ">
-                                <i class="material-icons">person</i>
-                            </div>
-                            <div class="text-end pt-1">
-                                <p class="text-sm mb-0 text-capitalize">Total Users</p>
-                                <h4 class="mb-0"><?= totalValue('customer') ?></h4>
-                            </div>
-                        </div>
-                        <div class="card-footer p-3">
-                            <p class="mb-0">
-                                <span class="text-success text-sm font-weight-bolder">+3%</span>
-                                than last month
-                            </p>
+            <!-- TOTAL CARD TEMPLATE ↓ -->
+            <?php 
+                $cards = [
+                    ["Users", "person", totalValue("customer"), "+3%", "success"],
+                    ["Product", "table_view", totalValue("vehicle"), "+55%", "success"],
+                    ["Manufacturer", "factory", totalValue("manufacturer"), "+12%", "success"],
+                    ["Order", "receipt_long", totalValue("orders"), "-2%", "danger"],
+                ];
+
+                foreach ($cards as $c) { 
+            ?>
+
+            <div class="col-xl-3 col-sm-6">
+                <div class="card">
+
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <i class="material-icons"><?= $c[1] ?></i>
+
+                        <div class="text-end">
+                            <p class="text-sm mb-0 text-capitalize">Total <?= $c[0] ?></p>
+                            <h4 class="mb-0"><?= $c[2] ?></h4>
                         </div>
                     </div>
-                </div>
 
-                <!-- Total Product -->
-                <div class="col-xl-3 col-sm-6">
-                    <div class="card">
-                        <div class="card-header">
-                            <div class="icon ">
-                                <i class="material-icons">table_view</i>
-                            </div>
-                            <div class="text-end pt-1">
-                                <p class="text-sm mb-0 text-capitalize">Total Product</p>
-                                <h4 class="mb-0"><?= totalValue('vehicle') ?></h4>
-                            </div>
-                        </div>
-                        <div class="card-footer p-3">
-                            <p class="mb-0">
-                                <span class="text-success text-sm font-weight-bolder">+55%</span>
-                                than last week
-                            </p>
-                        </div>
+                    <div class="card-footer p-3">
+                        <p class="mb-0">
+                            <span class="text-<?= $c[4] ?> text-sm font-weight-bolder"><?= $c[3] ?></span>
+                            than last period
+                        </p>
                     </div>
-                </div>
 
-                <!-- Total Manufacturer -->
-                <div class="col-xl-3 col-sm-6">
-                    <div class="card">
-                        <div class="card-header">
-                            <div class="icon ">
-                                <i class="material-icons">factory</i>
-                            </div>
-                            <div class="text-end pt-1">
-                                <p class="text-sm mb-0 text-capitalize">Total Manufacturer</p>
-                                <h4 class="mb-0"><?= totalValue('manufacturer') ?></h4>
-                            </div>
-                        </div>
-                        <div class="card-footer p-3">
-                            <p class="mb-0">
-                                <span class="text-success text-sm font-weight-bolder">+12%</span>
-                                than last week
-                            </p>
-                        </div>
-                    </div>
                 </div>
-
-                <!-- Total Order -->
-                <div class="col-xl-3 col-sm-6">
-                    <div class="card">
-                        <div class="card-header">
-                            <div class="icon ">
-                                <i class="material-icons">receipt_long</i>
-                            </div>
-                            <div class="text-end pt-1">
-                                <p class="text-sm mb-0 text-capitalize">Total Order</p>
-                                <h4 class="mb-0"><?= totalValue('orders') ?></h4>
-                            </div>
-                        </div>
-                        <div class="card-footer p-3">
-                            <p class="mb-0">
-                                <span class="text-danger text-sm font-weight-bolder">-2%</span>
-                                than yesterday
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
             </div>
+
+            <?php } ?>
+            <!-- END TEMPLATE -->
         </div>
 
     </div>
-    <!-- KẾT THÚC CONTENT-AREA -->
+    </div>
 
 </div>
-<!-- KẾT THÚC LAYOUT -->
 
 </body>
+

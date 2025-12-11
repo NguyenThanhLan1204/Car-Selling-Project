@@ -49,7 +49,7 @@ if (isset($_POST["submit"])) {
 ?>
 <head>
     <link rel="stylesheet" href="bootstrap.min.css">
-    <link rel="stylesheet" href="./css/add_vers.css"> 
+    <link rel="stylesheet" href="./css/ver_manuf.css"> 
 </head>
 
 <div class="layout">
@@ -61,7 +61,7 @@ if (isset($_POST["submit"])) {
 
         <div class="card">
             <div class="card-header">
-                <h4>Add Vehicle</h4>
+                <h2>Add Vehicle</h2>
             </div>
 
             <div class="card-body">

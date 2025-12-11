@@ -1,7 +1,7 @@
 <?php
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
+session_start();
+
+unset($_SESSION['cart']);
 
 $_SESSION = [];
 // Xóa cookie session (PHPSESSID)

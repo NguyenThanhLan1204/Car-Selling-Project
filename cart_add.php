@@ -37,8 +37,8 @@ if (isset($_POST['vehicle_id'])) {
     $cart_json = json_encode($_SESSION['cart']);
 
     // Lưu giỏ hàng vào Cookie với tên 'user_cart'
-    setcookie('user_cart', $cart_json, $cookie_expiry, "/"); 
-    
+    $cookie_name = "user_cart_" . $_SESSION['customer_id'];
+    setcookie($cookie_name, $cart_json, $cookie_expiry, "/");
     
     // Chuyển hướng về trang giỏ hàng
     header("Location: base.php?page=cart");

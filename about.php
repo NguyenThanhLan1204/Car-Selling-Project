@@ -46,9 +46,9 @@
                 <h5 class="fw-bold mb-3">Our Professional Team</h5>
                 <p>We pride ourselves on having the most dedicated team in the automotive industry.</p>
                 <ul class="list-unstyled">
-                    <li class="mb-2">✅ <strong>Expert Technicians:</strong> Highly trained in luxury car maintenance.</li>
-                    <li class="mb-2">✅ <strong>Customer Support:</strong> Available 24/7 to assist your needs.</li>
-                    <li class="mb-2">✅ <strong>Sales Consultants:</strong> Helping you find your dream car.</li>
+                    <li class="mb-2"> <strong>Expert Technicians:</strong> Highly trained in luxury car maintenance.</li>
+                    <li class="mb-2"> <strong>Customer Support:</strong> Available 24/7 to assist your needs.</li>
+                    <li class="mb-2"> <strong>Sales Consultants:</strong> Helping you find your dream car.</li>
                 </ul>
                 <p class="text-muted small mt-3">See the Leadership Team column for executive profiles.</p>
             </div>

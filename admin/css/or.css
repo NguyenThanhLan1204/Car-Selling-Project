@@ -51,6 +51,85 @@
 }
 
 /* ===============================
+    FILTER BADGES – NEW STYLE
+================================= */
+
+/* FILTER AREA */
+.filter-group {
+    display: flex;
+    gap: 12px;
+    margin-top: 18px;     /* kéo xuống dưới */
+    margin-bottom: 18px;  /* đẩy xa header bảng xuống */
+    padding-left: 12px;   /* căn lệch theo tiêu đề */
+}
+
+.filter-btn {
+    padding: 7px 22px;
+    border-radius: 25px;
+    font-size: 13px;         /* chữ nhỏ lại */
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    color: #fff;
+    text-decoration: none;
+    transition: 0.25s ease;
+    display: inline-block;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+}
+
+.filter-btn:hover {
+    transform: translateY(-2px);
+    opacity: 0.92;
+}
+
+.filter-btn.active {
+    box-shadow: 0 4px 14px rgba(0,0,0,0.25);
+    transform: translateY(-2px);
+}
+
+/* COLORS */
+.filter-btn.all {
+    border-radius: 25px;
+    padding: 8px 16px;
+    font-size: 15px;
+    background: #a55feb;
+}
+
+.filter-btn.booked {
+     border-radius: 25px;
+    padding: 8px 16px;
+    font-size: 15px;
+    background: #c87ac9;
+}
+
+.filter-btn.delivering {
+    border-radius: 20px;
+    padding: 8px 16px;
+    font-size: 15px;
+    background: #ce9fcc;
+}
+
+.filter-btn.success {
+    border-radius: 20px;
+    padding: 8px 16px;
+    font-size: 15px;
+    background: #a9f2ba;
+}
+
+
+/* Hover */
+.filter-btn:hover {
+    transform: translateY(-2px);
+    opacity: 0.9;
+}
+
+/* Khi đang chọn */
+.filter-btn.active {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.28);
+    transform: translateY(-2px);
+}
+
+/* ===============================
    BADGE STATUS
 ================================= */
 
@@ -103,7 +182,8 @@
     font-size: 15px;
     background: #b9c4cf;
 }
-/* ===============================
+
+/*===============================
    TABLE STYLING
 ================================= */
 
@@ -147,45 +227,6 @@
     border-radius: 6px;
     object-fit: cover;
     border: 1px solid #c8d6e5;
-}
-
-/* Responsive */
-@media (max-width: 992px) {
-    .container-fluid {
-        margin-left: 0;
-        padding: 15px;
-        max-width: 100%;
-    }
-
-    /* Table chuyển sang dạng list card trên mobile */
-    .table thead {
-        display: none;
-    }
-
-    .table, .table tbody, .table tr, .table td {
-        display: block;
-        width: 100%;
-    }
-
-    .table tbody tr {
-        margin-bottom: 15px;
-        background: #f9f9f9;
-        border-radius: 12px;
-        padding: 12px;
-    }
-
-    .table tbody td {
-        text-align: left;
-        padding: 6px 12px;
-        position: relative;
-    }
-
-    .table tbody td::before {
-        content: attr(data-label);
-        font-weight: 600;
-        display: inline-block;
-        width: 100px;
-    }
 }
 
 /* ===============================
