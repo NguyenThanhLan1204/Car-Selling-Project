@@ -1,0 +1,251 @@
+/* ===============================
+   LAYOUT CHUNG
+================================= */
+
+.layout {
+    display: flex;
+    width: 100%;
+}
+
+/* Khu vực content (bên phải sidebar) */
+.container-fluid {
+    margin-left: 260px;  /* rộng sidebar */
+    padding: 25px;
+    max-width: calc(100% - 260px);
+    width: 80%;
+}
+
+/* Sidebar cố định không co lại */
+.sidebar {
+    flex-shrink: 0;
+}
+
+/* ===============================
+   CARD + HEADER
+================================= */
+
+.card {
+    border-radius: 12px;
+    overflow: hidden;
+    background: #fdfefe;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    margin-bottom: 20px;
+}
+
+.card-header {
+    padding: 15px 20px;
+    background: #85b4e8;
+    color: #fff;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    display: flex;
+    flex-direction: column;  /* Tiêu đề + badges/links trên nhiều dòng */
+    align-items: flex-start;
+    gap: 12px; /* khoảng cách giữa tiêu đề và badges */
+}
+
+.card-header h6 {
+    margin: 0;
+    font-weight: 700;
+    font-size: 20px;
+}
+
+/* ===============================
+    FILTER BADGES – NEW STYLE
+================================= */
+
+/* FILTER AREA */
+.filter-group {
+    display: flex;
+    gap: 12px;
+    margin-top: 18px;     /* kéo xuống dưới */
+    margin-bottom: 18px;  /* đẩy xa header bảng xuống */
+    padding-left: 12px;   /* căn lệch theo tiêu đề */
+}
+
+.filter-btn {
+    padding: 7px 22px;
+    border-radius: 25px;
+    font-size: 13px;         /* chữ nhỏ lại */
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    color: #fff;
+    text-decoration: none;
+    transition: 0.25s ease;
+    display: inline-block;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+}
+
+.filter-btn:hover {
+    transform: translateY(-2px);
+    opacity: 0.92;
+}
+
+.filter-btn.active {
+    box-shadow: 0 4px 14px rgba(0,0,0,0.25);
+    transform: translateY(-2px);
+}
+
+/* COLORS */
+.filter-btn.all {
+    border-radius: 25px;
+    padding: 8px 16px;
+    font-size: 15px;
+    background: #a55feb;
+}
+
+.filter-btn.booked {
+     border-radius: 25px;
+    padding: 8px 16px;
+    font-size: 15px;
+    background: #c87ac9;
+}
+
+.filter-btn.delivering {
+    border-radius: 20px;
+    padding: 8px 16px;
+    font-size: 15px;
+    background: #ce9fcc;
+}
+
+.filter-btn.success {
+    border-radius: 20px;
+    padding: 8px 16px;
+    font-size: 15px;
+    background: #a9f2ba;
+}
+
+
+/* Hover */
+.filter-btn:hover {
+    transform: translateY(-2px);
+    opacity: 0.9;
+}
+
+/* Khi đang chọn */
+.filter-btn.active {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.28);
+    transform: translateY(-2px);
+}
+
+/* ===============================
+   BADGE STATUS
+================================= */
+
+.badge {
+    cursor: pointer;
+    padding: 6px 14px;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 12px;
+    text-decoration: none;
+    transition: 0.25s;
+    margin-right: 8px;
+}
+
+.badge:hover {
+    opacity: 0.8;
+}
+
+.badge.bg-primary {
+    border-radius: 25px;
+    padding: 8px 16px;
+    font-size: 15px;
+    background: #c87ac9;
+}
+
+.badge.bg-info {
+    border-radius: 20px;
+    padding: 8px 16px;
+    font-size: 15px;
+    background: #ce9fcc;
+}
+
+.badge.bg-success {
+    border-radius: 20px;
+    padding: 8px 16px;
+    font-size: 15px;
+    background: #a9f2ba;
+}
+
+.badge.bg-secondary {
+    border-radius: 20px;
+    padding: 8px 16px;
+    font-size: 15px;
+    background: #d0acb6;
+}
+
+.badge.bg-dark {
+    border-radius: 20px;
+    padding: 8px 16px;
+    font-size: 15px;
+    background: #b9c4cf;
+}
+
+/*===============================
+   TABLE STYLING
+================================= */
+
+.table {
+    margin-top: 15px;
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 8px;
+}
+
+.table thead tr {
+    background: #91beea;
+    color: #fff;
+}
+
+.table thead th {
+    padding: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    text-align: center;
+}
+
+.table tbody tr {
+    background: #f9f9f9;
+    border-radius: 8px;
+    transition: 0.25s;
+}
+
+.table tbody tr:hover {
+    background-color: rgba(0,0,0,0.05);
+}
+
+.table tbody td {
+    vertical-align: middle;
+    padding: 10px 12px;
+    text-align: center;
+}
+
+/* Hình ảnh */
+.table img {
+    border-radius: 6px;
+    object-fit: cover;
+    border: 1px solid #c8d6e5;
+}
+
+/* ===============================
+   THÔNG TIN NGƯỜI MUA
+================================= */
+
+h5 {
+    margin-top: 20px;
+    font-weight: 700;
+    color: #333;
+}
+
+strong {
+    font-weight: 600;
+    margin-top: 10px;
+    display: inline-block;
+}
+
+hr {
+    margin: 15px 0;
+    border-top: 1px solid #ccc;
+}

@@ -3,7 +3,7 @@ include("dbconn.php");
 ?>
 <head>
     <link rel="stylesheet" href="bootstrap.min.css">
-    <link rel="stylesheet" href="./css/list_vers.css"> 
+    <link rel="stylesheet" href="./css/ver_manuf.css"> 
 </head>
 
 <div class="layout">
@@ -14,7 +14,7 @@ include("dbconn.php");
 
     <div class="card">
         <div class="card-header d-flex justify-content-between">
-            <h4>Vehicle List</h4>
+            <h2>Vehicle List</h2>
             <button class="btn btn-success" onclick="window.location.href='add_vehicle.php'">+ Add Vehicle</button>
         </div>
 

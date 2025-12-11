@@ -47,7 +47,7 @@ $total = 0;
 
 <head>
     <link rel="stylesheet" href="bootstrap.min.css">
-    <link rel="stylesheet" href="./css/order_de.css"> 
+    <link rel="stylesheet" href="./css/or.css"> 
 </head>
 
 <body>
