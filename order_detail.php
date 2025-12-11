@@ -1,10 +1,8 @@
 <?php
-// Tên file: order_detail.php (Đã Tối ưu và Đơn giản hóa)
 
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
-// Giả định file 'db.php' chứa kết nối CSDL ($conn)
 require_once 'db.php'; 
 
 // 1. Kiểm tra đăng nhập
@@ -35,8 +33,8 @@ function getStatusText($status) {
     return $statuses[$status] ?? ["Not determined", "badge bg-dark"];
 }
 
-// --- 3. TRUY VẤN TỔNG QUAN ĐƠN HÀNG VÀ BẢO MẬT ---
-$sql_order = "SELECT total_amount, status, created_at 
+// --- 3. TRUY VẤN TỔNG QUAN ĐƠN HÀNG VÀ BẢO MẬT (ĐÃ THÊM shipping_fee) ---
+$sql_order = "SELECT total_amount, status, created_at, shipping_fee 
               FROM orders 
               WHERE order_id = ? AND customer_id = ?";
 $stmt_order = $conn->prepare($sql_order);
@@ -51,9 +49,13 @@ if (!$order_info) {
     exit;
 }
 
+// Lấy phí vận chuyển từ DB. Nếu không có (NULL), mặc định là 0.
+$shipping_fee = $order_info['shipping_fee'] ?? 0;
+
+
 // --- 4. TRUY VẤN CHI TIẾT SẢN PHẨM TRONG ĐƠN HÀNG ---
 $sql_details = "SELECT od.quantity, od.amount, od.payment_method, 
-                       v.model, v.image_url, m.name AS manufacturer
+                        v.model, v.image_url, m.name AS manufacturer
                 FROM order_detail od
                 JOIN vehicle v ON od.vehicle_id = v.vehicle_id
                 JOIN manufacturer m ON v.manufacturer_id = m.manufacturer_id
@@ -66,12 +68,26 @@ $details_result = $stmt_details->get_result();
 // Lấy phương thức thanh toán từ dòng đầu tiên
 $first_item = $details_result->fetch_assoc();
 $payment_method = $first_item['payment_method'] ?? 'N/A';
-$details_result->data_seek(0); // Đưa con trỏ về đầu để lặp lại từ đầu
 
-// Nếu đơn hàng có sản phẩm, ta reset con trỏ. Nếu không, ta không cần reset.
-if ($first_item) {
+// --- Bổ sung: Tính toán Tổng giá trị sản phẩm ---
+$total_products_value = 0;
+if ($details_result->num_rows > 0) {
+    $details_result->data_seek(0); // Đưa con trỏ về đầu để tính toán
+    while($item = $details_result->fetch_assoc()) {
+        // $item['amount'] là tổng giá trị của một dòng chi tiết (price * quantity)
+        $total_products_value += $item['amount']; 
+    }
+    // Đưa con trỏ về đầu lần nữa để lặp lại cho phần hiển thị HTML
     $details_result->data_seek(0); 
 }
+
+// Tính Tổng cộng cuối cùng
+$grand_total = $total_products_value + $shipping_fee;
+
+// Dùng Grand Total để hiển thị, nếu total_amount trong DB bằng 0 (lỗi) thì dùng Grand Total tự tính
+$display_final_total = ($order_info['total_amount'] > 0) ? $order_info['total_amount'] : $grand_total;
+
+
 ?>
 
 <div class="container py-5">
@@ -90,18 +106,21 @@ if ($first_item) {
                         <div class="col-md-6">
                             <p><strong>Date order:</strong> <?= date("d/m/Y H:i:s", strtotime($order_info['created_at'])) ?></p>
                             <p><strong>Status:</strong> <span class="<?= $badgeClass ?>"><?= $statusText ?></span></p>
+                            <p><strong>Total Value:</strong> <span class="text-danger fs-5">$<?= number_format($display_final_total, 0, ',', '.') ?></span></p>
                         </div>
                         <div class="col-md-6 text-md-end">
-                            <p><strong> Total value</strong>:</strong> <span class="text-danger fs-4">$<?= number_format($order_info['total_amount'], 0, ',', '.') ?></span></p>
+                            
                             <p><strong>Payment methods:</strong> <?= htmlspecialchars($payment_method) ?></p>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <h4 class="fw-bold mb-3">Purchased Products</h4>
+            <h4 class="fw-bold mb-3">Purchased Products (<?= $details_result->num_rows ?> items)</h4>
             <?php 
             if ($details_result->num_rows > 0) {
+                // Đưa con trỏ về đầu lần nữa trước khi hiển thị
+                $details_result->data_seek(0); 
                 while($item = $details_result->fetch_assoc()) {
             ?>
                 <div class="card mb-3 shadow-sm">
@@ -110,18 +129,40 @@ if ($first_item) {
                             <div class="col-md-2">
                                 <img src="<?= htmlspecialchars($item['image_url']) ?>" class="img-fluid rounded object-fit-cover" alt="<?= htmlspecialchars($item['model']) ?>" style="height: 80px; width: 100%;">
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-5">
                                 <h6 class="mb-1 fw-bold"><?= htmlspecialchars($item['model']) ?> - <?= htmlspecialchars($item['manufacturer']) ?></h6>
                             </div>
-                            <div class="col-md-4 text-end">
+                            <div class="col-md-5 text-end">
                                 <p class="mb-0">Quantity: <strong><?= number_format($item['quantity']) ?></strong></p>
-                                <p class="mb-0">Total: <strong class="text-primary">$<?= number_format($item['amount'], 0, ',', '.') ?></strong></p>
+                                <p class="mb-0">Total Price: <strong class="text-primary">$<?= number_format($item['amount'], 0, ',', '.') ?></strong></p>
                             </div>
                         </div>
                     </div>
                 </div>
             <?php 
                 } 
+            ?>
+
+            <div class="card shadow-sm mt-5">
+                <div class="card-body">
+                    <h5 class="fw-bold mb-3">Summary</h5>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Total Products Value:</span>
+                        <span class="fw-bold">$<?= number_format($total_products_value, 0, ',', '.') ?></span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Shipping/Other Fees:</span>
+                        <span class="fw-bold text-success">$<?= number_format($shipping_fee, 0, ',', '.') ?></span>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between fs-4">
+                        <span class="fw-bold text-danger">GRAND TOTAL:</span>
+                        <span class="fw-bold text-danger">$<?= number_format($display_final_total, 0, ',', '.') ?></span>
+                    </div>
+                </div>
+            </div>
+            
+            <?php
             } else {
                 echo '<div class="alert alert-warning">There are no products in this order.</div>';
             }
