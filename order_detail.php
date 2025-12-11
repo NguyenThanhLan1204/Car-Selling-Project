@@ -3,6 +3,7 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
+// Giả sử db.php sử dụng biến $conn
 require_once 'db.php'; 
 
 // 1. Kiểm tra đăng nhập
@@ -17,30 +18,37 @@ $customer_id = $_SESSION['customer_id'];
 $order_id = isset($_GET['order_id']) ? intval($_GET['order_id']) : 0;
 
 if ($order_id === 0) {
-    // Chuyển hướng nếu không có ID
     header("Location: base.php?page=order"); 
     exit;
 }
 
 // --- HÀM HỖ TRỢ HIỂN THỊ STATUS ---
 function getStatusText($status) {
-    // Dùng mảng cố định để dễ quản lý hơn switch/case dài
     $statuses = [
         2 => ["Booked", "badge bg-primary"],
         3 => ["Delivering", "badge bg-info"],
         4 => ["Success", "badge bg-success"],
+        // Thêm các status khác nếu cần
     ];
     return $statuses[$status] ?? ["Not determined", "badge bg-dark"];
 }
 
-// --- 3. TRUY VẤN TỔNG QUAN ĐƠN HÀNG VÀ BẢO MẬT (ĐÃ THÊM shipping_fee) ---
+// --- 3. TRUY VẤN TỔNG QUAN ĐƠN HÀNG (LẤY SHIPPING_FEE) ---
+// Dùng $conn vì db.php thường dùng $conn cho kết nối MySQLi OOP
 $sql_order = "SELECT total_amount, status, created_at, shipping_fee 
               FROM orders 
               WHERE order_id = ? AND customer_id = ?";
 $stmt_order = $conn->prepare($sql_order);
+
+// Kiểm tra nếu chuẩn bị thất bại
+if ($stmt_order === false) {
+    die("Lỗi chuẩn bị truy vấn: " . $conn->error);
+}
+
 $stmt_order->bind_param("ii", $order_id, $customer_id);
 $stmt_order->execute();
-$order_info = $stmt_order->get_result()->fetch_assoc();
+$result_order = $stmt_order->get_result();
+$order_info = $result_order->fetch_assoc();
 $stmt_order->close();
 
 // Kiểm tra: Nếu đơn hàng không tồn tại HOẶC KHÔNG thuộc về khách hàng này
@@ -49,7 +57,7 @@ if (!$order_info) {
     exit;
 }
 
-// Lấy phí vận chuyển từ DB. Nếu không có (NULL), mặc định là 0.
+// Lấy phí vận chuyển từ DB. Nếu NULL (lỗi data cũ), mặc định là 0.
 $shipping_fee = $order_info['shipping_fee'] ?? 0;
 
 
@@ -61,32 +69,35 @@ $sql_details = "SELECT od.quantity, od.amount, od.payment_method,
                 JOIN manufacturer m ON v.manufacturer_id = m.manufacturer_id
                 WHERE od.order_id = ?";
 $stmt_details = $conn->prepare($sql_details);
+
+// Kiểm tra nếu chuẩn bị thất bại
+if ($stmt_details === false) {
+    die("Lỗi chuẩn bị truy vấn chi tiết: " . $conn->error);
+}
+
 $stmt_details->bind_param("i", $order_id);
 $stmt_details->execute();
 $details_result = $stmt_details->get_result();
 
-// Lấy phương thức thanh toán từ dòng đầu tiên
-$first_item = $details_result->fetch_assoc();
-$payment_method = $first_item['payment_method'] ?? 'N/A';
-
-// --- Bổ sung: Tính toán Tổng giá trị sản phẩm ---
+// Lấy phương thức thanh toán từ dòng đầu tiên và tính tổng giá trị sản phẩm
 $total_products_value = 0;
-if ($details_result->num_rows > 0) {
-    $details_result->data_seek(0); // Đưa con trỏ về đầu để tính toán
+$payment_method = 'N/A';
+$item_count = $details_result->num_rows;
+
+if ($item_count > 0) {
+    $details_data = [];
     while($item = $details_result->fetch_assoc()) {
-        // $item['amount'] là tổng giá trị của một dòng chi tiết (price * quantity)
+        $details_data[] = $item;
+        // $item['amount'] là giá trị của một dòng chi tiết (price * quantity)
         $total_products_value += $item['amount']; 
     }
-    // Đưa con trỏ về đầu lần nữa để lặp lại cho phần hiển thị HTML
-    $details_result->data_seek(0); 
+    // Lấy payment method từ dòng đầu tiên của mảng
+    $payment_method = $details_data[0]['payment_method'] ?? 'N/A';
 }
 
-// Tính Tổng cộng cuối cùng
-$grand_total = $total_products_value + $shipping_fee;
 
-// Dùng Grand Total để hiển thị, nếu total_amount trong DB bằng 0 (lỗi) thì dùng Grand Total tự tính
-$display_final_total = ($order_info['total_amount'] > 0) ? $order_info['total_amount'] : $grand_total;
-
+// Tính Tổng cộng cuối cùng (Sử dụng dữ liệu DB: total_amount)
+$grand_total = $order_info['total_amount'];
 
 ?>
 
@@ -106,22 +117,20 @@ $display_final_total = ($order_info['total_amount'] > 0) ? $order_info['total_am
                         <div class="col-md-6">
                             <p><strong>Date order:</strong> <?= date("d/m/Y H:i:s", strtotime($order_info['created_at'])) ?></p>
                             <p><strong>Status:</strong> <span class="<?= $badgeClass ?>"><?= $statusText ?></span></p>
-                            <p><strong>Total Value:</strong> <span class="text-danger fs-5">$<?= number_format($display_final_total, 0, ',', '.') ?></span></p>
+                            
                         </div>
                         <div class="col-md-6 text-md-end">
-                            
                             <p><strong>Payment methods:</strong> <?= htmlspecialchars($payment_method) ?></p>
+                            <p><strong>Total Value:</strong> <span class="text-danger fs-5">$<?= number_format($grand_total, 0, ',', '.') ?></span></p>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <h4 class="fw-bold mb-3">Purchased Products (<?= $details_result->num_rows ?> items)</h4>
+            <h4 class="fw-bold mb-3">Purchased Products (<?= $item_count ?> items)</h4>
             <?php 
-            if ($details_result->num_rows > 0) {
-                // Đưa con trỏ về đầu lần nữa trước khi hiển thị
-                $details_result->data_seek(0); 
-                while($item = $details_result->fetch_assoc()) {
+            if ($item_count > 0) {
+                foreach($details_data as $item) {
             ?>
                 <div class="card mb-3 shadow-sm">
                     <div class="card-body">
@@ -147,7 +156,7 @@ $display_final_total = ($order_info['total_amount'] > 0) ? $order_info['total_am
                 <div class="card-body">
                     <h5 class="fw-bold mb-3">Summary</h5>
                     <div class="d-flex justify-content-between mb-2">
-                        <span>Total Products Value:</span>
+                        <span>Total Products Value (Subtotal):</span>
                         <span class="fw-bold">$<?= number_format($total_products_value, 0, ',', '.') ?></span>
                     </div>
                     <div class="d-flex justify-content-between mb-2">
@@ -157,7 +166,7 @@ $display_final_total = ($order_info['total_amount'] > 0) ? $order_info['total_am
                     <hr>
                     <div class="d-flex justify-content-between fs-4">
                         <span class="fw-bold text-danger">GRAND TOTAL:</span>
-                        <span class="fw-bold text-danger">$<?= number_format($display_final_total, 0, ',', '.') ?></span>
+                        <span class="fw-bold text-danger">$<?= number_format($grand_total, 0, ',', '.') ?></span>
                     </div>
                 </div>
             </div>
@@ -173,6 +182,7 @@ $display_final_total = ($order_info['total_amount'] > 0) ? $order_info['total_am
 </div>
 
 <?php
-$stmt_details->close();
-$conn->close();
+if (isset($stmt_details) && $stmt_details) $stmt_details->close();
+// Chỉ đóng kết nối nếu nó được mở trong file này (thường là không nên, nhưng giữ nguyên theo logic ban đầu của bạn)
+// $conn->close(); 
 ?>
