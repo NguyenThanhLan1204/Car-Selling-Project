@@ -1,4 +1,3 @@
-DROP DATABASE IF EXISTS car_selling;
 CREATE DATABASE car_selling;
 USE car_selling;
 
@@ -15,10 +14,10 @@ CREATE TABLE vehicle (
     vehicle_id INT AUTO_INCREMENT PRIMARY KEY,
     manufacturer_id INT, 
     model VARCHAR(255) NOT NULL,
+    category VARCHAR(50) NOT NULL,
     year INT,
     price DECIMAL(15, 2), 
     image_url VARCHAR(500),
-    video_url VARCHAR(500), 
     stock INT DEFAULT 0, 
     description TEXT,
     CONSTRAINT fk_vehicle_manufacturer FOREIGN KEY (manufacturer_id) REFERENCES manufacturer(manufacturer_id)
@@ -65,68 +64,42 @@ CREATE TABLE order_detail (
 -- 1.Tạo Manufacturers
 INSERT INTO manufacturer (name, country, description) VALUES
 ('Mercedes-Benz', 'Germany', 'Luxury vehicles, vans, trucks, buses, coaches and ambulances.'), 
-('BMW', 'Germany', 'German multinational manufacturer of luxury vehicles and motorcycles.'),                          
+('BMW', 'Germany', 'German multinational manufacturer of luxury vehicles and motorcycles.'),  
+('Toyota', 'Japan', 'Japanese multinational automotive manufacturer.'),                        
 ('Ferrari', 'Italy', 'Italian luxury sports car manufacturer based in Maranello.'),              
-('Audi', 'Germany', 'German automotive manufacturer of luxury vehicles.'),
-('Volvo', 'Sweden', 'Swedish premium automotive manufacturer focusing on safety.'),
-('Porsche', 'Germany', 'German high-performance sports car manufacturer.'),
-('McLaren', 'United Kingdom', 'British supercar manufacturer known for hypercars.');
+('Audi', 'Germany', 'German automotive manufacturer of luxury vehicles.');
+
 -- 2. Tạo Vehicles
-INSERT INTO vehicle (manufacturer_id, model, year, price, image_url,video_url, stock, description) VALUES
+INSERT INTO vehicle (manufacturer_id, model, category, year, price, image_url, stock, description) VALUES
+-- --- 1. SEDAN 
+(1, 'Mercedes-Maybach S680','sedan', 2024, 170000, './assets/img/maybach.jpg', 3, 'The absolute pinnacle of luxury sedans, V12 engine.'), 
+(3, 'Toyota Camry 2.5Q','sedan', 2024, 140500, './assets/img/camry.jpg', 10, 'Business sedan, spacious and reliable.'),
+(2, 'BMW 740i Pure Excellence','sedan', 2024, 659900, './assets/img/740i.jpg', 5, 'Flagship luxury sedan with theater screen.'),
 
--- ==========================
--- 1. AUDI (ID = 4)
--- ==========================
-(4, 'Audi RS6', 2023, 138888, './assets/img/audi_rs6.jpg', 'assets/video/audi_rs6.mp4', 5, 'High-performance wagon with aggressive styling.'),
-(4, 'Audi Q3 SUV', 2024, 38595, './assets/img/audi_q3.webp', 'assets/video/Audi_Q3.mp4', 7, 'Fuel 9.0–5.3 l/100km, CO₂ 205–137 g/km, Class G–E. Optional equipment available.'),
-(4, 'Audi RS7', 2024, 127800, './assets/img/audi_rs7.jpg', 'assets/video/Audi_RS7.mp4', 3, 'High-performance luxury fastback.'),
-(4, 'Audi A7 Sportback', 2024, 75000, './assets/img/audi_a7.jpg', 'assets/video/Audi_A7_Sportback.mp4', 6, 'Premium 4-door coupe-style sedan.'),
+-- --- 2. HATCHBACK 
+(3, 'Toyota Yaris','hatchback', 2024, 6840, './assets/img/yaris.jpg', 15, 'Compact hatchback, easy to drive in city.'),
+(1, 'Mercedes A-Class','hatchback', 2024, 240000, './assets/img/aclass.jpg', 8, 'Luxury compact hatchback with modern tech.'),
+(2, 'BMW 118i SportLine','hatchback', 2024, 180000, './assets/img/bmw118i.jpg', 6, 'Sporty hatchback, driving pleasure.'),
 
--- ==========================
--- 2. BMW (ID = 2)
--- ==========================
-(2, 'BMW X5M', 2024, 519000, './assets/img/bmw_x5m.png', 'assets/video/BMW_X5M.mp4', 2, '616 BHP V8 • Black Sapphire Metallic • 13,500 KM • GCC Spec • Warranty until 2029.'),
-(2, 'BMW X5 xDrive40i M Sport', 2025, 359000, './assets/img/bmw_x5_40i.jpg', 'assets/video/BMW_X5.mp4', 3, 'Loaded with premium options • 9,771 KM • Warranty until 2030.'),
-(2, 'BMW M3 G80', 2024, 76995, './assets/img/bmw_m3_g80.png', 'assets/video/bmw_m3_g80.mp4', 4, 'High-performance sports sedan, twin-turbo inline-6.'),
+-- --- 3. SUV 
+(5, 'Audi Q7 45 TFSI','suv', 2024, 377000, './assets/img/audi_q7.jpg', 5, 'Versatile 7-seater SUV, quattro technology.'), 
+(1, 'Mercedes-AMG G63','suv', 2024, 1175000, './assets/img/g63.jpg', 2, 'The off-road king, iconic boxy design.'),
+(2, 'BMW X7 xDrive40i','suv', 2024, 629900, './assets/img/40i.jpg', 4, 'The President, 7-seater luxury SUV.'),
 
--- ==========================
--- 3. VOLVO (ID = 5)
--- ==========================
-(5, 'Volvo EM90', 2024, 80000, './assets/img/volvo_em90.avif', 'assets/video/VolvoEM90.mp4', 3, 'Luxury electric MPV with Scandinavian design.'),
-(5, 'Volvo S90', 2024, 55000, './assets/img/volvo_s90.png', 'assets/video/Volvo_S90.mp4', 5, 'Premium sedan known for safety and comfort.'),
-(5, 'Volvo XC70', 2025, 45000, './assets/img/volvo_xc70.png', 'assets/video/Volvo_XC70.mp4', 4, 'All-road wagon built for versatility.'),
+-- --- 4. MPV 
+(3, 'Toyota Alphard','mpv', 2024, 437000, './assets/img/alphard.jpg', 3, 'Luxury MPV, business class on wheels.'),
+(1, 'Mercedes V-Class V250','mpv', 2024, 303900, './assets/img/v250.jpg', 5, 'Premium MPV for family and business.'),
+(3, 'Toyota Innova Cross','mpv', 2024, 99000, './assets/img/innova.jpg', 12, 'Popular MPV, hybrid option available.'),
 
--- ==========================
--- 4. PORSCHE (ID = 6)
--- ==========================
-(6, 'Porsche Taycan Turbo GT', 2025, 739000, './assets/img/taycan_gt.jpg', 'assets/video/Porsche_Taycan_Turbo_GT.mp4', 1, '1,019 BHP • Shade Green Metallic • Weissach Package • 838 KM • Warranty 2027.'),
-(6, 'Porsche 911 GT3', 2024, 175000, './assets/img/porsche_gt3.png', 'assets/video/porsche_911gt3.mp4', 2, 'Track-focused high-performance 911.'),
-(6, 'Porsche GT3 RS', 2024, 225000, './assets/img/porsche_gt3_rs.png', 'assets/video/Porsche_GT3_RS.mp4', 1, 'Ultimate track machine with extreme aero.'),
-(6, 'Porsche 911', 2024, 110000, './assets/img/porsche_911.png', 'assets/video/porsche_911.mp4', 5, 'Iconic sports car with rear-engine layout.'),
-(6, 'Porsche 918 Spyder Weissach', 2015, 900000, './assets/img/porsche_918_weissach.png', 'assets/video/Porsche_918_spyder_weisach.mp4', 1, 'Lightweight Weissach Package edition.'),
+-- --- 5. PICKUP 
+(3, 'Toyota Hilux Adventure','pickup', 2024, 107700, './assets/img/hilux.jpg', 8, 'Tough and durable pickup truck.'),
+(3, 'Toyota Hilux E','pickup', 2024, 85000, './assets/img/hilux_e.jpg', 10, 'Standard pickup for work.'),
 
--- ==========================
--- 5. FERRARI (ID = 3)
--- ==========================
-(3, 'Ferrari 812', 2024, 335000, './assets/img/ferrari_812.jpg', 'assets/video/ferrari_812.mp4', 1, 'Naturally aspirated V12 grand tourer.'),
-(3, 'Ferrari SF90', 2024, 625000, './assets/img/ferrari_sf90.png', 'assets/video/ferrarisf90.mp4', 1, '1000 HP hybrid supercar.'),
-(3, 'Ferrari Roma', 2024, 220000, './assets/img/ferrari_roma.jpg', 'assets/video/Ferrari_Roma.mp4', 1, 'Elegant V8 grand tourer.'),
-
--- ==========================
--- 6. MERCEDES-BENZ (ID = 1)
--- ==========================
-(1, 'Maybach GLS 600', 2023, 214888, './assets/img/maybach_gls600.jpg', 'assets/video/maybach_2023.mp4', 3, 'Flagship luxury SUV with unmatched comfort.'),
-(1, 'Mercedes-AMG CLA 45 S 4MATIC+', 2024, 309000, './assets/img/cla45.jpg', 'assets/video/Mercedes_AMG_45S.mp4', 4, '421 BHP • 14,000 KM • Full history • Warranty until 2029.'),
-(1, 'Mercedes CLE53 AMG 4MATIC+', 2024, 439000, './assets/img/cle53.jpg', 'assets/video/Mercedes_CLE53.mp4', 3, '443 BHP • 5,980 KM • Warranty until 2029.'),
-(1, 'Mercedes-AMG SL63', 2024, 155000, './assets/img/sl63.png', 'assets/video/Mercedes_AMG_SL63.mp4', 2, 'Luxury high-performance roadster.'),
-(1, 'Mercedes-AMG GT Black Series', 2021, 300000, './assets/img/gt_black.png', 'assets/video/AMG_GT_BLACK_SERIES.mp4', 1, 'Extreme aerodynamics • track-bred V8 monster.'),
-
--- ==========================
--- 7. MCLAREN (ID = 7)
--- ==========================
-(7, 'McLaren Senna', 2020,  1000000, './assets/img/mclaren_senna.png', 'assets/video/Maclaren_senna.mp4', 1, 'Track-focused hypercar named after Ayrton Senna.'),
-(7, 'McLaren Speedtail', 2020, 2100000, './assets/img/mclaren_speedtail.png', 'assets/video/Mclaren_Speedtail.mp4', 1, 'Hybrid hyper-GT with 403 km/h top speed.'),
-(7, 'McLaren 750S', 2024, 330000, './assets/img/mclaren_750s.webp', 'assets/video/McLaren_750S_Spider.mp4', 2, 'Lighter, sharper successor to the 720S.');
+-- --- 6. SUPERCAR 
+(4, 'Ferrari SF90 Stradale','supercar', 2024, 3400000, './assets/img/sf90.jpg', 1, '1000HP Hybrid Supercar, 0-100km/h in 2.5s.'), 
+(4, 'Ferrari 296 GTB','supercar', 2024, 2300000, './assets/img/296gtb.jpg', 2, 'V6 Hybrid, defining fun to drive.'), 
+(4, 'Ferrari 296 Speciale A','supercar', 2024, 2900000, './assets/img/296speciale.jpg', 1, 'Open-top special edition, pure emotion.'), 
+(5, 'Audi RS e-tron GT','supercar', 2024, 590000, './assets/img/audi_rs.jpg', 3, 'Electric high-performance grand tourer.'); 
 
 -- 3. Tạo Customers 
 INSERT INTO customer (name, age, phone_number, email, dob, username, password, role, address) VALUES
@@ -161,4 +134,28 @@ VALUES
 (2, 5, 4, 1090000000, 1, 'Bank Transfer', 2),
 
 -- Order #5 của customer 5
-(5, 4, 5, 1050000000, 1, 'Cash', 5);
+(5, 4, 5, 1050000000, 1, 'Cash', 3);
+
+
+
+ALTER TABLE orders
+ADD COLUMN total_amount DECIMAL(10, 2) NOT NULL DEFAULT 0.00;
+
+ALTER TABLE orders
+ADD COLUMN shipping_fee DECIMAL(10, 2) DEFAULT 0;
+
+ALTER TABLE order_detail
+ADD COLUMN price_unit DECIMAL(10, 2) NOT NULL DEFAULT 0 AFTER payment_method;
+
+
+-- SCRIPT 1: TẠO BẢNG PAYMENT_METHODS
+CREATE TABLE payment_methods (
+    payment_method_id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(50) NOT NULL UNIQUE
+);
+
+-- Chèn dữ liệu mẫu dựa trên ví dụ của bạn
+INSERT INTO payment_methods (name) VALUES 
+('Bank Transfer'), 
+('Credit Card');
+
