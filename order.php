@@ -16,11 +16,6 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-if (!isset($_SESSION['customer_id'])) {
-    echo "<p class='text-center text-danger py-5'>You need to login to view orders. <a href='login.php' class='fw-bold'>Login now</a></p>";
-    exit;
-}
-
 $customer_id = $_SESSION['customer_id'];
 
 // Lấy filter status từ URL (Sử dụng 0 cho "Tất cả")
