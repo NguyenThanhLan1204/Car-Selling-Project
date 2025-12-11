@@ -24,7 +24,7 @@
       
       <div class="mb-4">
         <img 
-            src="./assets/img/101-anh-sieu-xe-4k-tai-free-lam-hinh-nen-dt-may-tinh.jpg" 
+            src="./assets/img/xedep.jpg" 
             class="img-fluid rounded shadow-sm mb-3"
         >
       </div>
@@ -78,7 +78,7 @@
           </div>
   
           <div class="d-flex align-items-center mb-3">
-            <img src="./assets/img/ceo2.jpg" class="rounded-circle me-3" width="60" height="60" alt="CEO 2">
+            <img src="./assets/img/595147931_1398470664997678_1830655376811180632_n.jpg" class="rounded-circle me-3" width="60" height="60" alt="CEO 2">
             <div>
               <h6 class="mb-0 fw-bold">Ný</h6>
               <small class="text-muted">CEO</small>
