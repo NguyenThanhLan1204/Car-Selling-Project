@@ -1,11 +1,9 @@
 <?php
-// Tên file: order.php (Phiên bản Khách hàng đã sửa lỗi Bộ lọc, giữ nguyên CSS)
 
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// Kết nối DB (Nên require_once 'db.php'; nếu bạn đã có file này)
 $servername = "localhost";
 $username   = "root";
 $password   = "";
@@ -67,7 +65,7 @@ $sql .= " ORDER BY o.created_at DESC";
 $stmt = $conn->prepare($sql);
 
 if (!$stmt) {
-    die("Lỗi chuẩn bị truy vấn: " . $conn->error);
+    die("Query preparation error: " . $conn->error);
 }
 
 $stmt->bind_param($types, ...$params); 
@@ -82,7 +80,7 @@ $result = $stmt->get_result();
     <div class="row g-4">
 
            <div class="col-lg-3 col-md-4">
-            <div class="p-4 shadow-sm bg-white rounded position-fixed" style="width: 250px;">           <h5 class="fw-bold mb-3">Bộ lọc Trạng thái</h5>
+            <div class="p-4 shadow-sm bg-white rounded position-fixed" style="width: 250px;">           <h5 class="fw-bold mb-3">Status Filter</h5>
              <div class="list-group">
                  <a href="base.php?page=order" class="list-group-item list-group-item-action <?= ($statusFilter === 0) ? 'active' : '' ?>">
                     All 
