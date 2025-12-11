@@ -23,7 +23,7 @@ if ($result->num_rows > 0) {
 ?>
 
 
-<body>
+<div></div>
     <div class="slider position-relative w-100">
         <div class="text-content position-relative">
             <div class="slide">          
@@ -102,4 +102,4 @@ if ($result->num_rows > 0) {
             ?>
         </div>
     </div>
-</body>
+</div>

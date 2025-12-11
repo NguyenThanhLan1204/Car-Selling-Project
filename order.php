@@ -1,7 +1,11 @@
-<?php
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
+<?php 
+if (!isset($_SESSION['customer_id'])) {
+    header("Location: login.php?message=please_login");
+    exit();
 }
+?>
+
+<?php
 // Kết nối DB
 $servername = "localhost";
 $username   = "root";
@@ -53,32 +57,31 @@ $result = $stmt->get_result();
     <h2 class="fw-bold mb-4 text-center">Đơn hàng của bạn</h2>
     <div class="row g-4">
         <div class="col-3">
-            <div class="p-4 shadow-sm position-fixed">
-                <h5 class="fw-bold mb-3">Bộ lọc Trạng thái</h5>
-                <div class="mb-3">
-                    <label class="form-check mb-2">
-                        <input class="form-check-input" type="radio" name="shipping" <?php if($statusFilter==0) echo 'checked'; ?>>
-                        <a href="base.php?page=order" class="form-check-label text-decoration-none">Tất cả Đơn hàng</a>
-                    </label>
-                    <label class="form-check mb-2">
-                        <input class="form-check-input" type="radio" name="shipping" <?php if($statusFilter==2) echo 'checked'; ?>>
-                        <a href="base.php?page=order&status=2" class="form-check-label text-decoration-none">Đang chờ xử lý</a>
-                    </label>
-                    <label class="form-check mb-2">
-                        <input class="form-check-input" type="radio" name="shipping" <?php if($statusFilter==3) echo 'checked'; ?>>
-                        <a href="base.php?page=order&status=3" class="form-check-label text-decoration-none">Đang giao hàng</a>
-                    </label>
-                    <label class="form-check">
-                        <input class="form-check-input" type="radio" name="shipping" <?php if($statusFilter==4) echo 'checked'; ?>>
-                        <a href="base.php?page=order&status=4" class="form-check-label text-decoration-none">Đã hoàn thành</a>
-                    </label>
+            <div class="p-4 shadow-sm bg-white rounded position-fixed">
+                <h5 class="fw-bold mb-3">Bộ lọc Trạng thái</h5>        
+                <div class="list-group">       
+                    <?php $status = $_GET['status'] ?? ''; ?>       
+                    <a href="base.php?page=order" 
+                       class="list-group-item list-group-item-action <?= $status == '' ? 'active' : '' ?>">
+                       Tất cả Đơn hàng
+                    </a>       
+                    <a href="base.php?page=order&status=2" 
+                       class="list-group-item list-group-item-action <?= $status == 2 ? 'active' : '' ?>">
+                       Đang chờ xử lý
+                    </a>       
+                    <a href="base.php?page=order&status=3" 
+                       class="list-group-item list-group-item-action <?= $status == 3 ? 'active' : '' ?>">
+                       Đang giao hàng
+                    </a>      
+                    <a href="base.php?page=order&status=4" 
+                       class="list-group-item list-group-item-action <?= $status == 4 ? 'active' : '' ?>">
+                       Đã hoàn thành
+                    </a>       
                 </div>
-                
             </div>
-        </div>
-    
+        </div>  
         <!-- Danh sách đơn hàng -->
-        <div class="col-9">
+        <div class="col-9" style="min-height: 400px;">
             <!-- Đơn hàng 1 -->
             <?php 
             if ($result->num_rows > 0) {
@@ -105,16 +108,16 @@ $result = $stmt->get_result();
                     echo '      <p class="mb-1">Giá: <strong>'.number_format($row['amount'],0,',','.').' VND</strong></p>';
                     echo '      <span class="badge '.$badgeClass.'">'.$statusText.'</span>';
                     echo '    </div>';
-                    echo '    <div class="col-md-2">';
-                    echo '      <a href="order_detail.php?id='.$row['order_detail_id'].'" class="btn btn-success text-nowrap d-flex justify-content-center align-items-center">';
-                    echo '        Xem chi tiết';
-                    echo '      </a>';
-                    echo '    </div>';
+                    // echo '    <div class="col-md-2">';
+                    // echo '      <a href="order_detail.php?id='.$row['order_detail_id'].'" class="btn btn-success text-nowrap d-flex justify-content-center align-items-center">';
+                    // echo '        Xem chi tiết';
+                    // echo '      </a>';
+                    // echo '    </div>';
                     echo '  </div>';
                     echo '</div>';
                 }
             } else {
-                echo '<div class="d-flex justify-content-center align-items-center" style="min-height: 400px;">';
+                echo '<div class="d-flex justify-content-center align-items-center">';
                 echo '   <div class="text-center text-muted">';
                 echo '       <i class="bi bi-box-seam" style="font-size: 3rem;"></i>';
                 echo '        <p class="mt-3">Bạn chưa có đơn hàng nào.</p>';

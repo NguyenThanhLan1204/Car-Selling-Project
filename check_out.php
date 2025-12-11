@@ -1,7 +1,13 @@
-<?php
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
+<?php include 'session_init.php'; ?>
+
+<?php 
+if (!isset($_SESSION['customer_id'])) {
+    header("Location: login.php?message=please_login");
+    exit();
 }
+?>
+
+<?php
 require_once 'db.php';
 
 if (!isset($_SESSION['customer_id'])) {
@@ -13,7 +19,7 @@ $customer_id = $_SESSION['customer_id'];
 $cart = isset($_SESSION['cart']) ? $_SESSION['cart'] : [];
 
 if (empty($cart)) {
-    header("Location: cart.php");
+    header("Location: base.php?page=cart");
     exit();
 }
 

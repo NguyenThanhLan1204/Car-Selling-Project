@@ -1,7 +1,5 @@
+
 <?php
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
 // Kết nối database
 require_once 'db.php';
 
@@ -31,16 +29,6 @@ if (isset($_GET['id'])) {
     exit();
 }
 ?>
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= htmlspecialchars($car['model']) ?> - Car Details</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
-</head>
 <body>
     <div class="container mt-5">
         <div class="product-wrapper row bg-white rounded shadow-sm p-4">
@@ -62,11 +50,9 @@ if (isset($_GET['id'])) {
 
                     <?php 
                         $media = []; 
-
                         if (!empty($car['video_url'])) {
                             $media[] = ['type' => 'video', 'url' => $car['video_url']];
                         }
-
                         $media[] = [
                             'type' => 'image',
                             'url' => !empty($car['image_url']) ? $car['image_url'] : 'https://via.placeholder.com/600x400'
@@ -88,12 +74,19 @@ if (isset($_GET['id'])) {
 
                     </div>
 
-                    <!-- Nút chuyển -->
-                    <div onclick="prevMedia()" 
-                        style="position:absolute; left:10px; top:50%; transform:translateY(-50%); cursor:pointer; font-size:30px;">❮</div>
-
-                    <div onclick="nextMedia()" 
-                        style="position:absolute; right:10px; top:50%; transform:translateY(-50%); cursor:pointer; font-size:30px;">❯</div>
+                    <!-- Nút Previous -->
+                    <div class="position-absolute start-0 top-50 translate-middle-y">
+                        <i class="bx bx-chevron-left fs-1 text-dark" 
+                           role="button" 
+                           onclick="prevMedia()"></i>
+                    </div>
+                    
+                    <!-- Nút Next -->
+                    <div class="position-absolute end-0 top-50 translate-middle-y">
+                        <i class="bx bx-chevron-right fs-1 text-dark" 
+                           role="button" 
+                           onclick="nextMedia()"></i>
+                    </div>
 
                 </div>
             </div>
@@ -101,14 +94,11 @@ if (isset($_GET['id'])) {
             <script>
                 const mediaList = <?= json_encode($media) ?>;
                 let currentIndex = 0;
-
                 function renderMedia() {
                     const container = document.getElementById('mediaContent');
                     const item = mediaList[currentIndex];
-
                     // Làm trống nội dung
                     container.innerHTML = "";
-
                     // VIDEO
                     if (item.type === "video") {
                         container.innerHTML = `
@@ -194,7 +184,7 @@ if (isset($_GET['id'])) {
                     </div>
                     <div class="mt-4">
                         <div class="d-flex gap-2">
-                            <?php if (isset($_SESSION['username'])): ?>
+                            <?php if (isset($_SESSION['customer_id'])): ?>
                                 <?php if ($car['stock'] > 0): ?>
                                     <button type="submit" class="btn btn-warning flex-grow-1 py-3 fw-bold rounded-pill">
                                         <i class='bx bx-cart-add fs-4 align-middle'></i> Add to Cart
@@ -214,9 +204,6 @@ if (isset($_GET['id'])) {
                     </div>
                 </form> 
             </div>
-
-            
-
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

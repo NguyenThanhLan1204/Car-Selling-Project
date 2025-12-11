@@ -1,10 +1,15 @@
-<?php
-session_start();
-if (isset($_SESSION['username'])) {
+<?php include 'session_init.php'; ?>
+<?php 
+// Nếu đã đăng nhập → chuyển về home
+if (isset($_SESSION['customer_id'])) {
     header("Location: base.php?page=home");
     exit();
 }
+
+// Lấy username từ cookie để autofill (nếu có)
+$savedUsername = isset($_COOKIE['username']) ? $_COOKIE['username'] : "";
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

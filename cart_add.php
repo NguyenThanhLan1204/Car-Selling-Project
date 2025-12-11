@@ -1,6 +1,5 @@
 <?php
-session_start();
-
+include 'session_init.php';
 // Kiểm tra xem có dữ liệu gửi lên không
 if (isset($_POST['vehicle_id'])) {
     
@@ -35,7 +34,7 @@ if (isset($_POST['vehicle_id'])) {
 
 } else {
     // Nếu truy cập trực tiếp file này mà không post dữ liệu -> Về trang chủ
-    header("Location: index.php");
+    header("Location: base.php?page=home");
     exit();
 }
 ?>

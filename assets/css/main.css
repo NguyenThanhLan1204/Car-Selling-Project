@@ -3,17 +3,8 @@
 }
 
 .search_box {
-  width: 600px;
-  height: 40px;
-  position: relative;
-}
-
-.form-control:focus{
-  
-}
-
-.search_box{
   width: 40vw;
+  height: 40px;
 }
 
 .search_box input {
@@ -27,15 +18,6 @@
   cursor: pointer;
   font-size: 25px;
 }
-
-.search_box i:hover{
-  color:#ffdd57;
-}
-
-.user_menu i:hover{
-  color: #ffdd57;
-}
-
 
 /* Nabar */
 .navbar {

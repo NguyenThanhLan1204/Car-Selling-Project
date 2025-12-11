@@ -1,6 +1,4 @@
 <?php
-session_start();
-
 /* Kết nối database */
 include("db.php");
 

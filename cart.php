@@ -1,8 +1,12 @@
+<?php 
+if (!isset($_SESSION['customer_id'])) {
+    header("Location: login.php?message=please_login");
+    exit();
+}
+?>
+
 <?php
 require_once 'db.php';
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
 
 $cart_content = isset($_SESSION['cart']) ? $_SESSION['cart'] : [];
 $list_ids = array_keys($cart_content);
@@ -15,7 +19,7 @@ $grand_total = 0;
             <h3 class="mb-4 fw-bold">Your shopping cart</h3>
             <?php if (empty($list_ids)): ?>
                 <div class="alert alert-warning text-center">
-                    The shopping cart is empty! <a href="index.php" class="fw-bold">Shop now</a>
+                    The shopping cart is empty! <a href="base.php?page=home" class="fw-bold">Shop now</a>
                 </div>
             <?php else: ?>
                 <?php
@@ -69,7 +73,7 @@ $grand_total = 0;
                 </div>
                 <?php endwhile; ?>
             <?php endif; ?>
-        </div>    
+        </div>
         <?php if (!empty($list_ids)): ?>
         <div class="col-lg-3">
             <div class="p-4 shadow-sm bg-white rounded position-sticky" style="top: 100px;">

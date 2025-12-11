@@ -1,6 +1,5 @@
-<?php
-session_start();
-?>
+<?php include 'session_init.php'; ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -43,7 +42,7 @@ session_start();
 
 
                     <li class="user_menu-cart">
-                        <?php if (isset($_SESSION['username'])): ?>
+                        <?php if (isset($_SESSION['customer_id'])): ?>
                             <a href="?page=cart"><i class="bx bx-cart fs-2 custom_hover"></i></a>
                         <?php else: ?>
                             <a href="login.php"><i class="bx bx-cart fs-2 custom_hover"></i></a>
@@ -66,7 +65,7 @@ session_start();
                         </ul>
                     </div>
                     <div class="dropdown-content" id="userDropdown">
-                        <?php if (isset($_SESSION['username'])): ?>
+                        <?php if (isset($_SESSION['customer_id'])): ?>
                             <h3 class="pt-2 pb-4 text-nowrap fw-bold">Hello <?= $_SESSION['username'] ?></h3>
                             <ul class="list-unstyled">
                                 <?php if ($_SESSION['role'] == 'admin'): ?>

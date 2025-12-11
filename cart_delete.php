@@ -1,6 +1,5 @@
 <?php
-session_start();
-
+include 'session_init.php';
 // 1. Kiểm tra ID xe cần xóa có được gửi lên không
 if (isset($_GET['id'])) {
     $id = $_GET['id'];
