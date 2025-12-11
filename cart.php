@@ -1,4 +1,9 @@
 <?php 
+// Đảm bảo session được khởi tạo trước khi sử dụng $_SESSION
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
 if (!isset($_SESSION['customer_id'])) {
     header("Location: login.php?message=please_login");
     exit();
@@ -6,11 +11,13 @@ if (!isset($_SESSION['customer_id'])) {
 ?>
 
 <?php
-require_once 'db.php';
+// Giả sử file db.php khởi tạo biến $conn hoặc $link
+require_once 'db.php'; 
+$db_connection = isset($conn) ? $conn : $link; 
 
 $cart_content = isset($_SESSION['cart']) ? $_SESSION['cart'] : [];
 $list_ids = array_keys($cart_content);
-$grand_total = 0; // Đây là subtotal ban đầu (tổng giá trị sản phẩm)
+$grand_total = 0; // Subtotal (tổng giá trị sản phẩm)
 ?>
 
 <div class="cart container py-5">
@@ -23,16 +30,14 @@ $grand_total = 0; // Đây là subtotal ban đầu (tổng giá trị sản ph�
                 </div>
             <?php else: ?>
                 <?php
-                // CHỈ THỰC HIỆN TRUY VẤN CSDL KHI GIỎ HÀNG KHÔNG RỖNG
                 $ids_str = implode(',', $list_ids);
-               
                 $sql = "SELECT * FROM vehicle WHERE vehicle_id IN ($ids_str)";
-                $result = $conn->query($sql);
+                $result = $db_connection->query($sql);
                 
                 while ($row = $result->fetch_assoc()):
                     $curr_id = $row['vehicle_id'];
                     $qty = $cart_content[$curr_id]['qty'];
-                    $color = $cart_content[$curr_id]['color'];
+                    $color = $cart_content[$curr_id]['color'] ?? 'Default';
                     $subtotal = $row['price'] * $qty;
                     $grand_total += $subtotal;
                 ?>
@@ -49,11 +54,11 @@ $grand_total = 0; // Đây là subtotal ban đầu (tổng giá trị sản ph�
                                     <div class="d-flex flex-column">
                                         <label class="small text-muted mb-1">Quantity</label>
                                         <input type="number" 
-                                               class="form-control text-center qty-input" 
-                                               value="<?= $qty ?>" 
-                                               min="1" 
-                                               data-id="<?= $curr_id ?>"
-                                               style="width: 80px; text-align: center;">
+                                                class="form-control text-center qty-input" 
+                                                value="<?= $qty ?>" 
+                                                min="1" 
+                                                data-id="<?= $curr_id ?>"
+                                                style="width: 80px; text-align: center;">
                                     </div>
                                     <div class="text-end">
                                         <p class="small text-muted mb-0">Subtotal</p>
@@ -81,10 +86,14 @@ $grand_total = 0; // Đây là subtotal ban đầu (tổng giá trị sản ph�
             <div class="p-4 shadow-sm bg-white rounded position-sticky" style="top: 100px;">
                 <h5 class="fw-bold mb-4 border-bottom pb-2">Cart summary</h5>
                 
-                <form action="check_out.php" method="POST">
+                <form action="base.php?page=checkout" method="POST"> 
+                    
+                    <input type="hidden" name="sub_total_input" id="sub-total-hidden" value="<?= $grand_total ?>">
+                    
+                    <input type="hidden" name="payment_method_input" id="payment-method-hidden" value="Cash on Delivery">
+
                     <div class="mb-4">
                         <p class="small fw-bold text-muted mb-2 text-uppercase">Shipping</p>
-                        
                         <div class="form-check border rounded p-2 mb-2">
                             <input class="form-check-input ms-0 me-2 shipping-radio" type="radio" 
                                    name="shipping_cost" id="ship-normal" value="0" checked>
@@ -93,7 +102,6 @@ $grand_total = 0; // Đây là subtotal ban đầu (tổng giá trị sản ph�
                                 <span class="fw-bold">$0</span>
                             </label>
                         </div>
-                        
                         <div class="form-check border rounded p-2">
                             <input class="form-check-input ms-0 me-2 shipping-radio" type="radio" 
                                    name="shipping_cost" id="ship-fast" value="15">
@@ -102,9 +110,29 @@ $grand_total = 0; // Đây là subtotal ban đầu (tổng giá trị sản ph�
                                 <span class="fw-bold">$15</span>
                             </label>
                         </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <p class="small fw-bold text-muted mb-2 text-uppercase">Payment Method</p>
                         
+                        <div class="form-check border rounded p-2 mb-2">
+                            <input class="form-check-input ms-0 me-2 payment-radio" type="radio" 
+                                   name="checkout_payment_method" id="payment-cash" value="Cash on Delivery" checked> 
+                            <label class="form-check-label w-100" for="payment-cash">Cash on Delivery</label>
                         </div>
-                    
+                        
+                        <div class="form-check border rounded p-2 mb-2">
+                            <input class="form-check-input ms-0 me-2 payment-radio" type="radio" 
+                                   name="checkout_payment_method" id="payment-bank" value="Bank Transfer"> 
+                            <label class="form-check-label w-100" for="payment-bank">Bank Transfer</label>
+                        </div>
+                        
+                        <div class="form-check border rounded p-2">
+                            <input class="form-check-input ms-0 me-2 payment-radio" type="radio" 
+                                   name="checkout_payment_method" id="payment-credit" value="Credit Card"> 
+                            <label class="form-check-label w-100" for="payment-credit">Credit Card</label>
+                        </div>
+                    </div>
                     <div class="d-flex justify-content-between mb-2">
                         <span class="text-muted">Subtotal:</span>
                         <strong id="temp-total">$<?= number_format($grand_total) ?></strong>
@@ -119,7 +147,7 @@ $grand_total = 0; // Đây là subtotal ban đầu (tổng giá trị sản ph�
                         Checkout
                     </button>
                 </form>
-                </div>
+            </div>
         </div>
         <?php endif; ?>
     </div>
@@ -129,8 +157,10 @@ $grand_total = 0; // Đây là subtotal ban đầu (tổng giá trị sản ph�
 document.addEventListener('DOMContentLoaded', function () {
     const qtyInputs = document.querySelectorAll('.qty-input');
     const shippingRadios = document.querySelectorAll('.shipping-radio');
+    const paymentRadios = document.querySelectorAll('.payment-radio');
+    const subTotalHidden = document.getElementById('sub-total-hidden');
+    const paymentMethodHidden = document.getElementById('payment-method-hidden'); 
 
-    // Hàm cập nhật tất cả giá tiền hiển thị
     function updateCartUI() {
         let grandSubtotal = 0;
         
@@ -150,22 +180,26 @@ document.addEventListener('DOMContentLoaded', function () {
             grandSubtotal += itemSubtotal;
         });
 
-        // Tính tổng tiền cuối cùng (bao gồm phí ship)
-        // Lấy giá trị của radio button đang được chọn (0 hoặc 15)
         const checkedRadio = document.querySelector('.shipping-radio:checked');
         const shippingCost = parseInt(checkedRadio ? checkedRadio.value : 0);
         
-        // **LƯU Ý: Không cần cập nhật trường ẩn vì radio button đã gửi giá trị**
-        
         const total = grandSubtotal + shippingCost;
+        
+        subTotalHidden.value = grandSubtotal; 
+        
         document.getElementById('temp-total').innerText = '$' + grandSubtotal.toLocaleString();
         document.getElementById('grand-total-display').innerText = '$' + total.toLocaleString();
     }
     
-    // Xử lý khi nhập từ bàn phím trực tiếp hoặc nhấn mũi tên mặc định
+    paymentRadios.forEach(radio => {
+        radio.addEventListener('change', function() {
+            paymentMethodHidden.value = this.value; 
+        });
+    });
+
     qtyInputs.forEach(input => {
-        input.addEventListener('input', updateCartUI); // Cập nhật khi có thay đổi
-        input.addEventListener('blur', function() { // Đảm bảo số lượng tối thiểu là 1
+        input.addEventListener('input', updateCartUI); 
+        input.addEventListener('blur', function() { 
             if (this.value === "" || parseInt(this.value) < 1) {
                 this.value = 1;
                 updateCartUI();
@@ -173,12 +207,10 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // Xử lý khi đổi gói vận chuyển
     shippingRadios.forEach(radio => {
         radio.addEventListener('change', updateCartUI);
     });
 
-    // Khởi tạo tổng tiền khi tải trang
     updateCartUI();
 });
 </script>
