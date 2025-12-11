@@ -105,8 +105,10 @@
          
                 if ($page == 'home') {
                   include("./home.php");
-                } elseif ($page == 'cart') {
-                  include("./cart.php");
+                  } elseif ($page == 'cart') {
+                include("./cart.php");
+                }elseif ($page == 'checkout') {
+                include("./check_out.php"); 
                 } elseif ($page == 'order') {
                 include("./order.php");
                 } elseif ($page == 'order_detail') {
