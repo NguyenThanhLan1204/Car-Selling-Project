@@ -6,7 +6,7 @@ if (session_status() === PHP_SESSION_NONE) {
 
 $cart_content = isset($_SESSION['cart']) ? $_SESSION['cart'] : [];
 $list_ids = array_keys($cart_content);
-$grand_total = 0;
+$grand_total = 0; // Đây là subtotal ban đầu (tổng giá trị sản phẩm)
 ?>
 
 <div class="cart container py-5">
@@ -19,8 +19,9 @@ $grand_total = 0;
                 </div>
             <?php else: ?>
                 <?php
-                // CHỈ THỰC HIỆN TRUY VẤN CSDL KHI GIỎ HÀNG KHÔNG RỖNG (Sửa lỗi Fatal Error SQL)
+                // CHỈ THỰC HIỆN TRUY VẤN CSDL KHI GIỎ HÀNG KHÔNG RỖNG
                 $ids_str = implode(',', $list_ids);
+               
                 $sql = "SELECT * FROM vehicle WHERE vehicle_id IN ($ids_str)";
                 $result = $conn->query($sql);
                 
@@ -69,44 +70,52 @@ $grand_total = 0;
                 </div>
                 <?php endwhile; ?>
             <?php endif; ?>
-        </div>    
+        </div> 
+        
         <?php if (!empty($list_ids)): ?>
         <div class="col-lg-3">
             <div class="p-4 shadow-sm bg-white rounded position-sticky" style="top: 100px;">
                 <h5 class="fw-bold mb-4 border-bottom pb-2">Cart summary</h5>
-                <div class="mb-4">
-                    <p class="small fw-bold text-muted mb-2 text-uppercase">Shipping</p>
-                    <div class="form-check border rounded p-2 mb-2">
-                        <input class="form-check-input ms-0 me-2 shipping-radio" type="radio" name="shipping" id="ship-normal" value="0" checked>
-                        <label class="form-check-label d-flex justify-content-between w-100" for="ship-normal">
-                            <span>Free shipping</span>
-                            <span class="fw-bold">$0</span>
-                        </label>
-                    </div>
-                    <div class="form-check border rounded p-2">
-                        <input class="form-check-input ms-0 me-2 shipping-radio" type="radio" name="shipping" id="ship-fast" value="15">
-                        <label class="form-check-label d-flex justify-content-between w-100" for="ship-fast">
-                            <span>Express shipping</span>
-                            <span class="fw-bold">$15</span>
-                        </label>
-                    </div>
-                </div>
-                <div class="d-flex justify-content-between mb-2">
-                    <span class="text-muted">Subtotal:</span>
-                    <strong id="temp-total">$<?= number_format($grand_total) ?></strong>
-                </div>
-                <hr>
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <span class="fw-bold h5">Total:</span>
-                    <span class="h4 fw-bold text-danger" id="grand-total-display">$<?= number_format($grand_total) ?></span>
-                </div>
+                
                 <form action="check_out.php" method="POST">
-                    <input type="hidden" name="shipping_cost" id="shipping-input-value" value="0">
+                    <div class="mb-4">
+                        <p class="small fw-bold text-muted mb-2 text-uppercase">Shipping</p>
+                        
+                        <div class="form-check border rounded p-2 mb-2">
+                            <input class="form-check-input ms-0 me-2 shipping-radio" type="radio" 
+                                   name="shipping_cost" id="ship-normal" value="0" checked>
+                            <label class="form-check-label d-flex justify-content-between w-100" for="ship-normal">
+                                <span>Free shipping</span>
+                                <span class="fw-bold">$0</span>
+                            </label>
+                        </div>
+                        
+                        <div class="form-check border rounded p-2">
+                            <input class="form-check-input ms-0 me-2 shipping-radio" type="radio" 
+                                   name="shipping_cost" id="ship-fast" value="15">
+                            <label class="form-check-label d-flex justify-content-between w-100" for="ship-fast">
+                                <span>Express shipping</span>
+                                <span class="fw-bold">$15</span>
+                            </label>
+                        </div>
+                        
+                        </div>
+                    
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-muted">Subtotal:</span>
+                        <strong id="temp-total">$<?= number_format($grand_total) ?></strong>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <span class="fw-bold h5">Total:</span>
+                        <span class="h4 fw-bold text-danger" id="grand-total-display">$<?= number_format($grand_total) ?></span>
+                    </div>
+                    
                     <button type="submit" class="btn btn-dark w-100 py-3 fw-bold rounded-pill text-uppercase">
                         Checkout
                     </button>
                 </form>
-            </div>
+                </div>
         </div>
         <?php endif; ?>
     </div>
@@ -116,7 +125,6 @@ $grand_total = 0;
 document.addEventListener('DOMContentLoaded', function () {
     const qtyInputs = document.querySelectorAll('.qty-input');
     const shippingRadios = document.querySelectorAll('.shipping-radio');
-    const shippingHiddenInput = document.getElementById('shipping-input-value');
 
     // Hàm cập nhật tất cả giá tiền hiển thị
     function updateCartUI() {
@@ -136,17 +144,15 @@ document.addEventListener('DOMContentLoaded', function () {
             const itemSubtotal = price * qty;
             row.querySelector('.subtotal-display').innerText = '$' + itemSubtotal.toLocaleString();
             grandSubtotal += itemSubtotal;
-            
-            // TODO: Tại đây cần gọi AJAX để lưu số lượng (qty) mới vào $_SESSION['cart']
         });
 
         // Tính tổng tiền cuối cùng (bao gồm phí ship)
+        // Lấy giá trị của radio button đang được chọn (0 hoặc 15)
         const checkedRadio = document.querySelector('.shipping-radio:checked');
         const shippingCost = parseInt(checkedRadio ? checkedRadio.value : 0);
         
-        // Cập nhật giá trị phí ship vào trường ẩn để gửi đi
-        shippingHiddenInput.value = shippingCost; 
-
+        // **LƯU Ý: Không cần cập nhật trường ẩn vì radio button đã gửi giá trị**
+        
         const total = grandSubtotal + shippingCost;
         document.getElementById('temp-total').innerText = '$' + grandSubtotal.toLocaleString();
         document.getElementById('grand-total-display').innerText = '$' + total.toLocaleString();
