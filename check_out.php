@@ -1,134 +1,207 @@
-
-<?php include 'session_init.php'; ?>
-
-<?php 
-if (!isset($_SESSION['customer_id'])) {
-    header("Location: login.php?message=please_login");
-    exit();
-}
-?>
-
 <?php
-require_once 'db.php';
-
-
-if (!isset($_SESSION['customer_id'])) {
-    header("Location: login.php");
-    exit();
+// Đảm bảo session được khởi tạo trước khi sử dụng $_SESSION
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
 }
 
-$customer_id = $_SESSION['customer_id'];
-$cart = isset($_SESSION['cart']) ? $_SESSION['cart'] : [];
-
-if (empty($cart)) {
-    header("Location: base.php?page=cart");
-
-    exit();
+// =========================================================================
+// PHẦN KẾT NỐI DATABASE
+if (file_exists("admin/dbconn.php")) {
+    require_once("admin/dbconn.php");
+} elseif (file_exists("dbconn.php")) {
+    require_once("dbconn.php");
+} elseif (file_exists("db.php")) {
+    require_once("db.php");
+    if (isset($conn) && !isset($link)) { $link = $conn; }
+} else {
+    die("Lỗi: Không tìm thấy file kết nối database.");
 }
 
-// KHỞI ĐỘNG TRANSACTION để đảm bảo tính toàn vẹn dữ liệu
-$conn->begin_transaction();
-$current_time = date('Y-m-d H:i:s');
-$status_initial = 2; // Đang chờ xử lý
+if (!isset($link) || !$link) {
+    die("Lỗi: Biến kết nối \$link chưa được khởi tạo.");
+}
+mysqli_set_charset($link, "utf8"); 
 
-// --- KHỞI TẠO BIẾN TÍNH TOÁN ---
-$sub_total = 0; // Tổng giá trị sản phẩm (Chưa bao gồm phí vận chuyển)
-$cart_items_with_price = []; 
 
-try {
-    // --- BƯỚC 1: TÍNH TOÁN TỔNG GIÁ TRỊ TỪ GIỎ HÀNG (Sub Total) ---
-    foreach ($cart as $vehicle_id => $item) {
-        $qty = $item['qty'];
+// --- LẤY DỮ LIỆU TỪ GIỎ HÀNG (Dùng cho Form hiển thị) ---
+$sub_total_from_cart = isset($_POST['sub_total_input']) ? (float)$_POST['sub_total_input'] : 0.0;
+$shipping_cost_from_cart = isset($_POST['shipping_cost']) ? (float)$_POST['shipping_cost'] : 0.0;
+$payment_method_default = isset($_POST['payment_method_input']) ? $_POST['payment_method_input'] : 'Cash on Delivery';
+$total_for_display = $sub_total_from_cart + $shipping_cost_from_cart;
+
+
+// =========================================================================
+// PHẦN XỬ LÝ FORM KHI BẤM NÚT ĐẶT HÀNG (POST từ Form hiện tại)
+
+if (isset($_POST['btn_place_order'])) {
+    
+    // --- KHỞI TẠO DỮ LIỆU CẦN THIẾT ---
+    $current_time = date('Y-m-d H:i:s');
+    $status_code = 2; // Status = 2 (Booked)
+    
+    // 1. Lấy dữ liệu từ Form và làm sạch
+    $fullname = mysqli_real_escape_string($link, $_POST['fullname']);
+    $email = mysqli_real_escape_string($link, $_POST['email']);
+    $phone = mysqli_real_escape_string($link, $_POST['phone']);
+    $address = mysqli_real_escape_string($link, $_POST['address']);
+    
+    // Lấy lại các giá trị ẩn (tổng tiền và phí ship)
+    $payment_method = mysqli_real_escape_string($link, $_POST['payment_method']); 
+    $final_total = (float)$_POST['total_amount_hidden']; // Tổng tiền cuối cùng (Subtotal + Shipping)
+    $shipping_cost = (float)$_POST['shipping_cost_hidden']; // Phí ship (Dùng để chèn vào cột shipping_fee)
+    
+    $cart = isset($_SESSION['cart']) ? $_SESSION['cart'] : [];
+
+    if (!empty($cart)) {
+
+            // --- BƯỚC A: XỬ LÝ KHÁCH HÀNG ---
+            $customer_id = 0;
+            $check_user_query = "SELECT customer_id FROM customer WHERE email = '$email' LIMIT 1";
+            $check_user_result = mysqli_query($link, $check_user_query);
+
+            if ($check_user_result && mysqli_num_rows($check_user_result) > 0) {
+                // 1. Nếu tìm thấy (Đã tồn tại)
+                $row = mysqli_fetch_assoc($check_user_result);
+                $customer_id = $row['customer_id'];
+                $_SESSION['customer_id'] = $customer_id; 
+
+                $sql_update_cust = "UPDATE customer SET 
+                                    name = '$fullname', 
+                                    phone_number = '$phone', 
+                                    address = '$address' 
+                                    WHERE customer_id = $customer_id";
+                
+                if (!mysqli_query($link, $sql_update_cust)) {
+                    // Ghi log lỗi nếu cần, nhưng KHÔNG dừng chương trình
+                    error_log("Lỗi cập nhật khách hàng: " . mysqli_error($link));
+                }
+            
+                
+            } else {
+                // 2. Nếu chưa tìm thấy (Khách hàng mới)
+                $username_gen = explode('@', $email)[0] . rand(100, 999);
+                $password_default = "123456"; 
+                
+                $sql_cust = "INSERT INTO customer (name, email, phone_number, address, username, password, role) 
+                            VALUES ('$fullname', '$email', '$phone', '$address', '$username_gen', '$password_default', 'user')";
+                
+                if (mysqli_query($link, $sql_cust)) {
+                    $customer_id = mysqli_insert_id($link);
+                    $_SESSION['customer_id'] = $customer_id; 
+                } else {
+                    die("Lỗi tạo khách hàng: " . mysqli_error($link));
+                }
+            }
         
-        // Lấy giá xe
-        $sql_price = "SELECT price FROM vehicle WHERE vehicle_id = ?";
-        $stmt_price = $conn->prepare($sql_price);
-        $stmt_price->bind_param("i", $vehicle_id);
-        $stmt_price->execute();
-        $result_price = $stmt_price->get_result();
-        $row_price = $result_price->fetch_assoc();
+        // --- BƯỚC B: TẠO ORDER (ĐÃ CHÈN total_amount, created_at VÀ shipping_fee) ---
+        $sql_order = "INSERT INTO orders (customer_id, status, total_amount, created_at, shipping_fee) 
+                      VALUES ($customer_id, $status_code, $final_total, '$current_time', $shipping_cost)";
         
-        if (!$row_price) {
-            throw new Exception("Error: Vehicle ID #$vehicle_id does not exist");
+        if (mysqli_query($link, $sql_order)) {
+            $order_id = mysqli_insert_id($link);
+            
+            // --- BƯỚC C: TẠO ORDER DETAIL ---
+            $success = true;
+            $ids = implode(',', array_keys($cart));
+            $res = mysqli_query($link, "SELECT vehicle_id, price FROM vehicle WHERE vehicle_id IN ($ids)");
+            
+            while($r = mysqli_fetch_assoc($res)){
+                $vid = $r['vehicle_id'];
+                $qty = $cart[$vid]['qty'];
+                $price = $r['price'];
+                $detail_status = 2; 
+                
+                $sql_detail = "INSERT INTO order_detail 
+                (customer_id, vehicle_id, order_id, amount, quantity, payment_method, status) 
+                VALUES 
+                ($customer_id, $vid, $order_id, $price, $qty, '$payment_method', $detail_status)";
+                
+                if (!mysqli_query($link, $sql_detail)) {
+                    $success = false;
+                    error_log("Lỗi chèn chi tiết đơn hàng: " . mysqli_error($link));
+                    break;
+                }
+            }
+            
+            if ($success) {
+                // THÀNH CÔNG: Xóa giỏ hàng và chuyển hướng
+                unset($_SESSION['cart']);
+                $_SESSION['last_order_id'] = $order_id; 
+                
+                echo "<script>
+                    alert('Đặt hàng thành công! Mã đơn: #$order_id'); 
+                    window.location.href='base.php?page=order'; 
+                </script>";
+                exit();
+                
+            } else {
+                 // Rollback thủ công
+                mysqli_query($link, "DELETE FROM orders WHERE order_id = $order_id");
+                die("Lỗi tạo chi tiết đơn hàng: " . mysqli_error($link));
+            }
+            
+        } else {
+            die("Lỗi tạo đơn hàng chính: " . mysqli_error($link));
         }
-        
-        $price = $row_price['price'];
-        $amount_item = $price * $qty;
-        
-        $sub_total += $amount_item; 
-        
-        // Lưu lại thông tin sản phẩm để INSERT ở bước 3
-        $cart_items_with_price[] = [
-            'vehicle_id' => $vehicle_id,
-            'amount' => $amount_item,
-            'quantity' => $qty,
-        ];
-        $stmt_price->close(); 
+    } else {
+        echo "<script>alert('Giỏ hàng trống!'); window.location.href='base.php';</script>";
     }
-    
-    // --- BƯỚC 2: TÍNH TOÁN PHÍ VẬN CHUYỂN VÀ TỔNG CỘNG CUỐI CÙNG ---
-    
-    // Đọc trực tiếp giá trị phí vận chuyển từ trường ẩn 'shipping_cost' trong form HTML
-    // Nếu chọn Express ($15) thì $_POST['shipping_cost'] sẽ là '15'
-    $shipping_fee = isset($_POST['shipping_cost']) ? floatval($_POST['shipping_cost']) : 0.00;
-    
-    // Tính tổng tiền cuối cùng bao gồm phí vận chuyển
-    $final_total = $sub_total + $shipping_fee; 
-
-    // --- BƯỚC 3: TẠO ĐƠN HÀNG MỚI (ORDERS) VỚI TOTAL_AMOUNT & SHIPPING_FEE ---
-    $sql_order = "INSERT INTO orders (customer_id, total_amount, shipping_fee, status, created_at) VALUES (?, ?, ?, ?, ?)";
-    $stmt_order = $conn->prepare($sql_order);
-    
-    // Tham số: i (customer_id), d (final_total), d (shipping_fee), i (status), s (created_at)
-    $stmt_order->bind_param("iddis", $customer_id, $final_total, $shipping_fee, $status_initial, $current_time); 
-    
-    if (!$stmt_order->execute()) {
-        throw new Exception("Error when creating orders: " . $stmt_order->error);
-    }
-    $order_id = $stmt_order->insert_id;
-    $stmt_order->close();
-
-    // --- BƯỚC 4: THÊM CHI TIẾT ĐƠN HÀNG (ORDER_DETAIL) ---
-
-    $payment_method = $_POST['payment_method'] ?? "Payment upon delivery"; 
-
-    $sql_detail = "INSERT INTO order_detail (customer_id, vehicle_id, order_id, amount, quantity, payment_method, status) 
-             VALUES (?, ?, ?, ?, ?, ?, ?)";
-    $stmt_detail = $conn->prepare($sql_detail);
-    
-    foreach ($cart_items_with_price as $item) {
-
-        $stmt_detail->bind_param(
-            "iiidisi", 
-            $customer_id, 
-            $item['vehicle_id'], 
-            $order_id, 
-            $item['amount'], 
-            $item['quantity'], 
-            $payment_method, 
-            $status_initial
-        );
-        
-        if (!$stmt_detail->execute()) {
-            throw new Exception("Error creating order details.");
-        }
-    }
-    $stmt_detail->close();
-    
-    // 5. CAM KẾT VÀ XÓA GIỎ HÀNG
-    $conn->commit();
-    unset($_SESSION['cart']);
-
-    // Chuyển hướng thành công
-    header("Location: base.php?page=order");
-    exit();
-
-} catch (Exception $e) {
-    // Xử lý lỗi: Hoàn tác Transaction
-    $conn->rollback();
-    
-    // Hiển thị lỗi
-    die("TRANSACTION ERROR: " . $e->getMessage() . "<br>Please try again.");
 }
 
+// --- PHẦN HIỂN THỊ HTML CỦA FORM ---
 ?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Checkout</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-7">
+            <h4 class="mb-3">Billing Address</h4>
+            
+            <form method="POST">
+                
+                <input type="hidden" name="total_amount_hidden" value="<?= $total_for_display ?>">
+                <input type="hidden" name="shipping_cost_hidden" value="<?= $shipping_cost_from_cart ?>">
+                <input type="hidden" name="payment_method" value="<?= htmlspecialchars($payment_method_default) ?>">
+                
+                <div class="mb-3">
+                    <label class="form-label">Full Name</label>
+                    <input type="text" class="form-control" name="fullname" required>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-control" name="email" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Phone</label>
+                        <input type="text" class="form-control" name="phone" required>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Address</label>
+                    <input type="text" class="form-control" name="address" required>
+                </div>
+                
+                <hr class="my-4">
+                
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <span class="fw-bold h5">Total Amount:</span>
+                    <span class="h4 fw-bold text-danger">$<?= number_format($total_for_display) ?></span>
+                </div>
+
+                <button type="submit" name="btn_place_order" class="btn btn-primary w-100 py-2 fw-bold text-uppercase">
+                    TẠO ĐƠN HÀNG
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
