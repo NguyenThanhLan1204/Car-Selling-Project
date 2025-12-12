@@ -4,7 +4,7 @@ $page = basename($_SERVER['PHP_SELF']);
 
 <head>
     <link rel="stylesheet" href="bootstrap.min.css">
-    <link rel="stylesheet" href="./css/header.css">
+    <link rel="stylesheet" href="./css/header1.css">
 
 </head>
 
