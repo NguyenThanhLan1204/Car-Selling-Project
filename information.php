@@ -64,7 +64,7 @@ if (isset($_GET['id'])) {
                         style="width:100%; height:100%; display:flex; align-items:center; justify-content:center;">
                         
                         <?php if ($media[0]['type'] === 'video'): ?>
-                            <video controls autoplay muted style="height:100%; width:auto; object-fit:cover;">
+                            <video autoplay muted loop style="height:100%; width:auto; object-fit:cover;">
                                 <source src="<?= $media[0]['url'] ?>" type="video/mp4">
                             </video>
                         <?php else: ?>
@@ -102,8 +102,8 @@ if (isset($_GET['id'])) {
                     // VIDEO
                     if (item.type === "video") {
                         container.innerHTML = `
-                            <video controls autoplay muted style="height:100%; width:auto; object-fit:cover;">
-                                <source src="${item.url}" type="video/mp4">
+                             <video autoplay muted loop style="height:100%; width:auto; object-fit:cover;">
+                                <source src="<?= $media[0]['url'] ?>" type="video/mp4">
                             </video>
                         `;
                     } 
