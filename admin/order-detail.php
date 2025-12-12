@@ -86,15 +86,16 @@ $total = 0;
                                 echo '<span class="badge bg-success">Success</span>';
                         ?>
 
-                        <br><br><strong>Update to:</strong>
-                        <?php
-                            if ($first['status'] == 2)
-                                echo "<a href='order.php?order=3&order_id=$order_id' class='badge bg-info'>Delivering</a>";
-                            else if ($first['status'] == 3)
-                                echo "<a href='order.php?order=4&order_id=$order_id' class='badge bg-success'>Delivered</a>";
-                            else
-                                echo "<span class='badge bg-secondary'>Done</span>";
-                        ?>
+                        <?php if ($first['status'] == 2 || $first['status'] == 3): ?>
+                            <br><br><strong>Update to:</strong>
+                            <?php
+                                if ($first['status'] == 2) {
+                                    echo "<a href='order.php?order=3&order_id=$order_id' class='badge bg-info'>Delivering</a>";
+                                } else if ($first['status'] == 3) {
+                                    echo "<a href='order.php?order=4&order_id=$order_id' class='badge bg-success'>Delivered</a>";
+                                }
+                            ?>
+                        <?php endif; ?>
 
                         <hr>
 
