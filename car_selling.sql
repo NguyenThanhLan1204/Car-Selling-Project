@@ -179,3 +179,8 @@ INSERT INTO payment_methods (name) VALUES
 ('Bank Transfer'), 
 ('Cash'),
 ('Credit Card');
+
+ALTER TABLE orders 
+ADD COLUMN shipping_name VARCHAR(255),
+ADD COLUMN shipping_phone VARCHAR(20),
+ADD COLUMN shipping_address TEXT;
