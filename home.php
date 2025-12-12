@@ -50,21 +50,16 @@ $stmt->close();
 ?>
 
 <div>
-    <div class="slider position-relative w-100">
-        <div class="text-content position-relative">
-            <div class="slide">          
-                <div class="img">
-                    <video autoplay muted loop class="d-block w-75 mx-auto p-3">
-                        <source src="./assets/video/Recording 2025-12-10 213401.mp4" type="video/mp4">
-                        Your browser does not support the video tag.
-                    </video>
-                </div>
-                <div class="info-content position-absolute start-50 translate-middle-x text-center text-white z-1">
+    <div style="position:relative; height:100vh; overflow:hidden;">
+    
+        <video autoplay muted loop
+            style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;">
+            <source src="./assets/video/Recording 2025-12-10 213401.mp4" type="video/mp4">
+        </video>
+        <div class="info-content position-absolute start-50 translate-middle-x text-center text-white z-1">
                     <h2 class="text-heading">Car World</h2>
                     <div class="text-description">Find your dream car at the best price today</div>
-                </div>
-            </div>
-        </div>
+        </div> 
     </div>
 
     <div class="container py-5">
