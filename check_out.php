@@ -31,7 +31,7 @@ $total_for_display = $sub_total_from_cart + $shipping_cost_from_cart;
 
 
 // =========================================================================
-// PHẦN XỬ LÝ FORM KHI BẤM NÚT ĐẶT HÀNG (POST từ Form hiện tại)
+// PHẦN XỬ LÝ FORM KHI BẤM NÚT ĐẶT HÀNG
 
 if (isset($_POST['btn_place_order'])) {
     
@@ -39,68 +39,34 @@ if (isset($_POST['btn_place_order'])) {
     $current_time = date('Y-m-d H:i:s');
     $status_code = 2; // Status = 2 (Booked)
     
+    // Lấy customer_id từ session (giả định đã đăng nhập vì giỏ hàng đã kiểm tra)
+    $customer_id = (int)$_SESSION['customer_id'];
+    
     // 1. Lấy dữ liệu từ Form và làm sạch
     $fullname = mysqli_real_escape_string($link, $_POST['fullname']);
-    $email = mysqli_real_escape_string($link, $_POST['email']);
     $phone = mysqli_real_escape_string($link, $_POST['phone']);
     $address = mysqli_real_escape_string($link, $_POST['address']);
     
-    // Lấy lại các giá trị ẩn (tổng tiền và phí ship)
+    // Lấy lại các giá trị ẩn
     $payment_method = mysqli_real_escape_string($link, $_POST['payment_method']); 
-    $final_total = (float)$_POST['total_amount_hidden']; // Tổng tiền cuối cùng (Subtotal + Shipping)
-    $shipping_cost = (float)$_POST['shipping_cost_hidden']; // Phí ship (Dùng để chèn vào cột shipping_fee)
+    $final_total = (float)$_POST['total_amount_hidden'];
+    $shipping_cost = (float)$_POST['shipping_cost_hidden'];
     
     $cart = isset($_SESSION['cart']) ? $_SESSION['cart'] : [];
 
     if (!empty($cart)) {
-
-            // --- BƯỚC A: XỬ LÝ KHÁCH HÀNG ---
-            $customer_id = 0;
-            $check_user_query = "SELECT customer_id FROM customer WHERE email = '$email' LIMIT 1";
-            $check_user_result = mysqli_query($link, $check_user_query);
-
-            if ($check_user_result && mysqli_num_rows($check_user_result) > 0) {
-                // 1. Nếu tìm thấy (Đã tồn tại)
-                $row = mysqli_fetch_assoc($check_user_result);
-                $customer_id = $row['customer_id'];
-                $_SESSION['customer_id'] = $customer_id; 
-
-                $sql_update_cust = "UPDATE customer SET 
-                                    name = '$fullname', 
-                                    phone_number = '$phone', 
-                                    address = '$address' 
-                                    WHERE customer_id = $customer_id";
-                
-                if (!mysqli_query($link, $sql_update_cust)) {
-                    // Ghi log lỗi nếu cần, nhưng KHÔNG dừng chương trình
-                    error_log("Lỗi cập nhật khách hàng: " . mysqli_error($link));
-                }
-            
-                
-            } else {
-                // 2. Nếu chưa tìm thấy (Khách hàng mới)
-                $username_gen = explode('@', $email)[0] . rand(100, 999);
-                $password_default = "123456"; 
-                
-                $sql_cust = "INSERT INTO customer (name, email, phone_number, address, username, password, role) 
-                            VALUES ('$fullname', '$email', '$phone', '$address', '$username_gen', '$password_default', 'user')";
-                
-                if (mysqli_query($link, $sql_cust)) {
-                    $customer_id = mysqli_insert_id($link);
-                    $_SESSION['customer_id'] = $customer_id; 
-                } else {
-                    die("Lỗi tạo khách hàng: " . mysqli_error($link));
-                }
-            }
-        
-        // --- BƯỚC B: TẠO ORDER (ĐÃ CHÈN total_amount, created_at VÀ shipping_fee) ---
-        $sql_order = "INSERT INTO orders (customer_id, status, total_amount, created_at, shipping_fee) 
-                      VALUES ($customer_id, $status_code, $final_total, '$current_time', $shipping_cost)";
+        // --- TẠO ORDER ---
+        $sql_order = "INSERT INTO orders 
+              (customer_id, status, total_amount, created_at, shipping_fee,
+               shipping_name, shipping_phone, shipping_address) 
+              VALUES 
+              ($customer_id, $status_code, $final_total, '$current_time', $shipping_cost,
+               '$fullname', '$phone', '$address')";
         
         if (mysqli_query($link, $sql_order)) {
             $order_id = mysqli_insert_id($link);
             
-            // --- BƯỚC C: TẠO ORDER DETAIL ---
+            // --- TẠO ORDER DETAIL ---
             $success = true;
             $ids = implode(',', array_keys($cart));
             $res = mysqli_query($link, "SELECT vehicle_id, price FROM vehicle WHERE vehicle_id IN ($ids)");
@@ -124,7 +90,6 @@ if (isset($_POST['btn_place_order'])) {
             }
             
             if ($success) {
-                // THÀNH CÔNG: Xóa giỏ hàng và chuyển hướng
                 unset($_SESSION['cart']);
                 $_SESSION['last_order_id'] = $order_id; 
                 
@@ -135,7 +100,6 @@ if (isset($_POST['btn_place_order'])) {
                 exit();
                 
             } else {
-                 // Rollback thủ công
                 mysqli_query($link, "DELETE FROM orders WHERE order_id = $order_id");
                 die("Lỗi tạo chi tiết đơn hàng: " . mysqli_error($link));
             }
@@ -174,15 +138,9 @@ if (isset($_POST['btn_place_order'])) {
                     <label class="form-label">Full Name</label>
                     <input type="text" class="form-control" name="fullname" required>
                 </div>
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Email</label>
-                        <input type="email" class="form-control" name="email" required>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Phone</label>
-                        <input type="text" class="form-control" name="phone" required>
-                    </div>
+                <div class="mb-3">
+                    <label class="form-label">Phone</label>
+                    <input type="text" class="form-control" name="phone" required>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Address</label>

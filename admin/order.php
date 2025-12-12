@@ -5,15 +5,12 @@ include("dbconn.php");
 // XỬ LÝ UPDATE STATUS ĐƠN HÀNG
 // =========================================
 if (isset($_GET['order']) && isset($_GET['order_id'])) {
+    $order_id = (int)$_GET['order_id'];
+    $newStatus = (int)$_GET['order'];
 
-    $order_id = (int) $_GET['order_id'];
-    $newStatus = (int) $_GET['order'];
-
-    // update bảng orders
     $sql1 = "UPDATE orders SET status = $newStatus WHERE order_id = $order_id";
     mysqli_query($link, $sql1);
 
-    // update bảng order_detail
     $sql2 = "UPDATE order_detail SET status = $newStatus WHERE order_id = $order_id";
     mysqli_query($link, $sql2);
 
@@ -22,22 +19,22 @@ if (isset($_GET['order']) && isset($_GET['order_id'])) {
 }
 
 // =========================================
-// LẤY FILTER STATUS (type)
+// LẤY FILTER STATUS
 // =========================================
 $type = isset($_GET['type']) ? (int)$_GET['type'] : -1;
 
 // =========================================
-// LẤY DANH SÁCH ORDER (KHÔNG DÙNG HÀM)
+// LẤY DANH SÁCH ORDER (ưu tiên shipping_*)
 // =========================================
 $sql = "
     SELECT 
         o.order_id,
         o.status,
         o.created_at,
-        c.name,
         c.email,
-        c.phone_number,
-        c.address,
+        COALESCE(o.shipping_name, c.name) AS display_name,
+        COALESCE(o.shipping_phone, c.phone_number) AS display_phone,
+        COALESCE(o.shipping_address, c.address) AS display_address,
         SUM(od.quantity) AS quantity
     FROM orders o
     JOIN customer c ON o.customer_id = c.customer_id
@@ -48,46 +45,39 @@ if ($type != -1) {
     $sql .= " WHERE o.status = $type ";
 }
 
-$sql .= "
-    GROUP BY o.order_id
-    ORDER BY o.created_at DESC
-";
+$sql .= " GROUP BY o.order_id ORDER BY o.created_at DESC";
 
 $orders = mysqli_query($link, $sql);
-
 ?>
+
+<!DOCTYPE html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <title>Order Management</title>
     <link rel="stylesheet" href="bootstrap.min.css">
-    <link rel="stylesheet" href="./css/or.css"> 
+    <link rel="stylesheet" href="./css/or.css">
 </head>
 <body>
 <div class="layout">
-    <!-- SIDEBAR GỌI TỪ header.php -->
-    <?php include ("header.php"); ?>
+    <?php include("header.php"); ?>
 
     <div class="container-fluid">
         <div class="row">
             <div class="col-12">
-
                 <div class="card my-4">
                     <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                         <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
                             <h6 class="text-white text-capitalize ps-3">Order table</h6>
-                            <a href="./order.php" 
-                            class="filter-btn all <?= $type == -1 ? 'active' : '' ?>">All</a>
-                            <a href="./order.php?type=2" 
-                            class="filter-btn booked <?= $type == 2 ? 'active' : '' ?>">Booked</a>
-                            <a href="./order.php?type=3" 
-                            class="filter-btn delivering <?= $type == 3 ? 'active' : '' ?>">Delivering</a>
-                            <a href="./order.php?type=4" 
-                            class="filter-btn success <?= $type == 4 ? 'active' : '' ?>">Success</a>
-                            </div>
+                            <a href="./order.php" class="filter-btn all <?= $type == -1 ? 'active' : '' ?>">All</a>
+                            <a href="./order.php?type=2" class="filter-btn booked <?= $type == 2 ? 'active' : '' ?>">Booked</a>
+                            <a href="./order.php?type=3" class="filter-btn delivering <?= $type == 3 ? 'active' : '' ?>">Delivering</a>
+                            <a href="./order.php?type=4" class="filter-btn success <?= $type == 4 ? 'active' : '' ?>">Success</a>
                         </div>
                     </div>
 
                     <div class="card-body px-0 pb-2">
                         <div class="table-responsive p-0">
-                            <!-- FILTER -->
                             <table class="table align-items-center mb-0 mt-3">
                                 <thead>
                                     <tr>
@@ -95,73 +85,48 @@ $orders = mysqli_query($link, $sql);
                                         <th>Customer</th>
                                         <th>Vehicle</th>
                                         <th>Address</th>
-                                        <th>Phone</th>              <!-- CỘT MỚI -->
+                                        <th>Phone</th>
                                         <th class="text-center">Status</th>
                                         <th class="text-center">Order time</th>
                                     </tr>
                                 </thead>
-
                                 <tbody>
-
                                 <?php while($order = mysqli_fetch_assoc($orders)) { ?>
                                     <tr>
                                         <td>#<?= $order['order_id'] ?></td>
-
                                         <td>
-                                            <b><?= $order['name'] ?></b><br>
-                                            <small><?= $order['email'] ?></small>
+                                            <b><?= htmlspecialchars($order['display_name']) ?></b><br>
+                                            <small><?= htmlspecialchars($order['email']) ?></small>
                                         </td>
-
                                         <td>
-                                            <a href="./order-detail.php?order_id=<?= $order['order_id'] ?>">
-                                                View now
-                                            </a>
-                                            <br>
+                                            <a href="./order-detail.php?order_id=<?= $order['order_id'] ?>">View now</a><br>
                                             Quantity: <?= $order['quantity'] ?>
                                         </td>
-
-                                        <!-- Chỉ còn địa chỉ -->
-                                        <td>
-                                            <?= $order['address'] ?>
-                                        </td>
-
-                                        <!-- Cột số điện thoại mới -->
-                                        <td>
-                                            <small><?= $order['phone_number'] ?></small>
-                                        </td>
-
+                                        <td><?= nl2br(htmlspecialchars($order['display_address'])) ?></td>
+                                        <td><small><?= htmlspecialchars($order['display_phone']) ?></small></td>
                                         <td class="text-center">
                                             <?php
-                                            if ($order['status'] == 2)
-                                                echo '<span class="badge bg-primary">Booked</span>';
-                                            else if ($order['status'] == 3)
-                                                echo '<span class="badge bg-info">Delivering</span>';
-                                            else if ($order['status'] == 4)
-                                                echo '<span class="badge bg-success">Success</span>';
-                                            else
-                                                echo '<span class="badge bg-dark">Unknown</span>';
+                                            switch ($order['status']) {
+                                                case 2: echo '<span class="badge bg-primary">Booked</span>'; break;
+                                                case 3: echo '<span class="badge bg-info">Delivering</span>'; break;
+                                                case 4: echo '<span class="badge bg-success">Success</span>'; break;
+                                                default: echo '<span class="badge bg-dark">Unknown</span>';
+                                            }
                                             ?>
                                         </td>
-
                                         <td class="text-center">
                                             <?= date('d-m-Y', strtotime($order['created_at'])) ?>
                                         </td>
                                     </tr>
                                 <?php } ?>
-
                                 </tbody>
                             </table>
                         </div>
                     </div>
-
                 </div>
-
             </div>
         </div>
     </div>
-    </div>
-    <!-- KẾT THÚC CONTENT-AREA -->
-
 </div>
-<!-- KẾT THÚC LAYOUT -->
 </body>
+</html>
