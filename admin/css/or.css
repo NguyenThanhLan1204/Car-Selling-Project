@@ -9,7 +9,7 @@
 
 /* Khu vực content (bên phải sidebar) */
 .container-fluid {
-    margin-left: 260px;  /* rộng sidebar */
+    margin-left: 320px;  /* rộng sidebar */
     padding: 25px;
     max-width: calc(100% - 260px);
     width: 80%;
@@ -188,39 +188,32 @@
 ================================= */
 
 .table {
-    margin-top: 15px;
+    margin-top: 10px;
+    border-radius: 8px;
+    overflow: hidden;
     width: 100%;
-    border-collapse: separate;
-    border-spacing: 0 8px;
+    margin: 0;
+    border-radius: 0; 
 }
 
 .table thead tr {
     background: #91beea;
-    color: #fff;
+    color: #ffffff;
 }
 
 .table thead th {
     padding: 12px;
     font-size: 15px;
     font-weight: 600;
-    text-align: center;
+     border-bottom: none;
 }
 
-.table tbody tr {
-    background: #f9f9f9;
-    border-radius: 8px;
-    transition: 0.25s;
-}
-
-.table tbody tr:hover {
-    background-color: rgba(0,0,0,0.05);
-}
-
-.table tbody td {
+.table td,
+.table th {
     vertical-align: middle;
-    padding: 10px 12px;
-    text-align: center;
+    padding: 12px;
 }
+
 
 /* Hình ảnh */
 .table img {
@@ -232,12 +225,6 @@
 /* ===============================
    THÔNG TIN NGƯỜI MUA
 ================================= */
-
-h5 {
-    margin-top: 20px;
-    font-weight: 700;
-    color: #333;
-}
 
 strong {
     font-weight: 600;

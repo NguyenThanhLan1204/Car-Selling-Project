@@ -66,7 +66,7 @@ $total = 0;
                     </div>
 
                     <div class="card-body px-4">
-                        <h5>Buyer Information</h5>
+                        <h2>Buyer Information</h2>
                         Buyer Name: <strong><?= htmlspecialchars($first['display_name']) ?></strong><br>
                         Phone: <strong><?= htmlspecialchars($first['display_phone']) ?></strong><br>
                         Email: <strong><?= htmlspecialchars($first['email']) ?></strong><br>
