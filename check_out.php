@@ -1,11 +1,9 @@
 <?php
-// Đảm bảo session được khởi tạo trước khi sử dụng $_SESSION
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
-// =========================================================================
-// PHẦN KẾT NỐI DATABASE
+// CONNECT DATABASE
 if (file_exists("admin/dbconn.php")) {
     require_once("admin/dbconn.php");
 } elseif (file_exists("dbconn.php")) {
@@ -14,40 +12,37 @@ if (file_exists("admin/dbconn.php")) {
     require_once("db.php");
     if (isset($conn) && !isset($link)) { $link = $conn; }
 } else {
-    die("Lỗi: Không tìm thấy file kết nối database.");
+    die("Error: Database connection file not found.");
 }
 
 if (!isset($link) || !$link) {
-    die("Lỗi: Biến kết nối \$link chưa được khởi tạo.");
+    die("Error: The connection variable \$link has not been initialized..");
 }
 mysqli_set_charset($link, "utf8"); 
 
 
-// --- LẤY DỮ LIỆU TỪ GIỎ HÀNG (Dùng cho Form hiển thị) ---
+// --- RETRIEVE DATA FROM SHOPPING CART (For Form Display) ---
 $sub_total_from_cart = isset($_POST['sub_total_input']) ? (float)$_POST['sub_total_input'] : 0.0;
 $shipping_cost_from_cart = isset($_POST['shipping_cost']) ? (float)$_POST['shipping_cost'] : 0.0;
 $payment_method_default = isset($_POST['payment_method_input']) ? $_POST['payment_method_input'] : 'Cash on Delivery';
 $total_for_display = $sub_total_from_cart + $shipping_cost_from_cart;
 
-
-// =========================================================================
-// PHẦN XỬ LÝ FORM KHI BẤM NÚT ĐẶT HÀNG
+//  PROCESS THE FORM WHEN THE ORDER BUTTON IS CLICKED
 
 if (isset($_POST['btn_place_order'])) {
-    
-    // --- KHỞI TẠO DỮ LIỆU CẦN THIẾT ---
+
     $current_time = date('Y-m-d H:i:s');
     $status_code = 2; // Status = 2 (Booked)
     
-    // Lấy customer_id từ session (giả định đã đăng nhập vì giỏ hàng đã kiểm tra)
+    // Get customer_id from session
     $customer_id = (int)$_SESSION['customer_id'];
     
-    // 1. Lấy dữ liệu từ Form và làm sạch
+    //1. Retrieve data from the form and clean it up.
     $fullname = mysqli_real_escape_string($link, $_POST['fullname']);
     $phone = mysqli_real_escape_string($link, $_POST['phone']);
     $address = mysqli_real_escape_string($link, $_POST['address']);
     
-    // Lấy lại các giá trị ẩn
+    // Recover hidden values
     $payment_method = mysqli_real_escape_string($link, $_POST['payment_method']); 
     $final_total = (float)$_POST['total_amount_hidden'];
     $shipping_cost = (float)$_POST['shipping_cost_hidden'];
@@ -55,7 +50,7 @@ if (isset($_POST['btn_place_order'])) {
     $cart = isset($_SESSION['cart']) ? $_SESSION['cart'] : [];
 
     if (!empty($cart)) {
-        // --- TẠO ORDER ---
+        // --- CREATE ORDER ---
         $sql_order = "INSERT INTO orders 
               (customer_id, status, total_amount, created_at, shipping_fee,
                shipping_name, shipping_phone, shipping_address) 
@@ -66,7 +61,7 @@ if (isset($_POST['btn_place_order'])) {
         if (mysqli_query($link, $sql_order)) {
             $order_id = mysqli_insert_id($link);
             
-            // --- TẠO ORDER DETAIL ---
+            // --- CREATE ORDER DETAIL ---
             $success = true;
             $ids = implode(',', array_keys($cart));
             $res = mysqli_query($link, "SELECT vehicle_id, price FROM vehicle WHERE vehicle_id IN ($ids)");
@@ -84,7 +79,7 @@ if (isset($_POST['btn_place_order'])) {
                 
                 if (!mysqli_query($link, $sql_detail)) {
                     $success = false;
-                    error_log("Lỗi chèn chi tiết đơn hàng: " . mysqli_error($link));
+                    error_log("Order details insertion error: " . mysqli_error($link));
                     break;
                 }
             }
@@ -94,27 +89,25 @@ if (isset($_POST['btn_place_order'])) {
                 $_SESSION['last_order_id'] = $order_id; 
                 
                 echo "<script>
-                    alert('Đặt hàng thành công! Mã đơn: #$order_id'); 
+                    alert('Order placed successfully! Order code: #$order_id'); 
                     window.location.href='base.php?page=order'; 
                 </script>";
                 exit();
                 
             } else {
                 mysqli_query($link, "DELETE FROM orders WHERE order_id = $order_id");
-                die("Lỗi tạo chi tiết đơn hàng: " . mysqli_error($link));
+                die("Error creating order details: " . mysqli_error($link));
             }
             
         } else {
-            die("Lỗi tạo đơn hàng chính: " . mysqli_error($link));
+            die("Main order creation error: " . mysqli_error($link));
         }
     } else {
-        echo "<script>alert('Giỏ hàng trống!'); window.location.href='base.php';</script>";
+        echo "<script>alert('Cart is empty!'); window.location.href='base.php';</script>";
     }
 }
 
-// --- PHẦN HIỂN THỊ HTML CỦA FORM ---
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -155,7 +148,7 @@ if (isset($_POST['btn_place_order'])) {
                 </div>
 
                 <button type="submit" name="btn_place_order" class="btn btn-primary w-100 py-2 fw-bold text-uppercase">
-                    TẠO ĐƠN HÀNG
+                    CREATE ORDER
                 </button>
             </form>
         </div>
