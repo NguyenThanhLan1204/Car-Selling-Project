@@ -1,5 +1,4 @@
 <?php 
-// Đảm bảo session được khởi tạo trước khi sử dụng $_SESSION
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
@@ -11,13 +10,12 @@ if (!isset($_SESSION['customer_id'])) {
 ?>
 
 <?php
-// Giả sử file db.php khởi tạo biến $conn hoặc $link
 require_once 'db.php'; 
 $db_connection = isset($conn) ? $conn : $link; 
 
 $cart_content = isset($_SESSION['cart']) ? $_SESSION['cart'] : [];
 $list_ids = array_keys($cart_content);
-$grand_total = 0; // Subtotal (tổng giá trị sản phẩm)
+$grand_total = 0; // Subtotal 
 ?>
 
 <div class="cart container py-5">
