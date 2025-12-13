@@ -1,20 +1,16 @@
 <?php
-
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
-// Giả sử db.php sử dụng biến $conn
 require_once 'db.php'; 
-
-// 1. Kiểm tra đăng nhập
+// 1. Check login
 if (!isset($_SESSION['customer_id'])) {
     header("Location: login.php");
     exit;
 }
-
 $customer_id = $_SESSION['customer_id'];
 
-// 2. Lấy Order ID từ URL
+// 2. Get Order ID from URL
 $order_id = isset($_GET['order_id']) ? intval($_GET['order_id']) : 0;
 
 if ($order_id === 0) {
@@ -22,25 +18,23 @@ if ($order_id === 0) {
     exit;
 }
 
-// --- HÀM HỖ TRỢ HIỂN THỊ STATUS ---
+// --- FUNCTION TO SUPPORT DISPLAYING STATUS ---
 function getStatusText($status) {
     $statuses = [
         2 => ["Booked", "badge bg-primary"],
         3 => ["Delivering", "badge bg-info"],
         4 => ["Success", "badge bg-success"],
-        // Thêm các status khác nếu cần
     ];
     return $statuses[$status] ?? ["Not determined", "badge bg-dark"];
 }
 
-// --- 3. TRUY VẤN TỔNG QUAN ĐƠN HÀNG (LẤY SHIPPING_FEE) ---
-// Dùng $conn vì db.php thường dùng $conn cho kết nối MySQLi OOP
+// --- 3. ORDER OVERVIEW QUERY ---
 $sql_order = "SELECT total_amount, status, created_at, shipping_fee 
               FROM orders 
               WHERE order_id = ? AND customer_id = ?";
 $stmt_order = $conn->prepare($sql_order);
 
-// Kiểm tra nếu chuẩn bị thất bại
+// Check if preparation fails
 if ($stmt_order === false) {
     die("Lỗi chuẩn bị truy vấn: " . $conn->error);
 }
@@ -51,17 +45,17 @@ $result_order = $stmt_order->get_result();
 $order_info = $result_order->fetch_assoc();
 $stmt_order->close();
 
-// Kiểm tra: Nếu đơn hàng không tồn tại HOẶC KHÔNG thuộc về khách hàng này
+// Check: If the order does not exist OR does not belong to this customer
 if (!$order_info) {
     echo "<p class='text-center text-danger py-5'>The order does not exist, or you do not have permission to access it.</p>";
     exit;
 }
 
-// Lấy phí vận chuyển từ DB. Nếu NULL (lỗi data cũ), mặc định là 0.
+// Get shipping fee from DB. If NULL (old data error), default is 0.
 $shipping_fee = $order_info['shipping_fee'] ?? 0;
 
 
-// --- 4. TRUY VẤN CHI TIẾT SẢN PHẨM TRONG ĐƠN HÀNG ---
+// --- 4. QUERY FOR PRODUCT DETAILS IN YOUR ORDER ---
 $sql_details = "SELECT od.quantity, od.amount, od.payment_method, 
                         v.model, v.image_url, m.name AS manufacturer
                 FROM order_detail od
@@ -70,7 +64,7 @@ $sql_details = "SELECT od.quantity, od.amount, od.payment_method,
                 WHERE od.order_id = ?";
 $stmt_details = $conn->prepare($sql_details);
 
-// Kiểm tra nếu chuẩn bị thất bại
+// Check if preparation fails
 if ($stmt_details === false) {
     die("Lỗi chuẩn bị truy vấn chi tiết: " . $conn->error);
 }
@@ -79,7 +73,7 @@ $stmt_details->bind_param("i", $order_id);
 $stmt_details->execute();
 $details_result = $stmt_details->get_result();
 
-// Lấy phương thức thanh toán từ dòng đầu tiên và tính tổng giá trị sản phẩm
+// Get the payment method from the first line and calculate the total product value
 $total_products_value = 0;
 $payment_method = 'N/A';
 $item_count = $details_result->num_rows;
@@ -88,19 +82,15 @@ if ($item_count > 0) {
     $details_data = [];
     while($item = $details_result->fetch_assoc()) {
         $details_data[] = $item;
-        // $item['amount'] là giá trị của một dòng chi tiết (price * quantity)
         $total_products_value += $item['amount']; 
     }
-    // Lấy payment method từ dòng đầu tiên của mảng
+    // Get the payment method from the first row of the array
     $payment_method = $details_data[0]['payment_method'] ?? 'N/A';
 }
-
-
-// Tính Tổng cộng cuối cùng (Sử dụng dữ liệu DB: total_amount)
+// Calculate the grand total (Using DB data: total_amount)
 $grand_total = $order_info['total_amount'];
 
 ?>
-
 <div class="container py-5">
     <div class="row">
         <div class="col-lg-12">
@@ -175,14 +165,11 @@ $grand_total = $order_info['total_amount'];
             } else {
                 echo '<div class="alert alert-warning">There are no products in this order.</div>';
             }
-            ?>
-            
+            ?>   
         </div>
     </div>
 </div>
 
 <?php
 if (isset($stmt_details) && $stmt_details) $stmt_details->close();
-// Chỉ đóng kết nối nếu nó được mở trong file này (thường là không nên, nhưng giữ nguyên theo logic ban đầu của bạn)
-// $conn->close(); 
 ?>
