@@ -33,9 +33,16 @@ if (isset($_POST['btn_place_order'])) {
     $phone = mysqli_real_escape_string($conn, $_POST['phone']);
     $address = mysqli_real_escape_string($conn, $_POST['address']);
     
-
-    // Lấy payment_id từ form (đây là id trong bảng payment)
+    // Lấy payment_id từ form
     $payment_id = (int)$_POST['payment'];
+
+    // --- SỬA LỖI: Lấy tên phương thức thanh toán để điền vào bảng order_detail ---
+    $payment_method_name = "Cash"; // Mặc định
+    $pm_query = mysqli_query($conn, "SELECT name FROM payment_methods WHERE payment_method_id = $payment_id");
+    if ($pm_row = mysqli_fetch_assoc($pm_query)) {
+        $payment_method_name = $pm_row['name'];
+    }
+    // --------------------------------------------------------------------------
 
     // Recover hidden values
     $final_total = (float)$_POST['total_amount_hidden'];
@@ -44,7 +51,7 @@ if (isset($_POST['btn_place_order'])) {
     $cart = isset($_SESSION['cart']) ? $_SESSION['cart'] : [];
 
     if (!empty($cart)) {
-        // --- CREATE ORDER (thêm payment_id) ---
+        // --- CREATE ORDER ---
         $sql_order = "INSERT INTO orders 
               (customer_id, payment_id, status, total_amount, created_at, shipping_fee,
                shipping_name, shipping_phone, shipping_address) 
@@ -66,21 +73,31 @@ if (isset($_POST['btn_place_order'])) {
                 $price = $r['price'];
                 $detail_status = 2;
 
+                // 1. Lưu chi tiết đơn hàng (ĐÃ SỬA: Thêm cột payment_method)
                 $sql_detail = "INSERT INTO order_detail 
-                               (vehicle_id, order_id, amount, quantity, status) 
+                               (vehicle_id, order_id, amount, quantity, payment_method, status) 
                                VALUES 
-                               ($vid, $order_id, $price, $qty, $detail_status)";
+                               ($vid, $order_id, $price, $qty, '$payment_method_name', $detail_status)";
 
                 if (!mysqli_query($conn, $sql_detail)) {
                     $success = false;
                     error_log("Order details insertion error: " . mysqli_error($conn));
                     break;
                 }
+                
+                // 2. TRỪ TỒN KHO (UPDATE STOCK)
+                $sql_update_stock = "UPDATE vehicle SET stock = stock - $qty WHERE vehicle_id = $vid";
+                mysqli_query($conn, $sql_update_stock);
             }
 
             if ($success) {
                 unset($_SESSION['cart']);
                 $_SESSION['last_order_id'] = $order_id;
+
+                // Xóa cookie giỏ hàng nếu có
+                if (isset($_COOKIE["user_cart_" . $customer_id])) {
+                     setcookie("user_cart_" . $customer_id, "", time() - 3600, "/");
+                }
 
                 echo "<script>
                     alert('Order placed successfully! Order code: #$order_id'); 
@@ -120,15 +137,21 @@ if (isset($_POST['btn_place_order'])) {
                 <input type="hidden" name="total_amount_hidden" value="<?= $total_for_display ?>">
                 <input type="hidden" name="shipping_cost_hidden" value="<?= $shipping_cost_from_cart ?>">
 
-                <!-- Thêm chọn phương thức thanh toán từ bảng payment -->
                 <div class="mb-3">
                     <label class="form-label">Payment Method</label>
                     <select name="payment" class="form-select" required>
                         <?php
-                        $pm_query = mysqli_query($conn, "SELECT payment_id, name FROM payment ORDER BY name");
-                        while ($pm = mysqli_fetch_assoc($pm_query)) {
-                            $selected = ($pm['payment_id'] == $payment_default) ? 'selected' : '';
-                            echo "<option value='{$pm['payment_id']}' $selected>{$pm['name']}</option>";
+                        $pm_query = mysqli_query($conn, "SELECT payment_method_id, name FROM payment_methods ORDER BY name");
+                        
+                        if ($pm_query) {
+                            while ($pm = mysqli_fetch_assoc($pm_query)) {
+                                $selected = ($pm['payment_method_id'] == $payment_default) ? 'selected' : '';
+                                echo "<option value='{$pm['payment_method_id']}' $selected>{$pm['name']}</option>";
+                            }
+                        } else {
+                            echo "<option value='2' selected>Cash</option>";
+                            echo "<option value='1'>Bank Transfer</option>";
+                            echo "<option value='3'>Credit Card</option>";
                         }
                         ?>
                     </select>
