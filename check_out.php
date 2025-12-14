@@ -73,9 +73,9 @@ if (isset($_POST['btn_place_order'])) {
                 $detail_status = 2; 
                 
                 $sql_detail = "INSERT INTO order_detail 
-                (customer_id, vehicle_id, order_id, amount, quantity, payment_method, status) 
+                (vehicle_id, order_id, amount, quantity, payment_method, status) 
                 VALUES 
-                ($customer_id, $vid, $order_id, $price, $qty, '$payment_method', $detail_status)";
+                ($vid, $order_id, $price, $qty, '$payment_method', $detail_status)";
                 
                 if (!mysqli_query($link, $sql_detail)) {
                     $success = false;

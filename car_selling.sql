@@ -49,7 +49,6 @@ CREATE TABLE orders (
 
 CREATE TABLE order_detail (
   order_detail_id INT AUTO_INCREMENT PRIMARY KEY,
-  customer_id INT NOT NULL,
   vehicle_id INT NOT NULL,
   order_id INT DEFAULT NULL,
   amount DECIMAL(15, 2) NOT NULL, 
@@ -57,7 +56,6 @@ CREATE TABLE order_detail (
   payment_method VARCHAR(50) NOT NULL,
   status INT(11) NOT NULL DEFAULT 1,
   created_at timestamp NOT NULL DEFAULT current_timestamp(),
-  CONSTRAINT fk_orderdetail_customer FOREIGN KEY (customer_id) REFERENCES customer(customer_id),
   CONSTRAINT fk_orderdetail_vehicle FOREIGN KEY (vehicle_id) REFERENCES vehicle(vehicle_id),
   CONSTRAINT fk_orderdetail_orders FOREIGN KEY (order_id) REFERENCES orders(order_id)
 );
