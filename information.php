@@ -1,4 +1,3 @@
-
 <?php
 // Kết nối database
 require_once 'db.php';
@@ -59,7 +58,6 @@ if (isset($_GET['id'])) {
                         ];
                     ?>
 
-                    <!-- KHUNG HIỂN THỊ MEDIA -->
                     <div id="mediaContent" 
                         style="width:100%; height:100%; display:flex; align-items:center; justify-content:center;">
                         
@@ -74,14 +72,12 @@ if (isset($_GET['id'])) {
 
                     </div>
 
-                    <!-- Nút Previous -->
                     <div class="position-absolute start-0 top-50 translate-middle-y">
                         <i class="bx bx-chevron-left fs-1 text-dark" 
                            role="button" 
                            onclick="prevMedia()"></i>
                     </div>
                     
-                    <!-- Nút Next -->
                     <div class="position-absolute end-0 top-50 translate-middle-y">
                         <i class="bx bx-chevron-right fs-1 text-dark" 
                            role="button" 
@@ -182,20 +178,22 @@ if (isset($_GET['id'])) {
                             <?= $car['description'] ? htmlspecialchars($car['description']) : "Description updating..." ?>
                         </div>
                     </div>
+                    
                     <div class="mt-4">
                         <div class="d-flex gap-2">
                             <?php if (isset($_SESSION['customer_id'])): ?>
+                                
                                 <?php if ($car['stock'] > 0): ?>
                                     <button type="submit" class="btn btn-warning flex-grow-1 py-3 fw-bold rounded-pill">
                                         <i class='bx bx-cart-add fs-4 align-middle'></i> Add to Cart
                                     </button>
                                 <?php else: ?>
-                                    <button type="button" class="btn btn-secondary flex-grow-1 py-3 fw-bold rounded-pill" disabled>
-                                        Temporarily Out of Stock
+                                    <button type="button" class="btn btn-secondary flex-grow-1 py-3 fw-bold rounded-pill text-uppercase" disabled>
+                                        SOLD OUT
                                     </button>
                                 <?php endif; ?>
                                 
-                                <?php else: ?>
+                            <?php else: ?>
                                 <a href="login.php" class="btn btn-warning flex-grow-1 py-3 fw-bold rounded-pill">
                                     Login to Add to Cart
                                 </a>
