@@ -125,29 +125,32 @@
             ?>
         </main>
 
-        <footer class="footer">
-            <div class="container">
-                <div class="contact">
-                        <h3 class="contact-header text-center">
-                            CAR WORLD
-                        </h3>
-                        <ul class="contact-socials list-unstyled d-flex justify-content-center gap-3">
-                            <li>
-                                <a href="#"><i class='bx bxl-facebook-circle fs-1 custom_hover'></i></a>
-                            </li>
-                            <li>
-                                <a href="#"><i class='bx bxl-instagram-alt fs-1 custom_hover'></i></a>
-                            </li>
-                            <li>
-                                <a href="#"><i class='bx bxl-youtube fs-1 custom_hover'></i></a>
-                            </li>
-                            <li>
-                                <a href="#"><i class='bx bxl-twitter fs-1 custom_hover'></i></a>
-                            </li>
-                        </ul>
-                    </div>
+        <footer class="footer py-4" style="background-color: #f0f7ff;"> <div class="container">
+        <div class="contact text-center">
+            
+            <h3 class="contact-header" style="font-weight: bold; letter-spacing: 2px;">
+                CAR WORLD
+            </h3>
+            
+            <ul class="contact-socials list-unstyled d-flex justify-content-center gap-3 mb-4">
+                <li><a href="#"><i class='bx bxl-facebook-circle fs-1 custom_hover'></i></a></li>
+                <li><a href="#"><i class='bx bxl-instagram-alt fs-1 custom_hover'></i></a></li>
+                <li><a href="#"><i class='bx bxl-youtube fs-1 custom_hover'></i></a></li>
+                <li><a href="#"><i class='bx bxl-twitter fs-1 custom_hover'></i></a></li>
+            </ul>
+            <div class="footer-bonbanh-style border-top pt-3">
+                <p class="mb-2" style="font-size: 14px; color: #333;"> 
+                    <strong>Email:</strong> contact@carworld.vn &nbsp;|&nbsp; 
+                    <strong>Hotline:</strong> 0379583624
+                </p>
+                <p class="mb-0 text-muted" style="font-size: 13px;">
+                    Công ty cổ phần Car World Việt Nam.<br>
+                    Địa chỉ: Số 1 Trịnh Văn Bô, Nam Từ Liêm, Hà Nội.
+                </p>
             </div>
-        </footer>
+             </div>
+    </div>
+</footer>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
