@@ -41,9 +41,11 @@ CREATE TABLE customer (
 -- 4. Bảng Order (Đơn hàng)
 CREATE TABLE orders (
     order_id INT AUTO_INCREMENT PRIMARY KEY,
-    customer_id INT NOT NULL, 
+    customer_id INT NOT NULL,
+    payment_id INT DEFAULT NULL, 
     status INT(11) NOT NULL DEFAULT 2, 
     created_at timestamp NOT NULL DEFAULT current_timestamp(), 
+    CONSTRAINT fk_orders_payment FOREIGN KEY (payment_id) REFERENCES payment(payment_id),
     CONSTRAINT fk_orders_customer FOREIGN KEY (customer_id) REFERENCES customer(customer_id)
 );
 
@@ -53,7 +55,6 @@ CREATE TABLE order_detail (
   order_id INT DEFAULT NULL,
   amount DECIMAL(15, 2) NOT NULL, 
   quantity INT(11) NOT NULL,
-  payment_method VARCHAR(50) NOT NULL,
   status INT(11) NOT NULL DEFAULT 1,
   created_at timestamp NOT NULL DEFAULT current_timestamp(),
   CONSTRAINT fk_orderdetail_vehicle FOREIGN KEY (vehicle_id) REFERENCES vehicle(vehicle_id),
@@ -381,12 +382,12 @@ ADD COLUMN total_amount DECIMAL(10, 2) NOT NULL DEFAULT 0.00;
 ALTER TABLE orders
 ADD COLUMN shipping_fee DECIMAL(10, 2) DEFAULT 0;
 
-CREATE TABLE payment_methods (
-    payment_method_id INT PRIMARY KEY AUTO_INCREMENT,
+CREATE TABLE payment (
+    payment_id INT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(50) NOT NULL UNIQUE
 );
 
-INSERT INTO payment_methods (name) VALUES 
+INSERT INTO payment (name) VALUES 
 ('Bank Transfer'), 
 ('Cash'),
 ('Credit Card');
