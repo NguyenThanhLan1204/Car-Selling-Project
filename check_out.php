@@ -4,21 +4,12 @@ if (session_status() == PHP_SESSION_NONE) {
 }
 
 // CONNECT DATABASE
-if (file_exists("admin/dbconn.php")) {
-    require_once("admin/dbconn.php");
-} elseif (file_exists("dbconn.php")) {
-    require_once("dbconn.php");
-} elseif (file_exists("db.php")) {
-    require_once("db.php");
-    if (isset($conn) && !isset($link)) { $link = $conn; }
-} else {
-    die("Error: Database connection file not found.");
-}
+require_once 'db.php'; 
 
-if (!isset($link) || !$link) {
-    die("Error: The connection variable \$link has not been initialized..");
+if (!isset($conn) || !$conn) {
+    die("Error: The connection variable \$conn has not been initialized..");
 }
-mysqli_set_charset($link, "utf8"); 
+mysqli_set_charset($conn, "utf8");
 
 
 // --- RETRIEVE DATA FROM SHOPPING CART (For Form Display) ---
@@ -38,12 +29,12 @@ if (isset($_POST['btn_place_order'])) {
     $customer_id = (int)$_SESSION['customer_id'];
     
     //1. Retrieve data from the form and clean it up.
-    $fullname = mysqli_real_escape_string($link, $_POST['fullname']);
-    $phone = mysqli_real_escape_string($link, $_POST['phone']);
-    $address = mysqli_real_escape_string($link, $_POST['address']);
+    $fullname = mysqli_real_escape_string($conn, $_POST['fullname']);
+    $phone = mysqli_real_escape_string($conn, $_POST['phone']);
+    $address = mysqli_real_escape_string($conn, $_POST['address']);
     
     // Recover hidden values
-    $payment_method = mysqli_real_escape_string($link, $_POST['payment_method']); 
+    $payment_method = mysqli_real_escape_string($conn, $_POST['payment_method']); 
     $final_total = (float)$_POST['total_amount_hidden'];
     $shipping_cost = (float)$_POST['shipping_cost_hidden'];
     
@@ -58,13 +49,13 @@ if (isset($_POST['btn_place_order'])) {
               ($customer_id, $status_code, $final_total, '$current_time', $shipping_cost,
                '$fullname', '$phone', '$address')";
         
-        if (mysqli_query($link, $sql_order)) {
-            $order_id = mysqli_insert_id($link);
+        if (mysqli_query($conn, $sql_order)) {
+            $order_id = mysqli_insert_id($conn);
             
             // --- CREATE ORDER DETAIL ---
             $success = true;
             $ids = implode(',', array_keys($cart));
-            $res = mysqli_query($link, "SELECT vehicle_id, price FROM vehicle WHERE vehicle_id IN ($ids)");
+            $res = mysqli_query($conn, "SELECT vehicle_id, price FROM vehicle WHERE vehicle_id IN ($ids)");
             
             while($r = mysqli_fetch_assoc($res)){
                 $vid = $r['vehicle_id'];
@@ -77,9 +68,9 @@ if (isset($_POST['btn_place_order'])) {
                 VALUES 
                 ($vid, $order_id, $price, $qty, '$payment_method', $detail_status)";
                 
-                if (!mysqli_query($link, $sql_detail)) {
+                if (!mysqli_query($conn, $sql_detail)) {
                     $success = false;
-                    error_log("Order details insertion error: " . mysqli_error($link));
+                    error_log("Order details insertion error: " . mysqli_error($conn));
                     break;
                 }
             }
@@ -95,12 +86,12 @@ if (isset($_POST['btn_place_order'])) {
                 exit();
                 
             } else {
-                mysqli_query($link, "DELETE FROM orders WHERE order_id = $order_id");
-                die("Error creating order details: " . mysqli_error($link));
+                mysqli_query($conn, "DELETE FROM orders WHERE order_id = $order_id");
+                die("Error creating order details: " . mysqli_error($conn));
             }
             
         } else {
-            die("Main order creation error: " . mysqli_error($link));
+            die("Main order creation error: " . mysqli_error($conn));
         }
     } else {
         echo "<script>alert('Cart is empty!'); window.location.href='base.php';</script>";
