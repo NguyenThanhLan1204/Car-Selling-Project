@@ -19,6 +19,7 @@ $cart_content = isset($_SESSION['cart']) ? $_SESSION['cart'] : [];
 $list_ids = array_keys($cart_content);
 $grand_total = 0; 
 ?>
+
 <div class="cart container py-5">
     <div class="row g-4">
         <div class="col-lg-9">
@@ -35,6 +36,7 @@ $grand_total = 0;
                 
                 while ($row = $result->fetch_assoc()):
                     $curr_id = $row['vehicle_id'];
+                    $qty = $cart_content[$curr_id]['qty'];
                     $subtotal = $row['price'] * $qty;
                     $grand_total += $subtotal;
                 ?>
