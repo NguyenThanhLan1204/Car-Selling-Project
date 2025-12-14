@@ -1,4 +1,5 @@
 <?php 
+// Đảm bảo session được khởi tạo trước khi sử dụng $_SESSION
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
@@ -10,13 +11,13 @@ if (!isset($_SESSION['customer_id'])) {
 ?>
 
 <?php
+// Giả sử file db.php khởi tạo biến $conn hoặc $link
 require_once 'db.php'; 
 $db_connection = isset($conn) ? $conn : $link; 
 
 $cart_content = isset($_SESSION['cart']) ? $_SESSION['cart'] : [];
 $list_ids = array_keys($cart_content);
-$grand_total = 0; // Subtotal 
-?>
+$grand_total = 0; 
 
 <div class="cart container py-5">
     <div class="row g-4">
@@ -34,8 +35,6 @@ $grand_total = 0; // Subtotal
                 
                 while ($row = $result->fetch_assoc()):
                     $curr_id = $row['vehicle_id'];
-                    $qty = $cart_content[$curr_id]['qty'];
-                    $color = $cart_content[$curr_id]['color'] ?? 'Default';
                     $subtotal = $row['price'] * $qty;
                     $grand_total += $subtotal;
                 ?>

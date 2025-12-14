@@ -13,11 +13,10 @@ if (isset($_SESSION['LAST_ACTIVITY'])) {
             $params = session_get_cookie_params();
             setcookie(session_name(), '', time() - 42000,
                 $params["path"], $params["domain"],
-                $params["secure"], $params["httponly"]
+                $params["secure"], $params["httponly"]tức 
             );
         }
         session_destroy();
-        
         setcookie("username", "", time() - 3600, "/");
         setcookie("role", "", time() - 3600, "/");
         setcookie("name", "", time() - 3600, "/");

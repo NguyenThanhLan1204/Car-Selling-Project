@@ -12,11 +12,6 @@
     <link rel="stylesheet" href="./assets/css/main.css">
     <link rel="stylesheet" href="./assets/css/base.css">
     
-    <link rel="stylesheet" href="/test/Car-Selling-Project/assets/css/main.css">
-    <link rel="stylesheet" href="/test/Car-Selling-Project/assets/css/base.css">
-    <link rel="stylesheet" href="/assets/css/main.css">
-    <link rel="stylesheet" href="/assets/css/base.css">
-    
     <title>Car Showroom</title>
 </head>
 <body>

@@ -4,26 +4,21 @@ include 'session_init.php';
 if (isset($_POST['vehicle_id'])) {
     
     $id = intval($_POST['vehicle_id']);
-    $color = isset($_POST['color']) ? htmlspecialchars($_POST['color']) : 'Standard'; // Dùng htmlspecialchars để an toàn hơn
     $quantity = 1; 
 
     // Khởi tạo giỏ hàng nếu chưa có
     if (!isset($_SESSION['cart'])) {
         $_SESSION['cart'] = array();
     }
-
     // --- Cập nhật Giỏ hàng trong Session ---
     // Kiểm tra xem xe này đã có trong giỏ chưa
     if (isset($_SESSION['cart'][$id])) {
         // Nếu có rồi thì tăng số lượng
         $_SESSION['cart'][$id]['qty'] += $quantity;
-        // Cập nhật lại màu mới nhất khách chọn
-        $_SESSION['cart'][$id]['color'] = $color;
     } else {
         // Nếu chưa có thì thêm mới
         $_SESSION['cart'][$id] = array(
             'qty' => $quantity,
-            'color' => $color
         );
     }
 
@@ -31,7 +26,7 @@ if (isset($_POST['vehicle_id'])) {
     // --- BỔ SUNG: LƯU GIỎ HÀNG VÀO COOKIE ---
 
     // Thời gian lưu của Cookie (ví dụ: 30 ngày)
-    $cookie_expiry = time() + (86400 * 30); // 86400 giây = 1 ngày
+    $cookie_expiry = time() + (86400 * 30);
 
     // Chuyển mảng giỏ hàng sang chuỗi JSON
     $cart_json = json_encode($_SESSION['cart']);
