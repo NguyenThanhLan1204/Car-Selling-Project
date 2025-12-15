@@ -97,38 +97,36 @@ $result = $stmt->get_result();
              </div>
           </div>
 
-             <div class="col-lg-9 col-md-8 offset-lg-3 offset-md-4">
-             <?php 
-             if ($result->num_rows > 0) {
-                 while($row = $result->fetch_assoc()) { 
-                     list($statusText, $badgeClass) = getStatusText($row['status']);
-                     ?>
-                     
-             <div class="card mb-4 shadow-sm">
-             <div class="row align-items-center m-3">
-
-               <div class="col-md-3">
-                 <img src="<?= htmlspecialchars($row['image_url']) ?>" class="img-fluid rounded-start object-fit-cover" alt="<?= htmlspecialchars($row['model']) ?>" style="max-height: 150px; width: 100%;">
-               </div>
-
-             <div class="col-md-7">
-                 <h5 class="fw-bold mb-2"><?= htmlspecialchars($row['model']) ?> - <?= htmlspecialchars($row['manufacturer']) ?></h5>
-                     <p class="mb-1">Order Code: <strong>#<?= htmlspecialchars($row['order_id']) ?></strong></p>
-                     <p class="mb-1">Date order: <?= date("d.m.Y H:i:s", strtotime($row['created_at'])) ?></p>
-                     
-                     <p class="mb-1">Total Amount: <strong class="text-danger">$<?= number_format($row['total_amount'], 0, ',', '.') ?></strong></p>
-                     
-                     <span class="badge <?= $badgeClass ?> fs-6"><?= $statusText ?></span>
-                 </div>
-                   <div class="col-md-2 text-end">
-                     <a 
-                         href="base.php?page=order_detail&order_id=<?= htmlspecialchars($row['order_id']) ?>" class="btn btn-success text-nowrap w-100"> 
-                              See details 
-                     </a>
-                   </div>
-                   </div>
-             </div>
-               <?php 
+            <div class="col-lg-9 col-md-8 offset-lg-3 offset-md-4">
+            <?php 
+            if ($result->num_rows > 0) {
+                while($row = $result->fetch_assoc()) { 
+                    list($statusText, $badgeClass) = getStatusText($row['status']);
+                    ?>
+                    
+            <div class="card mb-4 shadow-sm">
+            <div class="row align-items-center m-3">
+              <div class="col-md-3">
+                <img src="<?= htmlspecialchars($row['image_url']) ?>" class="img-fluid rounded-start object-fit-cover" alt="<?= htmlspecialchars($row['model']) ?>" style="max-height: 150px; width: 100%;">
+              </div>
+            <div class="col-md-7">
+                <h5 class="fw-bold mb-2"><?= htmlspecialchars($row['model']) ?> - <?= htmlspecialchars($row['manufacturer']) ?></h5>
+                    <p class="mb-1">Order Code: <strong>#<?= htmlspecialchars($row['order_id']) ?></strong></p>
+                    <p class="mb-1">Date order: <?= date("d.m.Y H:i:s", strtotime($row['created_at'])) ?></p>
+                    
+                    <p class="mb-1">Total Amount: <strong class="text-danger">$<?= number_format($row['total_amount'], 0, ',', '.') ?></strong></p>
+                    
+                    <span class="badge <?= $badgeClass ?> fs-6"><?= $statusText ?></span>
+                </div>
+                  <div class="col-md-2 text-end">
+                    <a 
+                        href="base.php?page=order_detail&order_id=<?= htmlspecialchars($row['order_id']) ?>" class="btn btn-success text-nowrap w-100"> 
+                             See details 
+                    </a>
+                  </div>
+                  </div>
+            </div>
+              <?php 
           }
              } else {
                echo '<div class="d-flex justify-content-center align-items-center" style="min-height: 400px;">';
