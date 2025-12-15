@@ -138,15 +138,6 @@ if (isset($_GET['id'])) {
 
                     <h2 class="fw-bold mb-3"><?= htmlspecialchars($car['model']) ?></h2>
 
-                    <div class="mb-3">
-                        <i class='bx bxs-star text-warning'></i>
-                        <i class='bx bxs-star text-warning'></i>
-                        <i class='bx bxs-star text-warning'></i>
-                        <i class='bx bxs-star text-warning'></i>
-                        <i class='bx bxs-star-half text-warning'></i>
-                        <small class="text-muted">(Customer Reviews)</small>
-                    </div>
-
                     <h3 class="text-danger fw-bold mb-4">
                         $<?= number_format($car['price'], 0, '.', ',') ?>
                     </h3>
