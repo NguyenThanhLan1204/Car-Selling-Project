@@ -125,29 +125,23 @@
             ?>
         </main>
 
-        <footer class="footer">
-            <div class="container">
-                <div class="contact">
-                        <h3 class="contact-header text-center">
-                            CAR WORLD
-                        </h3>
-                        <ul class="contact-socials list-unstyled d-flex justify-content-center gap-3">
-                            <li>
-                                <a href="#"><i class='bx bxl-facebook-circle fs-1 custom_hover'></i></a>
-                            </li>
-                            <li>
-                                <a href="#"><i class='bx bxl-instagram-alt fs-1 custom_hover'></i></a>
-                            </li>
-                            <li>
-                                <a href="#"><i class='bx bxl-youtube fs-1 custom_hover'></i></a>
-                            </li>
-                            <li>
-                                <a href="#"><i class='bx bxl-twitter fs-1 custom_hover'></i></a>
-                            </li>
-                        </ul>
-                    </div>
-            </div>
-        </footer>
+        <footer class="footer" style="background-color: #aeaeae; ">
+        <div class="container text-center"> 
+        <h3 class="contact-header mb-3" style="font-weight: bold; letter-spacing: 2px; color: #000;">
+            CAR WORLD
+        </h3>
+        <p class="mb-0" style="background-color: #aeaeae;font-size: 15px; color: #333; line-height: 1.6;"> 
+                Email: contact@carworld.vn | Hotline: 0379.583.624
+                <br> Location: No 1 Trinh Van Bo, Nam Tu Liem, Ha Noi
+        </p>
+        <ul class="contact-socials list-unstyled d-flex justify-content-center gap-3 mb-3">
+            <li><a href="#"><i class='bx bxl-facebook-circle fs-2 custom_hover'></i></a></li>
+            <li><a href="#"><i class='bx bxl-instagram-alt fs-2 custom_hover'></i></a></li>
+            <li><a href="#"><i class='bx bxl-youtube fs-2 custom_hover'></i></a></li>
+            <li><a href="#"><i class='bx bxl-twitter fs-2 custom_hover'></i></a></li>
+        </ul> 
+    </div>
+</footer>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
