@@ -59,7 +59,7 @@ CREATE TABLE vehicle (
 CREATE TABLE orders (
     order_id INT AUTO_INCREMENT PRIMARY KEY,
     customer_id INT NOT NULL, 
-    payment_id INT DEFAULT 2, -- Mặc định ID 2 là Cash
+    payment_method_id INT DEFAULT 2, -- Mặc định ID 2 là Cash
     status INT(11) NOT NULL DEFAULT 2, 
     total_amount DECIMAL(15, 2) NOT NULL DEFAULT 0.00,
     shipping_fee DECIMAL(15, 2) DEFAULT 0.00,
@@ -68,7 +68,7 @@ CREATE TABLE orders (
     shipping_address TEXT,
     created_at timestamp NOT NULL DEFAULT current_timestamp(), 
     CONSTRAINT fk_orders_customer FOREIGN KEY (customer_id) REFERENCES customer(customer_id),
-    CONSTRAINT fk_orders_payment FOREIGN KEY (payment_id) REFERENCES payment_methods(payment_method_id)
+    CONSTRAINT fk_orders_payment FOREIGN KEY (payment_method_id) REFERENCES payment_methods(payment_method_id)
 );
 
 -- ======================================================
