@@ -81,7 +81,6 @@ CREATE TABLE order_detail (
     order_id INT DEFAULT NULL,
     amount DECIMAL(15, 2) NOT NULL, 
     quantity INT(11) NOT NULL,
-    status INT(11) NOT NULL DEFAULT 1,
     created_at timestamp NOT NULL DEFAULT current_timestamp(),
     CONSTRAINT fk_orderdetail_vehicle FOREIGN KEY (vehicle_id) REFERENCES vehicle(vehicle_id),
     CONSTRAINT fk_orderdetail_orders FOREIGN KEY (order_id) REFERENCES orders(order_id) ON DELETE CASCADE
@@ -373,7 +372,7 @@ Open-top version available – pure exhilaration redefined.');
 
 -- 5. Insert Orders
 -- Payment ID: 2=Cash, 1=Bank, 3=Credit
-INSERT INTO orders (customer_id, status, created_at, total_amount, payment_id) VALUES
+INSERT INTO orders (customer_id, status, created_at, total_amount, payment_method_id) VALUES
 (2, 4, '2024-01-15 10:30:00', 458000000, 2),   
 (3, 2, '2024-02-20 14:15:00', 665000000, 1),   
 (4, 4, '2024-03-05 09:00:00', 559000000, 3),   
@@ -383,10 +382,10 @@ INSERT INTO orders (customer_id, status, created_at, total_amount, payment_id) V
 -- 6. Insert Order Detail
 -- Đã xóa payment_method
 INSERT INTO order_detail 
-(vehicle_id, order_id, amount, quantity, status) 
+(vehicle_id, order_id, amount, quantity, created_at) 
 VALUES
-(1, 1, 458000000, 1, 4),
-(3, 2, 665000000, 1, 2),
-(2, 3, 559000000, 1, 4),
-(5, 4, 1090000000, 1, 2),
-(4, 5, 1050000000, 1, 5);s
+(1, 1, 458000000, 1, '2024-01-15 10:30:00'),
+(3, 2, 665000000, 1, '2024-02-20 14:15:00'),
+(2, 3, 559000000, 1, '2024-03-05 09:00:00'),
+(5, 4, 1090000000, 1, '2024-04-10 16:45:00'),
+(4, 5, 1050000000, 1, '2024-05-01 11:20:00');
