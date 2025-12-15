@@ -34,7 +34,6 @@ $users = getAllCustomers();
                                 <th class="text-center">Age</th>
                                 <th class="text-center">Date of Birth</th>
                                 <th class="text-center">Total order</th>
-                                <th class="text-center">Day come</th>
                             </tr>
                         </thead>
 
@@ -53,8 +52,9 @@ $users = getAllCustomers();
                                         <?= date('d-m-Y', strtotime($user['dob'])); ?>
                                     </td>
 
-                                    <td class="text-center">-</td>
-                                    <td class="text-center">-</td>
+                                    <td class="text-center">
+                                        <?= $user['total_orders'] ?>
+                                    </td>
                                 </tr>
                             <?php } ?>
                         </tbody>
