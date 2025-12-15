@@ -125,7 +125,7 @@
             ?>
         </main>
 
-        <footer class="footer" style="background-color: #aeaeae; ">
+        <footer class="footer">
         <div class="container text-center"> 
         <h3 class="contact-header mb-3" style="font-weight: bold; letter-spacing: 2px; color: #000;">
             CAR WORLD
@@ -136,7 +136,7 @@
             <li><a href="#"><i class='bx bxl-youtube fs-2 custom_hover'></i></a></li>
             <li><a href="#"><i class='bx bxl-twitter fs-2 custom_hover'></i></a></li>
         </ul> 
-        <p class="mb-0" style="background-color: #aeaeae;font-size: 15px; color: #333; line-height: 1.6;"> 
+        <p class="mb-0 fs-6 text-dark lh-base"> 
                 Email: contact@carworld.vn | Hotline: 0379.583.624
                 <br> Location: No 1 Trinh Van Bo, Nam Tu Liem, Ha Noi
         </p>

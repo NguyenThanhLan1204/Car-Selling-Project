@@ -1,7 +1,6 @@
 
 <?php
 session_start();
-
 if (isset($_SESSION['username'])) {
     header("Location: base.php?page=home");
     exit();
