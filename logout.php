@@ -1,8 +1,8 @@
 <?php
 session_start();
-
+//Xóa giỏ hàng trong session
 unset($_SESSION['cart']);
-
+//Xóa session
 $_SESSION = [];
 // Xóa cookie session (PHPSESSID)
 if (ini_get("session.use_cookies")) {

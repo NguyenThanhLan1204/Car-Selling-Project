@@ -48,7 +48,6 @@ $grand_total = 0;
                         <div class="col-md-9">
                             <div class="card-body position-relative">
                                 <h5 class="card-title fw-bold"><?= $row['model'] ?></h5>
-                                <p class="card-text mb-1 text-muted small">Color: <strong><?= $color ?></strong></p>
                                 <div class="d-flex justify-content-between align-items-center mt-3">
                                     <div class="d-flex flex-column">
                                         <label class="small text-muted mb-1">Quantity</label>
