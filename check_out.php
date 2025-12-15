@@ -126,19 +126,6 @@ if (isset($_POST['btn_place_order'])) {
                 <input type="hidden" name="shipping_cost_hidden" value="<?= $shipping_cost_from_cart ?>">
 
                 <div class="mb-3">
-                    <label class="form-label">Payment Method</label>
-                    <select name="payment" class="form-select" required>
-                        <?php
-                        $pm_query = mysqli_query($conn, "SELECT payment_method_id, name FROM payment_methods ORDER BY name");
-                        while ($pm = mysqli_fetch_assoc($pm_query)) {
-                            $selected = ($pm['payment_method_id'] == $payment_default) ? 'selected' : '';
-                            echo "<option value='{$pm['payment_method_id']}' $selected>{$pm['name']}</option>";
-                        }
-                        ?>
-                    </select>
-                </div>
-
-                <div class="mb-3">
                     <label class="form-label">Full Name</label>
                     <input type="text" class="form-control" name="fullname" required>
                 </div>
