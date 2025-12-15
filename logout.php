@@ -26,6 +26,6 @@ setcookie("role", "", time() - 3600, "/");
 // Xóa cookie name
 setcookie("name", "", time() - 3600, "/");
 
-header("Location: login.php");
+header("Location: base.php?page=home");
 exit();
 ?>
