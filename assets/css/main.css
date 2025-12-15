@@ -31,8 +31,7 @@
 
 /* Footer */
 .footer{
-  background-color: var(--third-bg-color);
-  height: 150px;
+  background-color: #aeaeae; 
 }
 
 .contact-header {
