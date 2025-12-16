@@ -133,7 +133,7 @@
         <ul class="contact-socials list-unstyled d-flex justify-content-center gap-3 mb-3">
             <li><a href="#"><i class='bx bxl-facebook-circle fs-2 custom_hover'></i></a></li>
             <li><a href="#"><i class='bx bxl-instagram-alt fs-2 custom_hover'></i></a></li>
-            <li><a href="https://youtu.be/f7BLrX8hAOg"><i class='bx bxl-youtube fs-2 custom_hover'></i></a></li>
+            <li><a href="https://youtu.be/sdEv8PiW7dE"><i class='bx bxl-youtube fs-2 custom_hover'></i></a></li>
             <li><a href="#"><i class='bx bxl-twitter fs-2 custom_hover'></i></a></li>
         </ul> 
         <p class="mb-0 fs-6 text-dark lh-base"> 
