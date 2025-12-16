@@ -36,10 +36,10 @@ function totalValue($table) {
             <!-- TOTAL CARD TEMPLATE ↓ -->
             <?php 
                 $cards = [
-                    ["Users", "person", totalValue("customer"), "+3%", "success"],
-                    ["Product", "table_view", totalValue("vehicle"), "+55%", "success"],
-                    ["Manufacturer", "factory", totalValue("manufacturer"), "+12%", "success"],
-                    ["Order", "receipt_long", totalValue("orders"), "-2%", "danger"],
+                    ["Users", "person", totalValue("customer"), "", "success"],
+                    ["Product", "table_view", totalValue("vehicle"), "", "success"],
+                    ["Manufacturer", "factory", totalValue("manufacturer"), "", "success"],
+                    ["Order", "receipt_long", totalValue("orders"), "", "danger"],
                 ];
 
                 foreach ($cards as $c) { 
@@ -60,7 +60,6 @@ function totalValue($table) {
                     <div class="card-footer p-3">
                         <p class="mb-0">
                             <span class="text-<?= $c[4] ?> text-sm font-weight-bolder"><?= $c[3] ?></span>
-                            than last period
                         </p>
                     </div>
 
