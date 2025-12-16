@@ -21,23 +21,7 @@ CREATE TABLE payment_methods (
 );
 
 -- ======================================================
--- 3. BẢNG CUSTOMER (Khách hàng)
--- ======================================================
-CREATE TABLE customer (
-    customer_id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    age INT, 
-    phone_number VARCHAR(20),
-    email VARCHAR(255),
-    dob DATE, 
-    username VARCHAR(100) UNIQUE,
-    address varchar(191) DEFAULT NULL, 
-    password VARCHAR(255),
-    role VARCHAR(20) DEFAULT 'user' 
-);
-
--- ======================================================
--- 4. BẢNG VEHICLE (Xe)
+-- 3. BẢNG VEHICLE (Xe)
 -- ======================================================
 CREATE TABLE vehicle (
     vehicle_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -53,13 +37,28 @@ CREATE TABLE vehicle (
 );
 
 -- ======================================================
--- 5. BẢNG ORDERS (Đơn hàng)
+-- 4. BẢNG CUSTOMER (Khách hàng)
 -- ======================================================
--- Đã thêm payment_id và các cột ship hàng, tổng tiền
+CREATE TABLE customer (
+    customer_id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    age INT, 
+    phone_number VARCHAR(20),
+    email VARCHAR(255),
+    dob DATE, 
+    username VARCHAR(100) UNIQUE,
+    address varchar(191) DEFAULT NULL, 
+    password VARCHAR(255),
+    role VARCHAR(20) DEFAULT 'user' 
+);
+
+-- ======================================================
+-- 5. BẢNG ORDERS (Đơn hàng) - Đã cập nhật đầy đủ cột
+-- ======================================================
 CREATE TABLE orders (
     order_id INT AUTO_INCREMENT PRIMARY KEY,
     customer_id INT NOT NULL, 
-    payment_method_id INT DEFAULT 2, -- Mặc định ID 2 là Cash
+    payment_id INT DEFAULT 2, -- Mặc định là Cash (2)
     status INT(11) NOT NULL DEFAULT 2, 
     total_amount DECIMAL(15, 2) NOT NULL DEFAULT 0.00,
     shipping_fee DECIMAL(15, 2) DEFAULT 0.00,
@@ -67,27 +66,27 @@ CREATE TABLE orders (
     shipping_phone VARCHAR(20),
     shipping_address TEXT,
     created_at timestamp NOT NULL DEFAULT current_timestamp(), 
-    CONSTRAINT fk_orders_customer FOREIGN KEY (customer_id) REFERENCES customer(customer_id),
-    CONSTRAINT fk_orders_payment FOREIGN KEY (payment_method_id) REFERENCES payment_methods(payment_method_id)
+    CONSTRAINT fk_orders_customer FOREIGN KEY (customer_id) REFERENCES customer(customer_id)
 );
 
 -- ======================================================
 -- 6. BẢNG ORDER DETAIL (Chi tiết đơn hàng)
 -- ======================================================
--- Đã XÓA cột payment_method thừa
 CREATE TABLE order_detail (
-    order_detail_id INT AUTO_INCREMENT PRIMARY KEY,
-    vehicle_id INT NOT NULL,
-    order_id INT DEFAULT NULL,
-    amount DECIMAL(15, 2) NOT NULL, 
-    quantity INT(11) NOT NULL,
-    created_at timestamp NOT NULL DEFAULT current_timestamp(),
-    CONSTRAINT fk_orderdetail_vehicle FOREIGN KEY (vehicle_id) REFERENCES vehicle(vehicle_id),
-    CONSTRAINT fk_orderdetail_orders FOREIGN KEY (order_id) REFERENCES orders(order_id) ON DELETE CASCADE
+  order_detail_id INT AUTO_INCREMENT PRIMARY KEY,
+  vehicle_id INT NOT NULL,
+  order_id INT DEFAULT NULL,
+  amount DECIMAL(15, 2) NOT NULL, 
+  quantity INT(11) NOT NULL,
+  payment_method VARCHAR(50) NOT NULL, -- Giữ lại để tương thích dữ liệu cũ
+  status INT(11) NOT NULL DEFAULT 1,
+  created_at timestamp NOT NULL DEFAULT current_timestamp(),
+  CONSTRAINT fk_orderdetail_vehicle FOREIGN KEY (vehicle_id) REFERENCES vehicle(vehicle_id),
+  CONSTRAINT fk_orderdetail_orders FOREIGN KEY (order_id) REFERENCES orders(order_id)
 );
 
 -- ======================================================
--- NẠP DỮ LIỆU (DATA INSERTION)
+-- NẠP DỮ LIỆU (DATA) - GIỮ NGUYÊN GỐC
 -- ======================================================
 
 -- 1. Insert Payment Methods
@@ -106,17 +105,9 @@ INSERT INTO manufacturer (name, country, description) VALUES
 ('Porsche', 'Germany', 'German high-performance sports car manufacturer.'),
 ('McLaren', 'United Kingdom', 'British supercar manufacturer known for hypercars.');
 
--- 3. Insert Customers 
-INSERT INTO customer (name, age, phone_number, email, dob, username, password, role, address) VALUES
-('System Administrator', 30, '0909000111', 'admin@carselling.com', '1990-01-01', 'admin', 'admin123', 'admin', '123 Admin Street, District 1, Ho Chi Minh City'),
-('Dinh Khai', 25, '0912345678', 'ronadokhaibeo@gmail.com', '1999-05-15', 'khaibeo', '123456', 'user', '45 Nguyen Hue, District 3, Ho Chi Minh City'),
-('Minh Ly', 40, '0988777666', 'minhca@gmail.com', '1984-12-20', 'minhca', 'password', 'user', '789 Le Loi, District 1, Ho Chi Minh City'),
-('Namdo', 22, '0365554444', 'namdo@gmail.com', '2002-03-08', 'namdo', 'security', 'user', '56 Tran Hung Dao, District 5, Ho Chi Minh City'),
-('Lanlitdo', 35, '0901239876', 'trumcho@gmail.com', '1989-07-27', 'lan', 'lan123', 'user', '321 Pham Ngu Lao, District 1, Ho Chi Minh City');
-
--- 4. Insert Vehicles (Đầy đủ mô tả)
+-- 3. Insert Vehicles (Giữ nguyên toàn bộ description dài của bạn)
 INSERT INTO vehicle (manufacturer_id, model, year, price, image_url, video_url, stock, description) VALUES
--- AUDI (ID 4)
+-- AUDI
 (4, 'Audi RS6', 2023, 138888, './assets/img/audi_rs6.jpg', 'assets/video/audi_rs6.mp4', 5,
 'The most brutal and practical super-wagon ever created – a 600 hp family estate that embarrasses genuine supercars on both road and track
 Power: 600 hp 4.0L twin-turbo V8
@@ -163,7 +154,7 @@ Audio: Bang & Olufsen 19-speaker 3D sound system
 Features: Soft-close doors · Panoramic sunroof
 S-Class levels of refinement in a sharper, sportier body.'),
 
--- BMW (ID 2)
+-- BMW
 (2, 'BMW X5M', 2024, 519000, './assets/img/bmw_x5m.png', 'assets/video/BMW_X5M.mp4', 2,
 'The fastest, most powerful and most intimidating luxury SUV ever built by BMW – a true M monster in gentleman’s clothing
 Power: 625 hp M TwinPower Turbo V8
@@ -194,7 +185,7 @@ Features: Carbon roof · M Carbon bucket seats · Laser headlights
 Display: iDrive 8 curved screen · Head-Up Display
 The benchmark performance sedan – angrier and better than ever.'),
 
--- VOLVO (ID 5)
+-- VOLVO
 (5, 'Volvo EM90', 2024, 80000, './assets/img/volvo_em90.avif', 'assets/video/VolvoEM90.mp4', 3,
 'The world’s first true luxury electric MPV – a Scandinavian living room on wheels that redefines comfort, silence and sustainability
 Power: 272 hp · Range: Up to 738 km (CLTC)
@@ -222,7 +213,7 @@ Cargo: 1,800 liters · Roof rails · Tow bar ready
 Suspension: Four-C active chassis · Hill descent control
 The ultimate go-anywhere family wagon.'),
 
--- PORSCHE (ID 6)
+-- PORSCHE
 (6, 'Porsche Taycan Turbo GT', 2025, 739000, './assets/img/taycan_gt.jpg', 'assets/video/Porsche_Taycan_Turbo_GT.mp4', 1,
 'The fastest series-production electric car ever to lap the Nürburgring – a 1,019 hp missile that rewrites what EVs can do
 Power: 1,019 hp with Launch Control
@@ -266,7 +257,7 @@ Package: Weissach lightweight · Magnesium wheels
 Production: Only 918 units worldwide
 A future classic and collector masterpiece.'),
 
--- FERRARI (ID 3)
+-- FERRARI
 (3, 'Ferrari 812', 2024, 335000, './assets/img/ferrari_812.jpg', 'assets/video/ferrari_812.mp4', 1,
 'The last front-engine, naturally aspirated V12 Ferrari – a 800 hp grand tourer that sings at nearly 9,000 rpm
 Power: 800 hp 6.5L V12
@@ -294,7 +285,7 @@ Design: “La Nuova Dolce Vita” philosophy
 Interior: Passenger display · Frau leather · Dual cockpit layout
 Beauty, power and sophistication in perfect harmony.'),
 
--- MERCEDES (ID 1)
+-- MERCEDES
 (1, 'Maybach GLS 600', 2023, 214888, './assets/img/maybach_gls600.jpg', 'assets/video/maybach_2023.mp4', 3,
 'The pinnacle of automotive luxury – an ultra-luxury SUV that makes first-class airline seats feel economy
 Power: 557 hp 4.0L V8 mild-hybrid
@@ -341,7 +332,7 @@ Aerodynamics: Over 400 kg downforce at 250 km/h
 Nürburgring lap record holder in its class
 A street-legal race car with no compromises.'),
 
--- MCLAREN (ID 7)
+-- MCLAREN
 (7, 'McLaren Senna', 2020, 1000000, './assets/img/mclaren_senna.png', 'assets/video/Maclaren_senna.mp4', 1,
 'The most extreme road-legal track car ever made by McLaren – named after the greatest F1 driver of all time
 Power: 800 hp twin-turbo V8
@@ -370,22 +361,28 @@ Chassis: Proactive Chassis Control III
 Interior: Carbon racing seats · Alcantara everywhere
 Open-top version available – pure exhilaration redefined.');
 
--- 5. Insert Orders
--- Payment ID: 2=Cash, 1=Bank, 3=Credit
-INSERT INTO orders (customer_id, status, created_at, total_amount, payment_method_id) VALUES
-(2, 4, '2024-01-15 10:30:00', 458000000, 2),   
-(3, 2, '2024-02-20 14:15:00', 665000000, 1),   
-(4, 4, '2024-03-05 09:00:00', 559000000, 3),   
-(2, 2, '2024-04-10 16:45:00', 1090000000, 1),  
-(5, 3, '2024-05-01 11:20:00', 1050000000, 2);  
+-- 4. Insert Customers 
+INSERT INTO customer (name, age, phone_number, email, dob, username, password, role, address) VALUES
+('System Administrator', 30, '0909000111', 'admin@carselling.com', '1990-01-01', 'admin', 'admin123', 'admin', '123 Admin Street, District 1, Ho Chi Minh City'),
+('Dinh Khai', 25, '0912345678', 'ronadokhaibeo@gmail.com', '1999-05-15', 'khaibeo', '123456', 'user', '45 Nguyen Hue, District 3, Ho Chi Minh City'),
+('Minh Ly', 40, '0988777666', 'minhca@gmail.com', '1984-12-20', 'minhca', 'password', 'user', '789 Le Loi, District 1, Ho Chi Minh City'),
+('Namdo', 22, '0365554444', 'namdo@gmail.com', '2002-03-08', 'namdo', 'security', 'user', '56 Tran Hung Dao, District 5, Ho Chi Minh City'),
+('Lanlitdo', 35, '0901239876', 'trumcho@gmail.com', '1989-07-27', 'lan', 'lan123', 'user', '321 Pham Ngu Lao, District 1, Ho Chi Minh City');
 
--- 6. Insert Order Detail
--- Đã xóa payment_method
+-- 5. Insert Orders (Đã thêm giá trị total_amount và payment_id để khớp với cấu trúc bảng)
+INSERT INTO orders (customer_id, status, created_at, total_amount, payment_id) VALUES
+(2, 4, '2024-01-15 10:30:00', 458000000, 2),   -- Order 1 (Cash)
+(3, 2, '2024-02-20 14:15:00', 665000000, 1),   -- Order 2 (Bank)
+(4, 4, '2024-03-05 09:00:00', 559000000, 3),   -- Order 3 (Credit)
+(2, 2, '2024-04-10 16:45:00', 1090000000, 1),  -- Order 4 (Bank)
+(5, 3, '2024-05-01 11:20:00', 1050000000, 2);  -- Order 5 (Cash)
+
+-- 6. Insert Order Detail (Đã xóa customer_id bị thừa)
 INSERT INTO order_detail 
-(vehicle_id, order_id, amount, quantity, created_at) 
+(vehicle_id, order_id, amount, quantity, payment_method, status) 
 VALUES
-(1, 1, 458000000, 1, '2024-01-15 10:30:00'),
-(3, 2, 665000000, 1, '2024-02-20 14:15:00'),
-(2, 3, 559000000, 1, '2024-03-05 09:00:00'),
-(5, 4, 1090000000, 1, '2024-04-10 16:45:00'),
-(4, 5, 1050000000, 1, '2024-05-01 11:20:00');
+(1, 1, 458000000, 1, 'Cash', 4),
+(3, 2, 665000000, 1, 'Bank Transfer', 2),
+(2, 3, 559000000, 1, 'Credit Card', 4),
+(5, 4, 1090000000, 1, 'Bank Transfer', 2),
+(4, 5, 1050000000, 1, 'Cash', 5);
