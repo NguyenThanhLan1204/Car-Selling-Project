@@ -28,8 +28,7 @@ function getStatusText($status) {
     return $statuses[$status] ?? ["Not determined", "badge bg-dark"];
 }
 
-// --- 3. ORDER OVERVIEW QUERY (SỬA LẠI: JOIN THÊM BẢNG PAYMENT_METHODS) ---
-// Chúng ta lấy tên phương thức thanh toán ngay tại đây
+// --- 3. ORDER OVERVIEW QUERY
 $sql_order = "SELECT o.total_amount, o.status, o.created_at, o.shipping_fee, pm.name as payment_method_name
               FROM orders o
               LEFT JOIN payment_methods pm ON o.payment_method_id = pm.payment_method_id
@@ -55,12 +54,10 @@ if (!$order_info) {
 
 // Get shipping fee
 $shipping_fee = $order_info['shipping_fee'] ?? 0;
-// Lấy tên phương thức thanh toán từ kết quả truy vấn trên
 $payment_method = $order_info['payment_method_name'] ?? 'N/A';
 
 
-// --- 4. QUERY FOR PRODUCT DETAILS (SỬA LẠI: BỎ od.payment_method) ---
-// Đã xóa 'od.payment_method' gây lỗi
+// --- 4. QUERY FOR PRODUCT DETAILS
 $sql_details = "SELECT od.quantity, od.amount, 
                         v.model, v.image_url, m.name AS manufacturer
                 FROM order_detail od
