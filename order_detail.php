@@ -68,7 +68,7 @@ $sql_details = "SELECT od.quantity, od.amount,
 $stmt_details = $conn->prepare($sql_details);
 
 if ($stmt_details === false) {
-    die("Lỗi chuẩn bị truy vấn chi tiết: " . $conn->error);
+    die("Detailed query preparation error: " . $conn->error);
 }
 
 $stmt_details->bind_param("i", $order_id);
