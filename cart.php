@@ -1,5 +1,4 @@
 <?php 
-// Đảm bảo session được khởi tạo trước khi sử dụng $_SESSION
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
@@ -8,10 +7,10 @@ if (!isset($_SESSION['customer_id'])) {
     header("Location: login.php?message=please_login");
     exit();
 }
+
 ?>
 
 <?php
-// Giả sử file db.php khởi tạo biến $conn hoặc $link
 require_once 'db.php'; 
 $db_connection = isset($conn) ? $conn : $link; 
 
@@ -42,7 +41,10 @@ $grand_total = 0;
                 ?>
                 <div class="card mb-3 shadow-sm product-row" data-id="<?= $curr_id ?>" data-price="<?= $row['price'] ?>">
                     <div class="row g-0 align-items-center">
-                        <div class="col-md-3">
+                        <div class="col-md-1 text-center">
+                            <input type="checkbox" class="form-check-input item-checkbox" value="<?= $curr_id ?>" checked>
+                        </div>
+                        <div class="col-md-2">
                             <img src="<?= !empty($row['image_url']) ? $row['image_url'] : 'https://via.placeholder.com/150' ?>" class="img-fluid rounded-start h-100 object-fit-cover" alt="<?= $row['model'] ?>" style="max-height: 150px; width: 100%;">
                         </div>
                         <div class="col-md-9">
@@ -84,11 +86,10 @@ $grand_total = 0;
             <div class="p-4 shadow-sm bg-white rounded position-sticky" style="top: 100px;">
                 <h5 class="fw-bold mb-4 border-bottom pb-2">Cart summary</h5>
                 
-                <form action="base.php?page=checkout" method="POST"> 
+                <form action="base.php?page=checkout" method="POST" id="cart-form"> 
                     
+                    <input type="hidden" name="selected_ids_input" id="selected-ids-input" value="">
                     <input type="hidden" name="sub_total_input" id="sub-total-hidden" value="<?= $grand_total ?>">
-                    
-                    <input type="hidden" name="payment_method_input" id="payment-method-hidden" value="Cash on Delivery">
 
                     <div class="mb-4">
                         <p class="small fw-bold text-muted mb-2 text-uppercase">Shipping</p>
@@ -96,49 +97,45 @@ $grand_total = 0;
                             <input class="form-check-input ms-0 me-2 shipping-radio" type="radio" 
                                    name="shipping_cost" id="ship-normal" value="0" checked>
                             <label class="form-check-label d-flex justify-content-between w-100" for="ship-normal">
-                                <span>Free shipping</span>
-                                <span class="fw-bold">$0</span>
+                                <span>Free shipping</span><span class="fw-bold">$0</span>
                             </label>
                         </div>
                         <div class="form-check border rounded p-2">
                             <input class="form-check-input ms-0 me-2 shipping-radio" type="radio" 
                                    name="shipping_cost" id="ship-fast" value="15">
                             <label class="form-check-label d-flex justify-content-between w-100" for="ship-fast">
-                                <span>Express shipping</span>
-                                <span class="fw-bold">$15</span>
+                                <span>Express shipping</span><span class="fw-bold">$15</span>
                             </label>
                         </div>
                     </div>
 
                     <div class="mb-4">
                         <p class="small fw-bold text-muted mb-2 text-uppercase">Payment Method</p>
-                        
                         <div class="form-check border rounded p-2 mb-2">
                             <input class="form-check-input ms-0 me-2 payment-radio" type="radio" 
-                                   name="checkout_payment_method" id="payment-cash" value="Cash on Delivery" checked> 
+                                   name="checkout_payment_method" id="payment-cash" value="2" checked> 
                             <label class="form-check-label w-100" for="payment-cash">Cash on Delivery</label>
                         </div>
-                        
                         <div class="form-check border rounded p-2 mb-2">
                             <input class="form-check-input ms-0 me-2 payment-radio" type="radio" 
-                                   name="checkout_payment_method" id="payment-bank" value="Bank Transfer"> 
+                                   name="checkout_payment_method" id="payment-bank" value="1"> 
                             <label class="form-check-label w-100" for="payment-bank">Bank Transfer</label>
                         </div>
-                        
                         <div class="form-check border rounded p-2">
                             <input class="form-check-input ms-0 me-2 payment-radio" type="radio" 
-                                   name="checkout_payment_method" id="payment-credit" value="Credit Card"> 
+                                   name="checkout_payment_method" id="payment-credit" value="3"> 
                             <label class="form-check-label w-100" for="payment-credit">Credit Card</label>
                         </div>
                     </div>
+
                     <div class="d-flex justify-content-between mb-2">
-                        <span class="text-muted">Subtotal:</span>
-                        <strong id="temp-total">$<?= number_format($grand_total) ?></strong>
+                        <span class="text-muted">Selected Subtotal:</span>
+                        <strong id="temp-total">$0</strong>
                     </div>
                     <hr>
                     <div class="d-flex justify-content-between align-items-center mb-4">
                         <span class="fw-bold h5">Total:</span>
-                        <span class="h4 fw-bold text-danger" id="grand-total-display">$<?= number_format($grand_total) ?></span>
+                        <span class="h4 fw-bold text-danger" id="grand-total-display">$0</span>
                     </div>
                     
                     <button type="submit" class="btn btn-dark w-100 py-3 fw-bold rounded-pill text-uppercase">
@@ -155,60 +152,52 @@ $grand_total = 0;
 document.addEventListener('DOMContentLoaded', function () {
     const qtyInputs = document.querySelectorAll('.qty-input');
     const shippingRadios = document.querySelectorAll('.shipping-radio');
-    const paymentRadios = document.querySelectorAll('.payment-radio');
+    const itemCheckboxes = document.querySelectorAll('.item-checkbox');
+    const selectAllCheck = document.getElementById('select-all-cart');
+    const selectedIdsInput = document.getElementById('selected-ids-input');
     const subTotalHidden = document.getElementById('sub-total-hidden');
-    const paymentMethodHidden = document.getElementById('payment-method-hidden'); 
 
     function updateCartUI() {
         let grandSubtotal = 0;
+        let selectedIds = [];
         
         document.querySelectorAll('.product-row').forEach(row => {
+            const checkbox = row.querySelector('.item-checkbox');
             const price = parseFloat(row.dataset.price);
             const input = row.querySelector('.qty-input');
-            
-            let qty = parseInt(input.value);
-
-            if (isNaN(qty) || qty < 1) {
-                qty = 1;
-                input.value = 1;
-            }
-            
+            const qty = parseInt(input.value) || 1;
             const itemSubtotal = price * qty;
+
+            // Update subtotal display for each line
             row.querySelector('.subtotal-display').innerText = '$' + itemSubtotal.toLocaleString();
-            grandSubtotal += itemSubtotal;
+
+            // ONLY PAY IF SELECTED
+            if (checkbox.checked) {
+                grandSubtotal += itemSubtotal;
+                selectedIds.push(row.dataset.id);
+                row.style.opacity = "1";
+            } else {
+                row.style.opacity = "0.5"; 
+            }
         });
 
-        const checkedRadio = document.querySelector('.shipping-radio:checked');
-        const shippingCost = parseInt(checkedRadio ? checkedRadio.value : 0);
-        
+        const checkedShip = document.querySelector('.shipping-radio:checked');
+        const shippingCost = parseInt(checkedShip ? checkedShip.value : 0);
         const total = grandSubtotal + shippingCost;
         
+// Update hidden inputs to send to checkout
         subTotalHidden.value = grandSubtotal; 
+        selectedIdsInput.value = selectedIds.join(','); 
         
         document.getElementById('temp-total').innerText = '$' + grandSubtotal.toLocaleString();
         document.getElementById('grand-total-display').innerText = '$' + total.toLocaleString();
     }
     
-    paymentRadios.forEach(radio => {
-        radio.addEventListener('change', function() {
-            paymentMethodHidden.value = this.value; 
-        });
-    });
 
-    qtyInputs.forEach(input => {
-        input.addEventListener('input', updateCartUI); 
-        input.addEventListener('blur', function() { 
-            if (this.value === "" || parseInt(this.value) < 1) {
-                this.value = 1;
-                updateCartUI();
-            }
-        });
-    });
+    itemCheckboxes.forEach(cb => cb.addEventListener('change', updateCartUI));
+    qtyInputs.forEach(input => input.addEventListener('input', updateCartUI));
+    shippingRadios.forEach(radio => radio.addEventListener('change', updateCartUI));
 
-    shippingRadios.forEach(radio => {
-        radio.addEventListener('change', updateCartUI);
-    });
-
-    updateCartUI();
+    updateCartUI(); 
 });
 </script>
