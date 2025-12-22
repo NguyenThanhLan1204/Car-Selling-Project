@@ -11,16 +11,15 @@ if (!isset($conn) || !$conn) {
 }
 mysqli_set_charset($conn, "utf8");
 
-// 2. RETRIEVE DATA FROM THE CART PAGE AND SEND IT TO
+// 2. RETRIEVE DATA FROM THE CART PAGE
 $selected_ids_str = isset($_POST['selected_ids_input']) ? $_POST['selected_ids_input'] : '';
 $sub_total_from_cart = isset($_POST['sub_total_input']) ? (float)$_POST['sub_total_input'] : 0.0;
 $shipping_cost_from_cart = isset($_POST['shipping_cost']) ? (float)$_POST['shipping_cost'] : 0.0;
-// Get payment method ID (1, 2, or 3)
 $payment_id_from_cart = isset($_POST['checkout_payment_method']) ? (int)$_POST['checkout_payment_method'] : 2;
 
 $total_for_display = $sub_total_from_cart + $shipping_cost_from_cart;
 
-// 3. AUTOMATIC PRE-FILL LOGIC
+// 3. AUTOMATIC PRE-FILL LOGIC (Default from Database)
 $prefill_name = "";
 $prefill_phone = "";
 $prefill_address = "";
@@ -43,26 +42,20 @@ if (isset($_SESSION['customer_id'])) {
 
 // 4. HANDLING WHEN PRESSING THE "CREATE ORDER" BUTTON
 if (isset($_POST['btn_place_order'])) {
-
     $current_time = date('Y-m-d H:i:s');
-    $status_code  = 2; // Booked
+    $status_code  = 2; 
 
     $customer_id = (int)$_SESSION['customer_id'];
-
-    // Get information from the Form (the user may have edited it)
     $fullname = mysqli_real_escape_string($conn, $_POST['fullname'] ?? '');
     $phone    = mysqli_real_escape_string($conn, $_POST['phone'] ?? '');
     $address  = mysqli_real_escape_string($conn, $_POST['address'] ?? '');
 
-    // Retrieve hidden values ​​passed through the form
     $payment_method_id = isset($_POST['payment_hidden']) ? (int)$_POST['payment_hidden'] : 2;
     $final_total       = isset($_POST['total_amount_hidden']) ? (float)$_POST['total_amount_hidden'] : 0.0;
     $shipping_cost     = isset($_POST['shipping_cost_hidden']) ? (float)$_POST['shipping_cost_hidden'] : 0.0;
     $final_selected_ids = mysqli_real_escape_string($conn, $_POST['final_selected_ids'] ?? '');
 
     if (!empty($final_selected_ids)) {
-
-        // ---  CREATE MAIN ORDER ---
         $sql_order = "INSERT INTO orders 
             (customer_id, payment_method_id, status, total_amount, created_at, shipping_fee,
              shipping_name, shipping_phone, shipping_address)
@@ -71,30 +64,22 @@ if (isset($_POST['btn_place_order'])) {
              '$fullname', '$phone', '$address')";
 
         if (mysqli_query($conn, $sql_order)) {
-
             $order_id = mysqli_insert_id($conn);
             $success  = true;
 
-            // --- ONLY THE PRICE OF THE SELECTED VEHICLES IS VALID. ---
             $res = mysqli_query($conn, "SELECT vehicle_id, price FROM vehicle WHERE vehicle_id IN ($final_selected_ids)");
-
             while ($r = mysqli_fetch_assoc($res)) {
                 $vid   = (int)$r['vehicle_id'];
                 $price = (float)$r['price'];
-                // Get the number from the session cart
                 $qty   = (int)$_SESSION['cart'][$vid]['qty'];
 
-                // --- CREATE ORDER DETAIL ---
                 $sql_detail = "INSERT INTO order_detail 
                     (vehicle_id, order_id, amount, quantity) 
                     VALUES 
                     ($vid, $order_id, $price, $qty)";
 
                 if (mysqli_query($conn, $sql_detail))  {
-                    // Inventory Update
                     mysqli_query($conn, "UPDATE vehicle SET stock = stock - $qty WHERE vehicle_id = $vid");
-                    
-                    // REMOVE THIS CAR FROM YOUR SHOPPING CART
                     unset($_SESSION['cart'][$vid]);
                 } else {
                     $success = false;
@@ -103,12 +88,11 @@ if (isset($_POST['btn_place_order'])) {
             }
 
             if ($success) {
-                // Delete cookies if any
-                if (isset($_COOKIE['user_cart_' . $customer_id])) {
-                    setcookie('user_cart_' . $customer_id, '', time() - 3600, '/');
-                }
-
+                // Xóa lưu trữ sau khi đặt hàng thành công
                 echo "<script>
+                    localStorage.removeItem('final_fullname');
+                    localStorage.removeItem('final_phone');
+                    localStorage.removeItem('final_address');
                     alert('Order placed successfully! Order code: #$order_id');
                     window.location.href='base.php?page=order';
                 </script>";
@@ -165,16 +149,15 @@ if (isset($_POST['btn_place_order'])) {
     <div class="row">
         <div class="col-md-12">
             <a href="base.php?page=cart" class="btn-return-cart">
-                <span>&larr;</span> Return to Cart
+                <span class="arrow">&larr;</span> Return to Cart
             </a>
         </div>
     </div>
+
     <div class="row justify-content-center">
         <div class="col-md-7">
-
         <h4 class="mb-3">Billing Address</h4>
-
-        <form method="POST">
+        <form method="POST" id="checkoutForm">
             <input type="hidden" name="final_selected_ids" value="<?= $selected_ids_str ?>">
             <input type="hidden" name="total_amount_hidden" value="<?= $total_for_display ?>">
             <input type="hidden" name="shipping_cost_hidden" value="<?= $shipping_cost_from_cart ?>">
@@ -182,19 +165,19 @@ if (isset($_POST['btn_place_order'])) {
 
             <div class="mb-3">
                 <label class="form-label">Full Name</label>
-                <input type="text" class="form-control" name="fullname" 
+                <input type="text" class="form-control persist" name="fullname" id="fullname"
                        value="<?= htmlspecialchars($prefill_name) ?>" required>
             </div>
 
             <div class="mb-3">
                 <label class="form-label">Phone</label>
-                <input type="text" class="form-control" name="phone" 
+                <input type="text" class="form-control persist" name="phone" id="phone"
                        value="<?= htmlspecialchars($prefill_phone) ?>" required>
             </div>
 
             <div class="mb-3">
                 <label class="form-label">Address</label>
-                <input type="text" class="form-control" name="address" 
+                <input type="text" class="form-control persist" name="address" id="address"
                        value="<?= htmlspecialchars($prefill_address) ?>" required>
                 <div class="form-text">You can edit this address for this specific order.</div>
             </div>
@@ -219,14 +202,55 @@ if (isset($_POST['btn_place_order'])) {
                 <span class="h4 fw-bold text-danger">$<?= number_format($total_for_display) ?></span>
             </div>
 
-            <button type="submit" name="btn_place_order" class="btn btn-primary w-100 fw-bold">
+            <button type="submit" name="btn_place_order" class="btn btn-primary w-100 fw-bold py-2">
                 CREATE ORDER
             </button>
         </form>
-
     </div>
 </div>
 </div>
+
+<script>
+    // Cơ chế khôi phục cưỡng bức (Force Overwrite)
+    (function() {
+        const fieldIds = ['fullname', 'phone', 'address'];
+
+        function applySavedValues() {
+            fieldIds.forEach(id => {
+                const el = document.getElementById(id);
+                const val = localStorage.getItem('final_' + id);
+                if (el && val) {
+                    el.value = val;
+                }
+            });
+        }
+
+        // 1. Chạy ngay khi có thể
+        applySavedValues();
+
+        // 2. Chạy liên tục để "đấu" với trình duyệt (Chạy 20 lần trong 2 giây đầu)
+        let count = 0;
+        const timer = setInterval(() => {
+            applySavedValues();
+            if (count++ > 20) clearInterval(timer);
+        }, 100);
+
+        // 3. Lưu dữ liệu bất kể người dùng nhập gì
+        fieldIds.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) {
+                // Sự kiện input (vừa gõ xong là lưu)
+                el.addEventListener('input', () => {
+                    localStorage.setItem('final_' + id, el.value);
+                });
+                // Sự kiện change (mất focus là lưu)
+                el.addEventListener('change', () => {
+                    localStorage.setItem('final_' + id, el.value);
+                });
+            }
+        });
+    })();
+</script>
 
 </body>
 </html>
