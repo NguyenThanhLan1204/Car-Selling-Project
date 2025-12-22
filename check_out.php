@@ -132,10 +132,43 @@ if (isset($_POST['btn_place_order'])) {
     <meta charset="UTF-8">
     <title>Checkout</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .btn-return-cart {
+            display: inline-flex;
+            align-items: center;
+            padding: 8px 16px;
+            color: #4a5568;
+            background-color: #ffffff;
+            border: 1px solid #cbd5e0;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 1.05rem;
+            transition: all 0.2s ease;
+            margin-bottom: 20px;
+        }
+        .btn-return-cart:hover {
+            background-color: #f7fafc;
+            border-color: #a0aec0;
+            color: #2d3748;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .btn-return-cart span {
+            margin-right: 10px;
+            font-size: 1.2rem;
+            line-height: 1;
+        }
+    </style>
 </head>
 <body class="bg-light">
 
 <div class="container py-5">
+    <div class="row">
+        <div class="col-md-12">
+            <a href="base.php?page=cart" class="btn-return-cart">
+                <span>&larr;</span> Return to Cart
+            </a>
+        </div>
+    </div>
     <div class="row justify-content-center">
         <div class="col-md-7">
 
