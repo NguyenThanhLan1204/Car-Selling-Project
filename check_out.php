@@ -19,7 +19,7 @@ $payment_id_from_cart = isset($_POST['checkout_payment_method']) ? (int)$_POST['
 
 $total_for_display = $sub_total_from_cart + $shipping_cost_from_cart;
 
-// 3. AUTOMATIC PRE-FILL LOGIC (Default from Database)
+// 3. AUTOMATIC PRE-FILL LOGIC
 $prefill_name = "";
 $prefill_phone = "";
 $prefill_address = "";
@@ -42,10 +42,12 @@ if (isset($_SESSION['customer_id'])) {
 
 // 4. HANDLING WHEN PRESSING THE "CREATE ORDER" BUTTON
 if (isset($_POST['btn_place_order'])) {
+
     $current_time = date('Y-m-d H:i:s');
     $status_code  = 2; 
 
     $customer_id = (int)$_SESSION['customer_id'];
+
     $fullname = mysqli_real_escape_string($conn, $_POST['fullname'] ?? '');
     $phone    = mysqli_real_escape_string($conn, $_POST['phone'] ?? '');
     $address  = mysqli_real_escape_string($conn, $_POST['address'] ?? '');
@@ -56,6 +58,7 @@ if (isset($_POST['btn_place_order'])) {
     $final_selected_ids = mysqli_real_escape_string($conn, $_POST['final_selected_ids'] ?? '');
 
     if (!empty($final_selected_ids)) {
+
         $sql_order = "INSERT INTO orders 
             (customer_id, payment_method_id, status, total_amount, created_at, shipping_fee,
              shipping_name, shipping_phone, shipping_address)
@@ -64,10 +67,12 @@ if (isset($_POST['btn_place_order'])) {
              '$fullname', '$phone', '$address')";
 
         if (mysqli_query($conn, $sql_order)) {
+
             $order_id = mysqli_insert_id($conn);
             $success  = true;
 
             $res = mysqli_query($conn, "SELECT vehicle_id, price FROM vehicle WHERE vehicle_id IN ($final_selected_ids)");
+
             while ($r = mysqli_fetch_assoc($res)) {
                 $vid   = (int)$r['vehicle_id'];
                 $price = (float)$r['price'];
@@ -88,11 +93,15 @@ if (isset($_POST['btn_place_order'])) {
             }
 
             if ($success) {
-                // Xóa lưu trữ sau khi đặt hàng thành công
+                if (isset($_COOKIE['user_cart_' . $customer_id])) {
+                    setcookie('user_cart_' . $customer_id, '', time() - 3600, '/');
+                }
+
                 echo "<script>
-                    localStorage.removeItem('final_fullname');
-                    localStorage.removeItem('final_phone');
-                    localStorage.removeItem('final_address');
+                    // Xoá bản nháp hahahaha khi đã đặt hàng thành công
+                    localStorage.removeItem('user_draft_fullname');
+                    localStorage.removeItem('user_draft_phone');
+                    localStorage.removeItem('user_draft_address');
                     alert('Order placed successfully! Order code: #$order_id');
                     window.location.href='base.php?page=order';
                 </script>";
@@ -120,44 +129,32 @@ if (isset($_POST['btn_place_order'])) {
         .btn-return-cart {
             display: inline-flex;
             align-items: center;
-            padding: 8px 16px;
+            padding: 8px 15px;
             color: #4a5568;
-            background-color: #ffffff;
+            background-color: #fff;
             border: 1px solid #cbd5e0;
             border-radius: 6px;
             text-decoration: none;
-            font-size: 1.05rem;
-            transition: all 0.2s ease;
+            transition: all 0.2s;
             margin-bottom: 20px;
         }
-        .btn-return-cart:hover {
-            background-color: #f7fafc;
-            border-color: #a0aec0;
-            color: #2d3748;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
-        .btn-return-cart span {
-            margin-right: 10px;
-            font-size: 1.2rem;
-            line-height: 1;
-        }
+        .btn-return-cart:hover { background-color: #f7fafc; border-color: #a0aec0; color: #2d3748; }
+        .btn-return-cart span { margin-right: 10px; font-size: 1.3rem; font-weight: bold; line-height: 1; }
     </style>
 </head>
 <body class="bg-light">
 
 <div class="container py-5">
-    <div class="row">
-        <div class="col-md-12">
-            <a href="base.php?page=cart" class="btn-return-cart">
-                <span class="arrow">&larr;</span> Return to Cart
-            </a>
-        </div>
+    <div class="mb-3">
+        <a href="base.php?page=cart" class="btn-return-cart">
+            <span>&larr;</span> Return to Cart
+        </a>
     </div>
 
     <div class="row justify-content-center">
         <div class="col-md-7">
         <h4 class="mb-3">Billing Address</h4>
-        <form method="POST" id="checkoutForm">
+        <form method="POST">
             <input type="hidden" name="final_selected_ids" value="<?= $selected_ids_str ?>">
             <input type="hidden" name="total_amount_hidden" value="<?= $total_for_display ?>">
             <input type="hidden" name="shipping_cost_hidden" value="<?= $shipping_cost_from_cart ?>">
@@ -165,19 +162,19 @@ if (isset($_POST['btn_place_order'])) {
 
             <div class="mb-3">
                 <label class="form-label">Full Name</label>
-                <input type="text" class="form-control persist" name="fullname" id="fullname"
+                <input type="text" class="form-control" name="fullname" id="fullname"
                        value="<?= htmlspecialchars($prefill_name) ?>" required>
             </div>
 
             <div class="mb-3">
                 <label class="form-label">Phone</label>
-                <input type="text" class="form-control persist" name="phone" id="phone"
+                <input type="text" class="form-control" name="phone" id="phone"
                        value="<?= htmlspecialchars($prefill_phone) ?>" required>
             </div>
 
             <div class="mb-3">
                 <label class="form-label">Address</label>
-                <input type="text" class="form-control persist" name="address" id="address"
+                <input type="text" class="form-control" name="address" id="address"
                        value="<?= htmlspecialchars($prefill_address) ?>" required>
                 <div class="form-text">You can edit this address for this specific order.</div>
             </div>
@@ -211,41 +208,33 @@ if (isset($_POST['btn_place_order'])) {
 </div>
 
 <script>
-    // Cơ chế khôi phục cưỡng bức (Force Overwrite)
+    // Cơ chế khôi phục thông tin 
     (function() {
-        const fieldIds = ['fullname', 'phone', 'address'];
+        const fields = ['fullname', 'phone', 'address'];
 
-        function applySavedValues() {
-            fieldIds.forEach(id => {
-                const el = document.getElementById(id);
-                const val = localStorage.getItem('final_' + id);
-                if (el && val) {
-                    el.value = val;
+        function applyDrafts() {
+            fields.forEach(id => {
+                const saved = localStorage.getItem('user_draft_' + id);
+                const input = document.getElementById(id);
+                if (input && saved !== null && saved !== "") {
+                    input.value = saved;
                 }
             });
         }
 
-        // 1. Chạy ngay khi có thể
-        applySavedValues();
-
-        // 2. Chạy liên tục để "đấu" với trình duyệt (Chạy 20 lần trong 2 giây đầu)
+        // Chạy liên tục để đè dữ liệu PHP/Trình duyệt tự điền trong 2 giây đầu
         let count = 0;
         const timer = setInterval(() => {
-            applySavedValues();
+            applyDrafts();
             if (count++ > 20) clearInterval(timer);
         }, 100);
 
-        // 3. Lưu dữ liệu bất kể người dùng nhập gì
-        fieldIds.forEach(id => {
-            const el = document.getElementById(id);
-            if (el) {
-                // Sự kiện input (vừa gõ xong là lưu)
-                el.addEventListener('input', () => {
-                    localStorage.setItem('final_' + id, el.value);
-                });
-                // Sự kiện change (mất focus là lưu)
-                el.addEventListener('change', () => {
-                    localStorage.setItem('final_' + id, el.value);
+        // Lưu ngay khi người dùng nhập bất cứ thứ gì
+        fields.forEach(id => {
+            const input = document.getElementById(id);
+            if (input) {
+                input.addEventListener('input', () => {
+                    localStorage.setItem('user_draft_' + id, input.value);
                 });
             }
         });
