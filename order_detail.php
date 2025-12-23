@@ -28,13 +28,14 @@ function getStatusText($status) {
     return $statuses[$status] ?? ["Not determined", "badge bg-dark"];
 }
 
-// --- 3. ORDER OVERVIEW QUERY ---
-$sql_order = "SELECT total_amount, status, created_at, shipping_fee 
-              FROM orders 
-              WHERE order_id = ? AND customer_id = ?";
+// --- 3. ORDER OVERVIEW QUERY
+$sql_order = "SELECT o.total_amount, o.status, o.created_at, o.shipping_fee, pm.name as payment_method_name
+              FROM orders o
+              LEFT JOIN payment_methods pm ON o.payment_method_id = pm.payment_method_id
+              WHERE o.order_id = ? AND o.customer_id = ?";
+              
 $stmt_order = $conn->prepare($sql_order);
 
-// Check if preparation fails
 if ($stmt_order === false) {
     die("Lỗi chuẩn bị truy vấn: " . $conn->error);
 }
@@ -51,43 +52,40 @@ if (!$order_info) {
     exit;
 }
 
-// Get shipping fee from DB. If NULL (old data error), default is 0.
+// Get shipping fee
 $shipping_fee = $order_info['shipping_fee'] ?? 0;
+$payment_method = $order_info['payment_method_name'] ?? 'N/A';
 
 
-// --- 4. QUERY FOR PRODUCT DETAILS IN YOUR ORDER ---
-$sql_details = "SELECT od.quantity, od.amount, od.payment_method, 
+// --- 4. QUERY FOR PRODUCT DETAILS
+$sql_details = "SELECT od.quantity, od.amount, 
                         v.model, v.image_url, m.name AS manufacturer
                 FROM order_detail od
                 JOIN vehicle v ON od.vehicle_id = v.vehicle_id
                 JOIN manufacturer m ON v.manufacturer_id = m.manufacturer_id
                 WHERE od.order_id = ?";
+                
 $stmt_details = $conn->prepare($sql_details);
 
-// Check if preparation fails
 if ($stmt_details === false) {
-    die("Lỗi chuẩn bị truy vấn chi tiết: " . $conn->error);
+    die("Detailed query preparation error: " . $conn->error);
 }
 
 $stmt_details->bind_param("i", $order_id);
 $stmt_details->execute();
 $details_result = $stmt_details->get_result();
 
-// Get the payment method from the first line and calculate the total product value
 $total_products_value = 0;
-$payment_method = 'N/A';
-$item_count = $details_result->num_rows;
+$details_data = [];
 
-if ($item_count > 0) {
-    $details_data = [];
+if ($details_result->num_rows > 0) {
     while($item = $details_result->fetch_assoc()) {
         $details_data[] = $item;
         $total_products_value += $item['amount']; 
     }
-    // Get the payment method from the first row of the array
-    $payment_method = $details_data[0]['payment_method'] ?? 'N/A';
 }
-// Calculate the grand total (Using DB data: total_amount)
+
+// Calculate the grand total
 $grand_total = $order_info['total_amount'];
 
 ?>
@@ -117,9 +115,9 @@ $grand_total = $order_info['total_amount'];
                 </div>
             </div>
 
-            <h4 class="fw-bold mb-3">Purchased Products (<?= $item_count ?> items)</h4>
+            <h4 class="fw-bold mb-3">Purchased Products (<?= count($details_data) ?> items)</h4>
             <?php 
-            if ($item_count > 0) {
+            if (!empty($details_data)) {
                 foreach($details_data as $item) {
             ?>
                 <div class="card mb-3 shadow-sm">

@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
     
     <link rel="stylesheet" href="./assets/css/main.css">
@@ -25,7 +25,6 @@
                 
                 <form action="base.php" method="GET" class="search_box position-relative d-flex">
                     <input type="hidden" name="page" value="home">
-                    
                     <input type="search" 
                            id="search" 
                            class="form-control h-100 w-100 px-4 rounded-3 border-0" 
@@ -69,11 +68,14 @@
 
                     <div class="dropdown-content" id="userDropdown">
                         <?php if (isset($_SESSION['customer_id'])): ?>
-                            <h3 class="pt-2 pb-4 text-nowrap fw-bold">Hello, <?= $_SESSION['username'] ?></h3>
+                            <h3 class="pt-2 pb-4 text-nowrap fw-bold">Hello, <?= htmlspecialchars($_SESSION['username']) ?></h3>
                             <ul class="list-unstyled">
                                 <?php if (isset($_SESSION['role']) && $_SESSION['role'] == 'admin'): ?>
                                     <li class="py-2"><a href="./admin/index.php" class="text-nowrap text-decoration-none custom_hover">Admin Dashboard</a></li>
                                 <?php endif; ?>
+                                
+                                <li class="py-2"><a href="?page=profile" class="text-nowrap text-decoration-none custom_hover">My Profile</a></li>
+                                
                                 <li class="py-2"><a href="?page=order" class="text-nowrap text-decoration-none custom_hover">My Orders</a></li>
                                 <li class="py-2"><a href="logout.php" class="text-nowrap text-decoration-none custom_hover">Logout</a></li>
                             </ul>
@@ -106,20 +108,22 @@
           
                 if ($page == 'home') {
                   include("./home.php");
-                  } elseif ($page == 'cart') {
-                include("./cart.php");
-                }elseif ($page == 'checkout') {
-                include("./check_out.php"); 
+                } elseif ($page == 'cart') {
+                  include("./cart.php");
+                } elseif ($page == 'checkout') {
+                  include("./check_out.php"); 
                 } elseif ($page == 'order') {
                     include("./order.php");
                 } elseif ($page == 'order_detail') {
                     include("./order_detail.php"); 
+                } elseif ($page == 'profile') {
+                    include("./profile.php");
+                    
                 } elseif ($page == 'about') {
                     include("./about.php");
                 } elseif ($page == 'information') {
                     include("./information.php");
                 } else {
-                    // Error message in English
                     echo "<div class='container mt-5 text-center'><h2>404 - Page not found</h2></div>";
                 }
             ?>
@@ -144,7 +148,7 @@
 </footer>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="./assets/js/main.js"></script>
 </body>
