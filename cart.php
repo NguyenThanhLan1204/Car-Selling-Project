@@ -58,7 +58,7 @@ $grand_total = 0;
                     $is_checked = (!isset($_SESSION['selected_ids']) || in_array($curr_id, $_SESSION['selected_ids']));
                     if ($is_checked) $grand_total += $subtotal;
                 ?>
-                <div class="card mb-3 shadow-sm product-row" data-id="<?= $curr_id ?>" data-price="<?= $row['price'] ?>">
+                <div class="card mb-3 shadow-sm product-row" data-id="<?= $curr_id ?>" data-price="<?= $row['price'] ?>" data-stock="<?= $row['stock'] ?>">
                     <div class="row g-0 align-items-center">
                         <div class="col-md-1 text-center">
                             <input type="checkbox" class="form-check-input item-checkbox" value="<?= $curr_id ?>" <?= $is_checked ? 'checked' : '' ?>>
@@ -72,7 +72,7 @@ $grand_total = 0;
                                 <div class="d-flex justify-content-between align-items-center mt-3">
                                     <div class="d-flex flex-column">
                                         <label class="small text-muted mb-1">Quantity</label>
-                                        <input type="number" class="form-control text-center qty-input" value="<?= $qty ?>" min="1" data-id="<?= $curr_id ?>" style="width: 80px; text-align: center;">
+                                        <input type="number" class="form-control text-center qty-input" value="<?= $qty ?>" min="1"  max="<?= $row['stock'] ?>"data-id="<?= $curr_id ?>" style="width: 80px; text-align: center;">
                                     </div>
                                     <div class="text-end">
                                         <p class="small text-muted mb-0">Subtotal</p>
@@ -163,7 +163,17 @@ document.addEventListener('DOMContentLoaded', function () {
             const checkbox = row.querySelector('.item-checkbox');
             const price = parseFloat(row.dataset.price);
             const input = row.querySelector('.qty-input');
-            const qty = parseInt(input.value) || 1;
+           //fix
+            const stock = parseInt(row.dataset.stock);
+            let qty = parseInt(input.value) || 1;
+
+            // ÉP GIỚI HẠN SỐ LƯỢNG
+            if (qty < 1) qty = 1;
+            if (qty > stock) qty = stock;
+
+            // CẬP NHẬT LẠI INPUT (RẤT QUAN TRỌNG)
+            input.value = qty;
+            //fix//
             const itemSubtotal = price * qty;
             const id = row.dataset.id;
 
