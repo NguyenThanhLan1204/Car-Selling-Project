@@ -129,13 +129,7 @@ if (isset($_POST['btn_place_order'])) {
                 <input type="text" class="form-control" name="address" id="address" value="" required placeholder="Enter your address">
             </div>
 
-            <hr class="my-4">
-            <div class="p-3 bg-white border rounded mb-4">
-                <div class="d-flex justify-content-between">
-                    <span>Selected Payment:</span>
-                    <span class="fw-bold"><?php echo ($payment_id_from_cart == 1) ? "Bank Transfer" : (($payment_id_from_cart == 3) ? "Credit Card" : "Cash on Delivery"); ?></span>
-                </div>
-            </div>
+
             <div class="d-flex justify-content-between mb-4">
                 <span class="fw-bold h5">Total Amount:</span>
                 <span class="h4 fw-bold text-danger">$<?= number_format($total_for_display) ?></span>
