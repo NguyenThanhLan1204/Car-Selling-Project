@@ -76,5 +76,8 @@
 }
 
 /* Cart */
+.cart {
+  min-height: 70vh;
+}
 
 
