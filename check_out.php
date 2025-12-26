@@ -8,16 +8,37 @@ if (!isset($conn) || !$conn) {
     die("Error: The connection variable \$conn has not been initialized.");
 }
 mysqli_set_charset($conn, "utf8");
+
 // 2. RETRIEVE DATA FROM CART PAGE
-$selected_ids_str = isset($_POST['selected_ids_input']) ? $_POST['selected_ids_input'] : '';
+$selected_ids_str = $_POST['selected_ids_input']
+    ?? (!empty($_SESSION['selected_ids']) ? implode(',', $_SESSION['selected_ids']) : '');
+
 $sub_total_from_cart = isset($_POST['sub_total_input']) ? (float)$_POST['sub_total_input'] : 0.0;
-$shipping_cost_from_cart = isset($_POST['shipping_cost']) ? (float)$_POST['shipping_cost'] : 0.0;
-$payment_id_from_cart = isset($_POST['checkout_payment_method']) ? (int)$_POST['checkout_payment_method'] : 2;
-$total_for_display = $sub_total_from_cart + $shipping_cost_from_cart;
+
+$total_for_display = $sub_total_from_cart; // Tổng xe, KHÔNG cộng tiền cọc
+// ===== DEPOSIT CONFIG =====
+$DEPOSIT_PERCENT = 10; // 10% đặt cọc
+
+// ===== CALCULATE DEPOSIT =====
+$deposit = round($sub_total_from_cart * $DEPOSIT_PERCENT / 100, 2);
+
+// Tổng xe KHÔNG cộng tiền cọc
+$total_for_display = $sub_total_from_cart;
+
 // Check login status
 if (!isset($_SESSION['customer_id'])) {
     die('<div class="container py-5 text-center"><h3>Please <a href="login.php">login</a> to continue checkout.</h3></div>');
 }
+// ===== PREFILL TEST DRIVE FROM CART (SESSION) =====
+$prefill_test_drive = '';
+$prefill_showroom   = '';
+
+if (!empty($_SESSION['test_drive_date']) && !empty($_SESSION['test_drive_time'])) {
+    $prefill_test_drive =
+        $_SESSION['test_drive_date'] . 'T' . substr($_SESSION['test_drive_time'], 0, 5);
+    $prefill_showroom = $_SESSION['showroom'] ?? '';
+}
+
 // 3. RETRIEVE USER INFO FROM DATABASE (Auto-fill)
 // Table structure based on your image: customer_id, name, phone_number, address...
 $prefill_name = "";
@@ -35,6 +56,20 @@ if ($result_user_info && mysqli_num_rows($result_user_info) > 0) {
 }
 // 4. HANDLE "CREATE ORDER" BUTTON CLICK
 if (isset($_POST['btn_place_order'])) {
+    $test_drive_schedule = $_POST['test_drive_schedule'] ?? '';
+    $showroom = mysqli_real_escape_string(
+    $conn,
+    $_POST['showroom'] ?? ($_SESSION['showroom'] ?? '')
+);
+
+    $test_drive_date = null;
+    $test_drive_time = null;
+
+    if (!empty($test_drive_schedule)) {
+        $test_drive_date = date('Y-m-d', strtotime($test_drive_schedule));
+        $test_drive_time = date('H:i:s', strtotime($test_drive_schedule));
+    }
+
     $current_time = date('Y-m-d H:i:s');
     $status_code  = 2; 
     $customer_id = (int)$_SESSION['customer_id'];
@@ -42,17 +77,17 @@ if (isset($_POST['btn_place_order'])) {
     $fullname = mysqli_real_escape_string($conn, $_POST['fullname'] ?? '');
     $phone    = mysqli_real_escape_string($conn, $_POST['phone'] ?? '');
     $address  = mysqli_real_escape_string($conn, $_POST['address'] ?? '');
-    $payment_method_id = isset($_POST['payment_hidden']) ? (int)$_POST['payment_hidden'] : 2;
     $final_total       = isset($_POST['total_amount_hidden']) ? (float)$_POST['total_amount_hidden'] : 0.0;
-    $shipping_cost     = isset($_POST['shipping_cost_hidden']) ? (float)$_POST['shipping_cost_hidden'] : 0.0;
+    $deposit = isset($_POST['deposit_amount_hidden']) ? (float)$_POST['deposit_amount_hidden'] : 0.0;
     $final_selected_ids = mysqli_real_escape_string($conn, $_POST['final_selected_ids'] ?? '');
     if (!empty($final_selected_ids)) {
-        $sql_order = "INSERT INTO orders 
-            (customer_id, payment_method_id, status, total_amount, created_at, shipping_fee,
-             shipping_name, shipping_phone, shipping_address)
-            VALUES 
-            ($customer_id, $payment_method_id, $status_code, $final_total, '$current_time', $shipping_cost,
-             '$fullname', '$phone', '$address')";
+            $sql_order = "INSERT INTO orders 
+                (customer_id, status, total_amount, deposit,shipping_name, shipping_phone, shipping_address,
+                test_drive_date, test_drive_time, showroom)
+                VALUES (
+                    $customer_id,$status_code,$final_total,$deposit,'$fullname','$phone',
+                    '$address','$test_drive_date','$test_drive_time','$showroom')";
+
         if (mysqli_query($conn, $sql_order)) {
             $order_id = mysqli_insert_id($conn);
             $success  = true;
@@ -88,6 +123,23 @@ if (isset($_POST['btn_place_order'])) {
         }
     }
 }
+// 5. FETCH SELECTED VEHICLE DETAILS FOR DISPLAY
+$vehicles = [];
+
+if (!empty($selected_ids_str)) {
+    $sql_vehicles = "
+        SELECT vehicle_id, model, price, image_url
+        FROM vehicle
+        WHERE vehicle_id IN ($selected_ids_str)
+    ";
+    $res_vehicles = mysqli_query($conn, $sql_vehicles);
+
+    while ($row = mysqli_fetch_assoc($res_vehicles)) {
+        $vehicles[] = $row;
+    }
+}
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -106,32 +158,90 @@ if (isset($_POST['btn_place_order'])) {
     <div class="mb-3">
         <a href="base.php?page=cart" class="btn-return-cart"><span>&larr;</span> Return to Cart</a>
     </div>
-    <div class="row justify-content-center">
+   <div class="row justify-content-center">
         <div class="col-md-7">
-        <h4 class="mb-3">Billing Address</h4>
+        <h4 class="mb-3">Booking Information</h4>
         <form method="POST" id="checkoutForm">
-            <input type="hidden" name="final_selected_ids" id="current_ids" value="<?= $selected_ids_str ?>">
+            <input type="hidden"  id="current_ids" name="final_selected_ids"  value="<?= htmlspecialchars($selected_ids_str) ?>">
+
             <input type="hidden" name="total_amount_hidden" value="<?= $total_for_display ?>">
-            <input type="hidden" name="shipping_cost_hidden" value="<?= $shipping_cost_from_cart ?>">
-            <input type="hidden" name="payment_hidden" value="<?= $payment_id_from_cart ?>">
+
+            <input type="hidden" name="deposit_amount_hidden" value="<?= $deposit ?>">
+
+
             <div class="mb-3">
                 <label class="form-label">Full Name</label>
-                <input type="text" class="form-control" name="fullname" id="fullname" 
-                       value="<?php echo htmlspecialchars($prefill_name); ?>" 
-                       required placeholder="Enter your name">
-            </div>
+                <input type="text" class="form-control" name="fullname"id="fullname" value="<?= htmlspecialchars($prefill_name) ?>"  required>
+           </div>
             <div class="mb-3">
                 <label class="form-label">Phone</label>
-                <input type="text" class="form-control" name="phone" id="phone" 
-                       value="<?php echo htmlspecialchars($prefill_phone); ?>" 
-                       required placeholder="Enter your phone">
+                <input type="text" class="form-control" name="phone" id="phone" value="<?= htmlspecialchars($prefill_phone) ?>" required>
             </div>
             <div class="mb-3">
                 <label class="form-label">Address</label>
-                <input type="text" class="form-control" name="address" id="address" 
-                       value="<?php echo htmlspecialchars($prefill_address); ?>" 
-                       required placeholder="Enter your address">
+                <input type="text"   class="form-control"  name="address"    id="address" value="<?= htmlspecialchars($prefill_address) ?>" required>
+        </div>
+            <div class="mb-3">
+                <label class="form-label">My Test Drive Schedule</label>
+                <input type="datetime-local"  class="form-control" name="test_drive_schedule" id="test_drive_schedule" value="<?= htmlspecialchars($prefill_test_drive) ?>" required>
+           </div>
+            <div class="mb-3">
+                        <label class="form-label small">Showroom</label>
+                        <select name="showroom" class="form-select">
+                            <option value="Hanoi" <?= $prefill_showroom == 'Hanoi' ? 'selected' : '' ?>>Hà Nội</option>
+                            <option value="HCM" <?= $prefill_showroom == 'HCM' ? 'selected' : '' ?>>Hồ Chí Minh</option>
+                            <option value="Danang" <?= $prefill_showroom == 'Danang' ? 'selected' : '' ?>>Đà Nẵng</option>
+                        </select>
+
+                    </div>
+           <?php if (!empty($vehicles)): ?>
+            <div class="mb-3">
+                <label class="form-label">My Selected Vehicles</label>
+
+                <?php foreach ($vehicles as $v): ?>
+                    <div class="card mb-3 shadow-sm">
+                        <div class="row g-0 align-items-center">
+                            <div class="col-md-3">
+                                <img
+                                    src="<?= !empty($v['image_url']) ? $v['image_url'] : 'https://via.placeholder.com/300' ?>"
+                                    class="img-fluid rounded-start"
+                                    alt="<?= htmlspecialchars($v['model']) ?>"
+                                >
+                            </div>
+
+                            <div class="col-md-9">
+                                <div class="card-body">
+                                    <h5 class="card-title fw-bold">
+                                        <?= htmlspecialchars($v['model']) ?>
+                                    </h5>
+
+                                    <p class="mb-1">
+                                        Price:
+                                        <strong class="text-primary">
+                                            $<?= number_format($v['price']) ?>
+                                        </strong>
+                                    </p>
+
+                                    <p class="text-muted mb-0">
+                                        This vehicle has been selected for your booking.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
             </div>
+            <?php endif; ?>
+
+            <div class="d-flex justify-content-between mb-2">
+                <span class="fw-semibold">
+                    Deposit (<?= $DEPOSIT_PERCENT ?>%):
+                </span>
+                <span class="fw-bold text-warning">
+                    $<?= number_format($deposit) ?>
+                </span>
+            </div>
+
             <div class="d-flex justify-content-between mb-4">
                 <span class="fw-bold h5">Total Amount:</span>
                 <span class="h4 fw-bold text-danger">$<?= number_format($total_for_display) ?></span>
@@ -141,6 +251,7 @@ if (isset($_POST['btn_place_order'])) {
     </div>
 </div>
 </div>
+
 <script>
 (function() {
     const fields = ['fullname', 'phone', 'address'];

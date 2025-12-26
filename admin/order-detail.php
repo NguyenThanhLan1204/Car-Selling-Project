@@ -11,7 +11,7 @@ $sqlOrder = "
     SELECT 
         o.order_id, 
         o.status, 
-        o.created_at,
+        o.test_drive_date,o.test_drive_time,
         o.shipping_name,
         o.shipping_phone,
         o.shipping_address,
@@ -49,7 +49,7 @@ $total = 0;
     <meta charset="UTF-8">
     <title>Order Detail #<?= $order_id ?></title>
     <link rel="stylesheet" href="bootstrap.min.css">
-    <link rel="stylesheet" href="./css/or.css">
+    <link rel="stylesheet" href="./css/admin_order.css">
 </head>
 <body>
 <div class="layout">
@@ -71,25 +71,51 @@ $total = 0;
                         Phone: <strong><?= htmlspecialchars($first['display_phone']) ?></strong><br>
                         Email: <strong><?= htmlspecialchars($first['email']) ?></strong><br>
                         Address: <strong><?= nl2br(htmlspecialchars($first['display_address'])) ?></strong><br>
-
-                        <br>
+                        Test Drive Date: <strong><?= htmlspecialchars($first['test_drive_date']) ?></strong><br>
+                        Test Drive Time: <strong><?= htmlspecialchars($first['test_drive_time']) ?></strong><br>
                         <strong>Status:</strong>
                         <?php
                         switch ($first['status']) {
-                            case 2: echo '<span class="badge bg-primary">Booked</span>'; break;
-                            case 3: echo '<span class="badge bg-info">Delivering</span>'; break;
-                            case 4: echo '<span class="badge bg-success">Success</span>'; break;
+                            case 1:
+                                echo '<span class="badge bg-warning text-dark">Cancel Pending</span>';
+                                break;
+
+                            case 2:
+                                echo '<span class="badge bg-primary">Booked</span>';
+                                break;
+
+                            case 3:
+                                echo '<span class="badge bg-info">Testing</span>';
+                                break;
+
+                            case 4:
+                                echo '<span class="badge bg-success">Success</span>';
+                                break;
+
+                            case 5:
+                                echo '<span class="badge bg-secondary">Cancelled</span>';
+                                break;
+
+                            default:
+                                echo '<span class="badge bg-dark">Unknown</span>';
                         }
                         ?>
 
                         <?php if ($first['status'] == 2 || $first['status'] == 3): ?>
                             <br><br><strong>Update to:</strong>
                             <?php if ($first['status'] == 2): ?>
-                                <a href="order.php?order=3&order_id=<?= $order_id ?>" class="badge bg-info">Delivering</a>
+                                <a href="order.php?order=3&order_id=<?= $order_id ?>" class="badge bg-info">Testing</a>
                             <?php elseif ($first['status'] == 3): ?>
-                                <a href="order.php?order=4&order_id=<?= $order_id ?>" class="badge bg-success">Delivered</a>
+                                 <br><br><strong></strong>
+                                <a href="order.php?order=4&order_id=<?= $order_id ?>" class="badge bg-success">Success</a>
+                                <a href="order.php?order=5&order_id=<?= $order_id ?>" class="badge bg-danger"> Cancelled </a>
                             <?php endif; ?>
-                        <?php endif; ?>
+                            
+                            <?php elseif ($first['status'] == 1): ?>
+                                <br><br><strong>Approve or Reject:</strong>
+                                <a href="order.php?order=5&order_id=<?= $order_id ?>" class="badge bg-success">Approve</a>
+                                <a href="order.php?order=2&order_id=<?= $order_id ?>" class="badge bg-danger">Reject</a>
+                            <?php endif; ?>
 
                         <hr>
 

@@ -4,22 +4,30 @@ if (session_status() == PHP_SESSION_NONE) {
 }
 
 // 1. XỬ LÝ LƯU TRẠNG THÁI (AJAX gọi đến chính nó)
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['action']) && $_GET['action'] === 'save_state') {
+// ===== AJAX SAVE CART STATE =====
+if (
+    $_SERVER['REQUEST_METHOD'] === 'POST' &&
+    isset($_GET['action']) &&
+    $_GET['action'] === 'save_state'
+) {
     $data = json_decode(file_get_contents('php://input'), true);
+
     if ($data) {
-        $_SESSION['selected_ids'] = $data['selected_ids'];
-        $_SESSION['shipping_cost'] = $data['shipping_cost'];
-        $_SESSION['payment_method'] = $data['payment_method'];
-        // Lưu cả số lượng nếu cần (để đồng bộ server-side)
-        if (isset($data['quantities'])) {
-            foreach ($data['quantities'] as $id => $qty) {
-                if (isset($_SESSION['cart'][$id])) {
-                    $_SESSION['cart'][$id]['qty'] = $qty;
-                }
-            }
-        }
+        $_SESSION['selected_ids'] = $data['selected_ids'] ?? [];
+        $_SESSION['cart_quantities'] = $data['quantities'] ?? [];
     }
-    exit; // Kết thúc request AJAX tại đây
+
+    exit; // CHỈ EXIT CHO AJAX
+}
+
+// ===== SAVE TEST DRIVE FROM FORM SUBMIT =====
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_GET['action'])) {
+    if (isset($_POST['test_drive_date'], $_POST['test_drive_time'])) {
+        $_SESSION['test_drive_date'] = $_POST['test_drive_date'];
+        $_SESSION['test_drive_time'] = $_POST['test_drive_time'];
+        $_SESSION['showroom'] = $_POST['showroom'] ?? '';
+    }
+    // ❌ KHÔNG exit ở đây
 }
 
 // 2. KIỂM TRA ĐĂNG NHẬP
@@ -99,45 +107,28 @@ $grand_total = 0;
                     <input type="hidden" name="sub_total_input" id="sub-total-hidden" value="<?= $grand_total ?>">
 
                     <div class="mb-4">
-                        <p class="small fw-bold text-muted mb-2 text-uppercase">Shipping</p>
-                        <?php $saved_ship = isset($_SESSION['shipping_cost']) ? $_SESSION['shipping_cost'] : "0"; ?>
-                        <div class="form-check border rounded p-2 mb-2">
-                            <input class="form-check-input ms-0 me-2 shipping-radio" type="radio" name="shipping_cost" id="ship-normal" value="0" <?= ($saved_ship == "0") ? 'checked' : '' ?>>
-                            <label class="form-check-label d-flex justify-content-between w-100" for="ship-normal"><span>Free shipping</span><span class="fw-bold">$0</span></label>
-                        </div>
-                        <div class="form-check border rounded p-2">
-                            <input class="form-check-input ms-0 me-2 shipping-radio" type="radio" name="shipping_cost" id="ship-fast" value="15" <?= ($saved_ship == "15") ? 'checked' : '' ?>>
-                            <label class="form-check-label d-flex justify-content-between w-100" for="ship-fast"><span>Express shipping</span><span class="fw-bold">$15</span></label>
-                        </div>
+                    <p class="small fw-bold text-muted mb-2 text-uppercase">Test Drive Schedule</p>
+
+                    <div class="mb-3">
+                        <label class="form-label small">Preferred Date</label>
+                        <input type="date" name="test_drive_date" class="form-control" value="<?= $_SESSION['test_drive_date'] ?? '' ?>" required>
                     </div>
 
-                    <div class="mb-4">
-                        <p class="small fw-bold text-muted mb-2 text-uppercase">Payment Method</p>
-                        <?php $saved_pay = isset($_SESSION['payment_method']) ? $_SESSION['payment_method'] : "2"; ?>
-                        <div class="form-check border rounded p-2 mb-2">
-                            <input class="form-check-input ms-0 me-2 payment-radio" type="radio" name="checkout_payment_method" id="payment-cash" value="2" <?= ($saved_pay == "2") ? 'checked' : '' ?>> 
-                            <label class="form-check-label w-100" for="payment-cash">Cash on Delivery</label>
-                        </div>
-                        <div class="form-check border rounded p-2 mb-2">
-                            <input class="form-check-input ms-0 me-2 payment-radio" type="radio" name="checkout_payment_method" id="payment-bank" value="1" <?= ($saved_pay == "1") ? 'checked' : '' ?>> 
-                            <label class="form-check-label w-100" for="payment-bank">Bank Transfer</label>
-                        </div>
-                        <div class="form-check border rounded p-2">
-                            <input class="form-check-input ms-0 me-2 payment-radio" type="radio" name="checkout_payment_method" id="payment-credit" value="3" <?= ($saved_pay == "3") ? 'checked' : '' ?>> 
-                            <label class="form-check-label w-100" for="payment-credit">Credit Card</label>
-                        </div>
+                    <div class="mb-3">
+                        <label class="form-label small">Preferred Time</label>
+                       <input type="time"name="test_drive_time"class="form-control" value="<?= $_SESSION['test_drive_time'] ?? '' ?>" required>
                     </div>
 
-                    <div class="d-flex justify-content-between mb-2">
-                        <span class="text-muted">Selected Subtotal:</span>
-                        <strong id="temp-total">$0</strong>
+                    <div class="mb-3">
+                        <label class="form-label small">Showroom</label>
+                        <select name="showroom" class="form-select">
+                            <option value="Hanoi">Hà Nội</option>
+                            <option value="HCM">Hồ Chí Minh</option>
+                            <option value="Danang">Đà Nẵng</option>
+                        </select>
                     </div>
-                    <hr>
-                    <div class="d-flex justify-content-between align-items-center mb-4">
-                        <span class="fw-bold h5">Total:</span>
-                        <span class="h4 fw-bold text-danger" id="grand-total-display">$0</span>
-                    </div>
-                    <button type="submit" class="btn btn-dark w-100 py-3 fw-bold rounded-pill text-uppercase">Checkout</button>
+                </div>
+                    <button type="submit" class="btn btn-dark w-100 py-3 fw-bold rounded-pill text-uppercase">Book</button>
                 </form>
             </div>
         </div>

@@ -26,17 +26,18 @@ $sql = "
     SELECT 
         o.order_id,
         o.status,
-        o.created_at,
+        o.test_drive_date,o.test_drive_time,
+        o.deposit,
         c.email,
-        pm.name AS payment_name,
         COALESCE(o.shipping_name, c.name) AS display_name,
         COALESCE(o.shipping_phone, c.phone_number) AS display_phone,
         COALESCE(o.shipping_address, c.address) AS display_address,
-        SUM(od.quantity) AS quantity
+        SUM(od.quantity) AS quantity,
+        MIN(v.model) AS vehicle_model
     FROM orders o
     JOIN customer c ON o.customer_id = c.customer_id
     LEFT JOIN order_detail od ON o.order_id = od.order_id
-    LEFT JOIN payment_methods pm ON o.payment_method_id = pm.payment_method_id
+    LEFT JOIN vehicle v ON od.vehicle_id = v.vehicle_id
 ";
 
 if ($type != -1) {
@@ -54,7 +55,7 @@ $orders = mysqli_query($link, $sql);
     <meta charset="UTF-8">
     <title>Order Management</title>
     <link rel="stylesheet" href="bootstrap.min.css">
-    <link rel="stylesheet" href="./css/or.css">
+    <link rel="stylesheet" href="./css/admin_order.css">
 </head>
 <body>
 <div class="layout">
@@ -71,9 +72,12 @@ $orders = mysqli_query($link, $sql);
 
             <!-- FILTER -->
             <a href="order.php" class="filter-btn all <?= $type == -1 ? 'active' : '' ?>">All</a>
-            <a href="order.php?type=2" class="filter-btn booked <?= $type == 2 ? 'active' : '' ?>">Booked</a>
-            <a href="order.php?type=3" class="filter-btn delivering <?= $type == 3 ? 'active' : '' ?>">Delivering</a>
+            <a href="order.php?type=1" class="filter-btn warning <?= $type == 1 ? 'active' : '' ?>">Cancel Pending</a>
+            <a href="order.php?type=2" class="filter-btn primary <?= $type == 2 ? 'active' : '' ?>">Booked</a>
+            <a href="order.php?type=3" class="filter-btn info <?= $type == 3 ? 'active' : '' ?>">Testing</a>
             <a href="order.php?type=4" class="filter-btn success <?= $type == 4 ? 'active' : '' ?>">Success</a>
+            <a href="order.php?type=5" class="filter-btn secondary <?= $type == 5 ? 'active' : '' ?>">Cancelled</a>
+
         </div>
     </div>
 
@@ -87,9 +91,9 @@ $orders = mysqli_query($link, $sql);
                     <th>Vehicle</th>
                     <th>Address</th>
                     <th>Phone</th>
-                    <th>Payment</th>
+                    <th>Deposit</th>
                     <th class="text-center">Status</th>
-                    <th class="text-center">Order time</th>
+                    <th class="text-center">Customer Appointments</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -107,19 +111,45 @@ $orders = mysqli_query($link, $sql);
                     </td>
                     <td><?= nl2br(htmlspecialchars($order['display_address'])) ?></td>
                     <td><?= htmlspecialchars($order['display_phone']) ?></td>
-                    <td><?= htmlspecialchars($order['payment_name']) ?></td>
+                    <td class="text-danger fw-bold"> $<?= number_format($order['deposit'], 0, ',', '.') ?>
+</td>
+
                     <td class="text-center">
-                        <?php
-                        switch ($order['status']) {
-                            case 2: echo '<span class="badge bg-primary">Booked</span>'; break;
-                            case 3: echo '<span class="badge bg-info">Delivering</span>'; break;
-                            case 4: echo '<span class="badge bg-success">Success</span>'; break;
-                        }
-                        ?>
+                    <?php
+                    switch ($order['status']) {
+                        case 1:
+                            echo '<span class="badge bg-warning text-dark">Cancel Pending</span>';
+                            break;
+                        case 2:
+                            echo '<span class="badge bg-primary">Booked</span>';
+                            break;
+                        case 3:
+                            echo '<span class="badge bg-info">Testing</span>';
+                            break;
+                        case 4:
+                            echo '<span class="badge bg-success">Success</span>';
+                            break;
+                        case 5:
+                            echo '<span class="badge bg-secondary">Cancelled</span>';
+                            break;
+                        default:
+                            echo '<span class="badge bg-dark">Unknown</span>';
+                    }
+                    ?>
                     </td>
+
                     <td class="text-center">
-                        <?= date('d-m-Y', strtotime($order['created_at'])) ?>
+                        <?php if (!empty($order['test_drive_date']) && !empty($order['test_drive_time'])): ?>
+                            <?= date(
+                                'd-m-Y H:i',
+                                strtotime($order['test_drive_date'] . ' ' . $order['test_drive_time'])
+                            ) ?>
+                        <?php else: ?>
+                            <span class="text-muted">—</span>
+                        <?php endif; ?>
                     </td>
+
+
                 </tr>
                 <?php } ?>
 

@@ -95,14 +95,14 @@
     background: #a55feb;
 }
 
-.filter-btn.booked {
+.filter-btn.primary {
      border-radius: 25px;
     padding: 8px 16px;
     font-size: 15px;
     background: #c87ac9;
 }
 
-.filter-btn.delivering {
+.filter-btn.info {
     border-radius: 20px;
     padding: 8px 16px;
     font-size: 15px;
@@ -114,6 +114,18 @@
     padding: 8px 16px;
     font-size: 15px;
     background: #a9f2ba;
+}
+.filter-btn.warning {
+    border-radius: 20px;
+    padding: 8px 16px;
+    font-size: 15px;
+    background: #d2c87d;
+}
+.filter-btn.secondary {
+    border-radius: 20px;
+    padding: 8px 16px;
+    font-size: 15px;
+    background: #5f5d5d;
 }
 
 
@@ -173,7 +185,7 @@
     border-radius: 20px;
     padding: 8px 16px;
     font-size: 15px;
-    background: #d0acb6;
+    background: #5f5d5d;
 }
 
 .badge.bg-dark {
@@ -181,6 +193,12 @@
     padding: 8px 16px;
     font-size: 15px;
     background: #b9c4cf;
+}
+.badge.bg-warning {
+    border-radius: 20px;
+    padding: 8px 16px;
+    font-size: 15px;
+    background: #d2c87d;
 }
 
 /*===============================
