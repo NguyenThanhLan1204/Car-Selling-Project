@@ -74,27 +74,28 @@ $result = $stmt->get_result();
 
 ?>
 
-<div class="container py-5">
+<div class="container py-5" style="min-height: 60vh;">
     <h2 class="fw-bold mb-4 text-center">Your order</h2>
     <div class="row g-4">
 
             <div class="col-lg-3 col-md-4">
-            <div class="p-4 shadow-sm bg-white rounded position-fixed" style="width: 250px;">           <h5 class="fw-bold mb-3">Status Filter</h5>
-             <div class="list-group">
-                 <a href="base.php?page=order" class="list-group-item list-group-item-action <?= ($statusFilter === 0) ? 'active' : '' ?>">
-                     All 
-                 </a>
-                 <a href="base.php?page=order&status=2" class="list-group-item list-group-item-action <?= ($statusFilter === 2) ? 'active' : '' ?>">
-                     Booked
-                 </a>
-                 <a href="base.php?page=order&status=3" class="list-group-item list-group-item-action <?= ($statusFilter === 3) ? 'active' : '' ?>">
-                     Delivering
-                 </a>
-                 <a href="base.php?page=order&status=4" class="list-group-item list-group-item-action <?= ($statusFilter === 4) ? 'active' : '' ?>">
-                      Success
-                 </a>
-                 </div>
-             </div>
+            <div class="p-4 shadow-sm bg-white rounded position-fixed" style="width: 250px;">           
+                <h5 class="fw-bold mb-3">Status Filter</h5>
+                <div class="list-group">
+                    <a href="base.php?page=order" class="list-group-item list-group-item-action <?= ($statusFilter === 0) ? 'active' : '' ?>">
+                        All 
+                    </a>
+                    <a href="base.php?page=order&status=2" class="list-group-item list-group-item-action <?= ($statusFilter === 2) ? 'active' : '' ?>">
+                        Booked
+                    </a>
+                    <a href="base.php?page=order&status=3" class="list-group-item list-group-item-action <?= ($statusFilter === 3) ? 'active' : '' ?>">
+                        Delivering
+                    </a>
+                    <a href="base.php?page=order&status=4" class="list-group-item list-group-item-action <?= ($statusFilter === 4) ? 'active' : '' ?>">
+                         Success
+                    </a>
+                    </div>
+                </div>
           </div>
 
             <div class="col-lg-9 col-md-8 offset-lg-3 offset-md-4">

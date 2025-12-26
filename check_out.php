@@ -69,6 +69,7 @@ if (isset($_POST['btn_place_order'])) {
                     unset($_SESSION['cart'][$vid]);
                 } else { $success = false; break; }
             }
+
             if ($success) {
                 if (isset($_COOKIE['user_cart_' . $customer_id])) {
                     setcookie('user_cart_' . $customer_id, '', time() - 3600, '/');

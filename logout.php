@@ -1,14 +1,18 @@
 <?php
 session_start();
 
-// Xóa cookie giỏ hàng theo user (QUAN TRỌNG NHẤT)
 if (isset($_SESSION['customer_id'])) {
-    $customer_id = $_SESSION['customer_id'];
-    setcookie('user_cart_' . $customer_id, '', time() - 3600, '/');
+    $cookie_name = "user_cart_" . $_SESSION['customer_id']; 
+    $cookie_expiry = time() + (86400 * 30); // 30 ngày 
+    if (empty($_SESSION['cart'])) { 
+        // Nếu giỏ hàng rỗng thì xoá cookie 
+        setcookie($cookie_name, '', time() - 3600, "/"); 
+    } else { 
+        // Nếu giỏ hàng còn thì lưu lại vào cookie 
+        $cart_json = json_encode($_SESSION['cart']); 
+        setcookie($cookie_name, $cart_json, $cookie_expiry, "/"); 
+    } 
 }
-
-// Xóa giỏ hàng trong session
-unset($_SESSION['cart']);
 
 // Xóa toàn bộ session
 $_SESSION = [];
