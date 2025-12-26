@@ -130,7 +130,7 @@ $orders = mysqli_query($link, $sql);
                             echo '<span class="badge bg-success">Success</span>';
                             break;
                         case 5:
-                            echo '<span class="badge bg-secondary">Cancelled</span>';
+                            echo '<span class="badge bg-danger">Cancelled</span>';
                             break;
                         default:
                             echo '<span class="badge bg-dark">Unknown</span>';

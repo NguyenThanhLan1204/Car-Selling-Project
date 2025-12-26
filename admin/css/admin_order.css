@@ -181,12 +181,6 @@
     background: #a9f2ba;
 }
 
-.badge.bg-secondary {
-    border-radius: 20px;
-    padding: 8px 16px;
-    font-size: 15px;
-    background: #5f5d5d;
-}
 
 .badge.bg-dark {
     border-radius: 20px;
@@ -199,6 +193,12 @@
     padding: 8px 16px;
     font-size: 15px;
     background: #d2c87d;
+}
+.badge.bg-danger {
+    border-radius: 20px;
+    padding: 8px 16px;
+    font-size: 15px;
+    background: #5f5d5d;
 }
 
 /*===============================
