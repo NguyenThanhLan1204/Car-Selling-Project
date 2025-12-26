@@ -13,14 +13,6 @@ CREATE TABLE manufacturer (
 );
 
 -- ======================================================
--- 2. BẢNG PAYMENT METHODS (Phương thức thanh toán)
--- ======================================================
-CREATE TABLE payment_methods (
-    payment_method_id INT PRIMARY KEY AUTO_INCREMENT,
-    name VARCHAR(50) NOT NULL UNIQUE
-);
-
--- ======================================================
 -- 3. BẢNG CUSTOMER (Khách hàng)
 -- ======================================================
 CREATE TABLE customer (
@@ -59,28 +51,28 @@ CREATE TABLE vehicle (
 CREATE TABLE orders (
     order_id INT AUTO_INCREMENT PRIMARY KEY,
     customer_id INT NOT NULL, 
-    payment_method_id INT DEFAULT 2, -- Mặc định ID 2 là Cash
     status INT(11) NOT NULL DEFAULT 2, 
     total_amount DECIMAL(15, 2) NOT NULL DEFAULT 0.00,
-    shipping_fee DECIMAL(15, 2) DEFAULT 0.00,
+    deposit DECIMAL(15, 2) DEFAULT 0.00,
     shipping_name VARCHAR(255),
     shipping_phone VARCHAR(20),
     shipping_address TEXT,
+    test_drive_date DATE,
+    test_drive_time TIME,
+    showroom VARCHAR(50),
     created_at timestamp NOT NULL DEFAULT current_timestamp(), 
-    CONSTRAINT fk_orders_customer FOREIGN KEY (customer_id) REFERENCES customer(customer_id),
-    CONSTRAINT fk_orders_payment FOREIGN KEY (payment_method_id) REFERENCES payment_methods(payment_method_id)
+    CONSTRAINT fk_orders_customer FOREIGN KEY (customer_id) REFERENCES customer(customer_id)
 );
 
 -- ======================================================
 -- 6. BẢNG ORDER DETAIL (Chi tiết đơn hàng)
 -- ======================================================
--- Đã XÓA cột payment_method thừa
 CREATE TABLE order_detail (
     order_detail_id INT AUTO_INCREMENT PRIMARY KEY,
     vehicle_id INT NOT NULL,
     order_id INT DEFAULT NULL,
     amount DECIMAL(15, 2) NOT NULL,
-quantity INT(11) NOT NULL,
+	quantity INT(11) NOT NULL,
     created_at timestamp NOT NULL DEFAULT current_timestamp(),
     CONSTRAINT fk_orderdetail_vehicle FOREIGN KEY (vehicle_id) REFERENCES vehicle(vehicle_id),
     CONSTRAINT fk_orderdetail_orders FOREIGN KEY (order_id) REFERENCES orders(order_id) ON DELETE CASCADE
@@ -89,13 +81,6 @@ quantity INT(11) NOT NULL,
 -- ======================================================
 -- NẠP DỮ LIỆU (DATA INSERTION)
 -- ======================================================
-
--- 1. Insert Payment Methods
-INSERT INTO payment_methods (name) VALUES 
-('Bank Transfer'), 
-('Cash'),
-('Credit Card');
-
 -- 2. Insert Manufacturers
 INSERT INTO manufacturer (name, country, description) VALUES
 ('Mercedes-Benz', 'Germany', 'Luxury vehicles, vans, trucks, buses, coaches and ambulances.'), 
@@ -369,15 +354,16 @@ Open-top version available – pure exhilaration redefined.');
 
 -- 5. Insert Orders
 -- Payment ID: 2=Cash, 1=Bank, 3=Credit
-INSERT INTO orders (customer_id, status, created_at, total_amount, payment_method_id) VALUES
-(2, 4, '2024-01-15 10:30:00', 458000000, 2),   
-(3, 2, '2024-02-20 14:15:00', 665000000, 1),   
-(4, 4, '2024-03-05 09:00:00', 559000000, 3),   
-(2, 2, '2024-04-10 16:45:00', 1090000000, 1),  
-(5, 3, '2024-05-01 11:20:00', 1050000000, 2);  
+INSERT INTO orders 
+(customer_id, status, created_at, total_amount, deposit, test_drive_date, test_drive_time)
+VALUES
+(2, 4, '2024-01-15 10:30:00', 458000000, 45800, '2024-01-20', '09:00:00'),
+(3, 2, '2024-02-20 14:15:00', 665000000, 66500, '2024-02-25', '14:30:00'),
+(4, 4, '2024-03-05 09:00:00', 559000000, 55900, '2024-03-10', '10:00:00'),
+(2, 2, '2024-04-10 16:45:00', 1090000000, 109000, '2024-04-15', '15:00:00'),
+(5, 3, '2024-05-01 11:20:00', 1050000000, 105000, '2024-05-05', '08:30:00');
 
 -- 6. Insert Order Detail
--- Đã xóa payment_method
 INSERT INTO order_detail 
 (vehicle_id, order_id, amount, quantity, created_at) 
 VALUES
@@ -386,3 +372,4 @@ VALUES
 (2, 3, 559000000, 1, '2024-03-05 09:00:00'),
 (5, 4, 1090000000, 1, '2024-04-10 16:45:00'),
 (4, 5, 1050000000, 1, '2024-05-01 11:20:00');
+
