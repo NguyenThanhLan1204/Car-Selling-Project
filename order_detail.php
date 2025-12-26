@@ -20,20 +20,28 @@ if ($order_id === 0) {
 
 // --- FUNCTION TO SUPPORT DISPLAYING STATUS ---
 function getStatusText($status) {
-    $statuses = [
-        2 => ["Booked", "badge bg-primary"],
-        3 => ["Delivering", "badge bg-info"],
-        4 => ["Success", "badge bg-success"],
-    ];
-    return $statuses[$status] ?? ["Not determined", "badge bg-dark"];
+    switch ($status) {
+        case 1: return ["Cancel Pending", "bg-warning"];
+        case 2: return ["Booked", "bg-primary"]; 
+        case 3: return ["Testing", "bg-info"]; 
+        case 4: return ["Success", "bg-success"]; 
+        case 5: return ["Cancelled", "bg-secondary"];
+        default: return ["Not Determine", "bg-dark"];
+    }
 }
 
 // --- 3. ORDER OVERVIEW QUERY
-$sql_order = "SELECT o.total_amount, o.status, o.created_at, o.shipping_fee, pm.name as payment_method_name
+$sql_order = "SELECT 
+                o.total_amount, 
+                o.status, 
+                o.created_at, 
+                o.deposit,
+                o.test_drive_date,
+                o.test_drive_time,
+                o.showroom
               FROM orders o
-              LEFT JOIN payment_methods pm ON o.payment_method_id = pm.payment_method_id
               WHERE o.order_id = ? AND o.customer_id = ?";
-              
+           
 $stmt_order = $conn->prepare($sql_order);
 
 if ($stmt_order === false) {
@@ -53,9 +61,10 @@ if (!$order_info) {
 }
 
 // Get shipping fee
-$shipping_fee = $order_info['shipping_fee'] ?? 0;
-$payment_method = $order_info['payment_method_name'] ?? 'N/A';
-
+$deposit = $order_info['deposit'] ?? 0;
+$test_drive_date = $order_info['test_drive_date'];
+$test_drive_time = $order_info['test_drive_time'];
+$showroom_name   = $order_info['showroom'];
 
 // --- 4. QUERY FOR PRODUCT DETAILS
 $sql_details = "SELECT od.quantity, od.amount, 
@@ -105,10 +114,16 @@ $grand_total = $order_info['total_amount'];
                         <div class="col-md-6">
                             <p><strong>Date order:</strong> <?= date("d/m/Y H:i:s", strtotime($order_info['created_at'])) ?></p>
                             <p><strong>Status:</strong> <span class="<?= $badgeClass ?>"><?= $statusText ?></span></p>
-                            
+                        <?php if (!empty($test_drive_date) && !empty($test_drive_time)): ?>
+                            <p>
+                                <strong>Test drive schedule:</strong>
+                                <?= date("d/m/Y H:i:s", strtotime($test_drive_date . ' ' . $test_drive_time)) ?>
+                            </p>
+                        <?php endif; ?>
+                        <p><strong>Showroom:</strong> <?= htmlspecialchars($showroom_name) ?></p>
+  
                         </div>
                         <div class="col-md-6 text-md-end">
-                            <p><strong>Payment methods:</strong> <?= htmlspecialchars($payment_method) ?></p>
                             <p><strong>Total Value:</strong> <span class="text-danger fs-5">$<?= number_format($grand_total, 0, ',', '.') ?></span></p>
                         </div>
                     </div>
@@ -136,20 +151,18 @@ $grand_total = $order_info['total_amount'];
                         </div>
                     </div>
                 </div>
-            <?php 
-                } 
-            ?>
+            <?php   }  ?>
 
             <div class="card shadow-sm mt-5">
                 <div class="card-body">
                     <h5 class="fw-bold mb-3">Summary</h5>
                     <div class="d-flex justify-content-between mb-2">
-                        <span>Total Products Value (Subtotal):</span>
+                        <span>Total Products Value:</span>
                         <span class="fw-bold">$<?= number_format($total_products_value, 0, ',', '.') ?></span>
                     </div>
                     <div class="d-flex justify-content-between mb-2">
-                        <span>Shipping/Other Fees:</span>
-                        <span class="fw-bold text-success">$<?= number_format($shipping_fee, 0, ',', '.') ?></span>
+                        <span>Deposit</span>
+                        <span class="fw-bold text-success">$<?= number_format($deposit, 0, ',', '.') ?></span>
                     </div>
                     <hr>
                     <div class="d-flex justify-content-between fs-4">

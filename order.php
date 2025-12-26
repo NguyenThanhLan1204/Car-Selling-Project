@@ -4,16 +4,7 @@ if (!isset($_SESSION['customer_id'])) {
     exit();
 }
 // CONNECT DATABASE
-$servername = "localhost";
-$username   = "root";
-$password   = "";
-$dbname     = "car_selling";
-$conn = new mysqli($servername, $username, $password, $dbname);
-$conn->set_charset("utf8");
-
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+require_once 'db.php';
 
 $customer_id = $_SESSION['customer_id'];
 
@@ -23,14 +14,16 @@ $statusFilter = isset($_GET['status']) ? intval($_GET['status']) : 0;
 // --- FUNCTION TO SUPPORT DISPLAYING STATUS ---
 function getStatusText($status) {
     switch ($status) {
+        case 1: return ["Cancel Pending", "bg-warning"];
         case 2: return ["Booked", "bg-primary"]; 
-        case 3: return ["Delivering", "bg-info"]; 
+        case 3: return ["Testing", "bg-info"]; 
         case 4: return ["Success", "bg-success"]; 
+        case 5: return ["Cancelled", "bg-secondary"];
         default: return ["Not Determine", "bg-dark"];
     }
 }
 // --- QUERY OF GENERAL ORDER DATA ---
-$sql = "SELECT o.order_id, o.total_amount, o.status, o.created_at, 
+$sql = "SELECT o.order_id, o.total_amount, o.status, o.test_drive_date,o.test_drive_time,o.showroom,
                od_rep.model, od_rep.image_url, od_rep.manufacturer
         FROM orders o 
         JOIN (
@@ -49,6 +42,7 @@ $sql = "SELECT o.order_id, o.total_amount, o.status, o.created_at,
 // Initialize parameters and data types
 $params = [$customer_id];
 $types = "i";
+
 
 // Add state filtering conditions
 if ($statusFilter > 0) {
@@ -74,28 +68,33 @@ $result = $stmt->get_result();
 
 ?>
 
-<div class="container py-5" style="min-height: 60vh;">
+<div class="container py-5">
     <h2 class="fw-bold mb-4 text-center">Your order</h2>
     <div class="row g-4">
 
             <div class="col-lg-3 col-md-4">
-            <div class="p-4 shadow-sm bg-white rounded position-fixed" style="width: 250px;">           
-                <h5 class="fw-bold mb-3">Status Filter</h5>
-                <div class="list-group">
-                    <a href="base.php?page=order" class="list-group-item list-group-item-action <?= ($statusFilter === 0) ? 'active' : '' ?>">
-                        All 
+            <div class="p-4 shadow-sm bg-white rounded position-fixed" style="width: 250px;">           <h5 class="fw-bold mb-3">Status Filter</h5>
+             <div class="list-group">
+                 <a href="base.php?page=order" class="list-group-item list-group-item-action <?= ($statusFilter === 0) ? 'active' : '' ?>">
+                     All 
+                 </a>
+                    <a href="base.php?page=order&status=1" class="list-group-item list-group-item-action <?= ($statusFilter === 1) ? 'active' : '' ?>">
+                        Cancel Pending
                     </a>
-                    <a href="base.php?page=order&status=2" class="list-group-item list-group-item-action <?= ($statusFilter === 2) ? 'active' : '' ?>">
-                        Booked
+                 <a href="base.php?page=order&status=2" class="list-group-item list-group-item-action <?= ($statusFilter === 2) ? 'active' : '' ?>">
+                     Booked
+                 </a>
+                 <a href="base.php?page=order&status=3" class="list-group-item list-group-item-action <?= ($statusFilter === 3) ? 'active' : '' ?>">
+                     Testing
+                 </a>
+                 <a href="base.php?page=order&status=4" class="list-group-item list-group-item-action <?= ($statusFilter === 4) ? 'active' : '' ?>">
+                      Success
+                 </a>
+                    <a href="base.php?page=order&status=5" class="list-group-item list-group-item-action <?= ($statusFilter === 5) ? 'active' : '' ?>">
+                        Cancelled
                     </a>
-                    <a href="base.php?page=order&status=3" class="list-group-item list-group-item-action <?= ($statusFilter === 3) ? 'active' : '' ?>">
-                        Delivering
-                    </a>
-                    <a href="base.php?page=order&status=4" class="list-group-item list-group-item-action <?= ($statusFilter === 4) ? 'active' : '' ?>">
-                         Success
-                    </a>
-                    </div>
-                </div>
+                 </div>
+             </div>
           </div>
 
             <div class="col-lg-9 col-md-8 offset-lg-3 offset-md-4">
@@ -113,8 +112,16 @@ $result = $stmt->get_result();
             <div class="col-md-7">
                 <h5 class="fw-bold mb-2"><?= htmlspecialchars($row['model']) ?> - <?= htmlspecialchars($row['manufacturer']) ?></h5>
                     <p class="mb-1">Order Code: <strong>#<?= htmlspecialchars($row['order_id']) ?></strong></p>
-                    <p class="mb-1">Date order: <?= date("d.m.Y H:i:s", strtotime($row['created_at'])) ?></p>
-                    
+                    <?php if (!empty($row['test_drive_date']) && !empty($row['test_drive_time'])): ?>
+                        <p>
+                            <strong>Test drive schedule:</strong>
+                            <?= date(
+                                "d/m/Y H:i",
+                                strtotime($row['test_drive_date'] . ' ' . $row['test_drive_time'])
+                            ) ?>
+                        </p>
+                    <?php endif; ?>
+
                     <p class="mb-1">Total Amount: <strong class="text-danger">$<?= number_format($row['total_amount'], 0, ',', '.') ?></strong></p>
                     
                     <span class="badge <?= $badgeClass ?> fs-6"><?= $statusText ?></span>
@@ -125,6 +132,42 @@ $result = $stmt->get_result();
                              See details 
                     </a>
                   </div>
+                 <?php if ($row['status'] == 2): ?>
+
+                    <div class="col-md-2 text-end">
+                        <button class="btn btn-danger text-nowrap w-100 mt-2"
+                                data-bs-toggle="modal"
+                                data-bs-target="#cancelModal<?= $row['order_id'] ?>">
+                            Cancel Order
+                        </button>
+                    </div>
+
+                    <!-- Cancel Modal -->
+                    <div class="modal fade" id="cancelModal<?= $row['order_id'] ?>" tabindex="-1">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Cancel Order</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Are you sure you want to cancel order #<?= htmlspecialchars($row['order_id']) ?>?
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                                    <a href="cancel_order.php?order_id=<?= htmlspecialchars($row['order_id']) ?>"
+                                    class="btn btn-danger">
+                                        Yes, Cancel
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                <?php endif; ?>
+
+
+
                   </div>
             </div>
               <?php 
