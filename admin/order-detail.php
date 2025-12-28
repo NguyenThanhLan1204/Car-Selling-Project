@@ -116,9 +116,7 @@ $total = 0;
                                 <a href="order.php?order=5&order_id=<?= $order_id ?>" class="badge bg-success">Approve</a>
                                 <a href="order.php?order=2&order_id=<?= $order_id ?>" class="badge bg-danger">Reject</a>
                             <?php endif; ?>
-
                         <hr>
-
                         <table class="table table-bordered">
                             <thead>
                                 <tr>

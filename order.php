@@ -38,7 +38,6 @@ $sql = "SELECT o.order_id, o.total_amount, o.status, o.test_drive_date,o.test_dr
              GROUP BY od1.order_id
         ) od_rep ON o.order_id = od_rep.order_id
         WHERE o.customer_id = ?"; // Filter by customer_id in the orders table
-
 // Initialize parameters and data types
 $params = [$customer_id];
 $types = "i";

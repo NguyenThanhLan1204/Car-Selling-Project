@@ -139,7 +139,6 @@ if (!empty($selected_ids_str)) {
     }
 }
 
-
 ?>
 <!DOCTYPE html>
 <html lang="en">

@@ -149,7 +149,6 @@ $orders = mysqli_query($link, $sql);
                         <?php endif; ?>
                     </td>
 
-
                 </tr>
                 <?php } ?>
 
@@ -158,7 +157,6 @@ $orders = mysqli_query($link, $sql);
         </div>
     </div>
 </div>
-
 </div>
 </div>
 </div>

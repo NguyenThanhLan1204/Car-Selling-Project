@@ -129,7 +129,6 @@ $grand_total = $order_info['total_amount'];
                     </div>
                 </div>
             </div>
-
             <h4 class="fw-bold mb-3">Purchased Products (<?= count($details_data) ?> items)</h4>
             <?php 
             if (!empty($details_data)) {

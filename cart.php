@@ -179,7 +179,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 row.style.opacity = "0.5"; 
             }
         });
-
         const checkedShip = document.querySelector('.shipping-radio:checked');
         const shippingCost = parseInt(checkedShip ? checkedShip.value : 0);
         const checkedPayment = document.querySelector('.payment-radio:checked');
