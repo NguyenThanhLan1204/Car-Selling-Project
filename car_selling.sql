@@ -353,7 +353,6 @@ Interior: Carbon racing seats · Alcantara everywhere
 Open-top version available – pure exhilaration redefined.');
 
 -- 5. Insert Orders
--- Payment ID: 2=Cash, 1=Bank, 3=Credit
 INSERT INTO orders 
 (customer_id, status, created_at, total_amount, deposit, test_drive_date, test_drive_time)
 VALUES
