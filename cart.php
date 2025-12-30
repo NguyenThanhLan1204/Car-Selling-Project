@@ -20,16 +20,6 @@ if (
     exit; // CHỈ EXIT CHO AJAX
 }
 
-// ===== SAVE TEST DRIVE FROM FORM SUBMIT =====
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_GET['action'])) {
-    if (isset($_POST['test_drive_date'], $_POST['test_drive_time'])) {
-        $_SESSION['test_drive_date'] = $_POST['test_drive_date'];
-        $_SESSION['test_drive_time'] = $_POST['test_drive_time'];
-        $_SESSION['showroom'] = $_POST['showroom'] ?? '';
-    }
-    // ❌ KHÔNG exit ở đây
-}
-
 // 2. KIỂM TRA ĐĂNG NHẬP
 if (!isset($_SESSION['customer_id'])) {
     header("Location: login.php?message=please_login");
@@ -107,28 +97,13 @@ $grand_total = 0;
                     <input type="hidden" name="sub_total_input" id="sub-total-hidden" value="<?= $grand_total ?>">
 
                     <div class="mb-4">
-                    <p class="small fw-bold text-muted mb-2 text-uppercase">Test Drive Schedule</p>
-
-                    <div class="mb-3">
-                        <label class="form-label small">Preferred Date</label>
-                        <input type="date" name="test_drive_date" class="form-control" value="<?= $_SESSION['test_drive_date'] ?? '' ?>" required>
+                        <p class="text-muted small">
+                            <i class='bx bx-info-circle'></i> 
+                            Please proceed to checkout to select your test drive schedule and showroom.
+                        </p>
                     </div>
 
-                    <div class="mb-3">
-                        <label class="form-label small">Preferred Time</label>
-                       <input type="time"name="test_drive_time"class="form-control" value="<?= $_SESSION['test_drive_time'] ?? '' ?>" required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label small">Showroom</label>
-                        <select name="showroom" class="form-select">
-                            <option value="Hanoi">Hà Nội</option>
-                            <option value="HCM">Hồ Chí Minh</option>
-                            <option value="Danang">Đà Nẵng</option>
-                        </select>
-                    </div>
-                </div>
-                    <button type="submit" class="btn btn-dark w-100 py-3 fw-bold rounded-pill text-uppercase">Book</button>
+                    <button type="submit" class="btn btn-dark w-100 py-3 fw-bold rounded-pill text-uppercase">Book & Checkout</button>
                 </form>
             </div>
         </div>
@@ -139,8 +114,6 @@ $grand_total = 0;
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     const qtyInputs = document.querySelectorAll('.qty-input');
-    const shippingRadios = document.querySelectorAll('.shipping-radio');
-    const paymentRadios = document.querySelectorAll('.payment-radio');
     const itemCheckboxes = document.querySelectorAll('.item-checkbox');
     const selectedIdsInput = document.getElementById('selected-ids-input');
     const subTotalHidden = document.getElementById('sub-total-hidden');
@@ -154,7 +127,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const checkbox = row.querySelector('.item-checkbox');
             const price = parseFloat(row.dataset.price);
             const input = row.querySelector('.qty-input');
-           //fix
+           
             const stock = parseInt(row.dataset.stock);
             let qty = parseInt(input.value) || 1;
 
@@ -162,9 +135,9 @@ document.addEventListener('DOMContentLoaded', function () {
             if (qty < 1) qty = 1;
             if (qty > stock) qty = stock;
 
-            // CẬP NHẬT LẠI INPUT (RẤT QUAN TRỌNG)
+            // CẬP NHẬT LẠI INPUT
             input.value = qty;
-            //fix//
+            
             const itemSubtotal = price * qty;
             const id = row.dataset.id;
 
@@ -179,18 +152,18 @@ document.addEventListener('DOMContentLoaded', function () {
                 row.style.opacity = "0.5"; 
             }
         });
-        const checkedShip = document.querySelector('.shipping-radio:checked');
-        const shippingCost = parseInt(checkedShip ? checkedShip.value : 0);
-        const checkedPayment = document.querySelector('.payment-radio:checked');
-        const paymentMethod = checkedPayment ? checkedPayment.value : 2;
 
-        const total = grandSubtotal + shippingCost;
+        // Chỉ tính tổng tiền hàng, không có phí ship trong cart này
+        const total = grandSubtotal;
         
         subTotalHidden.value = grandSubtotal; 
         selectedIdsInput.value = selectedIds.join(','); 
         
-        document.getElementById('temp-total').innerText = '$' + grandSubtotal.toLocaleString();
-        document.getElementById('grand-total-display').innerText = '$' + total.toLocaleString();
+        // Cập nhật hiển thị (nếu có các element ID này ở layout cha, nếu không thì bỏ qua)
+        if(document.getElementById('temp-total')) 
+            document.getElementById('temp-total').innerText = '$' + grandSubtotal.toLocaleString();
+        if(document.getElementById('grand-total-display'))
+            document.getElementById('grand-total-display').innerText = '$' + total.toLocaleString();
 
         // GỬI DỮ LIỆU LƯU VÀO SESSION
         fetch('base.php?page=cart&action=save_state', {
@@ -198,8 +171,6 @@ document.addEventListener('DOMContentLoaded', function () {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 selected_ids: selectedIds,
-                shipping_cost: shippingCost,
-                payment_method: paymentMethod,
                 quantities: quantities
             })
         });
@@ -207,8 +178,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     itemCheckboxes.forEach(cb => cb.addEventListener('change', updateCartUI));
     qtyInputs.forEach(input => input.addEventListener('input', updateCartUI));
-    shippingRadios.forEach(radio => radio.addEventListener('change', updateCartUI));
-    paymentRadios.forEach(radio => radio.addEventListener('change', updateCartUI));
 
     updateCartUI(); 
 });
