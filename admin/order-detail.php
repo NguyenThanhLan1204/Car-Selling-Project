@@ -105,6 +105,7 @@ $total = 0;
                             <br><br><strong>Update to:</strong>
                             <?php if ($first['status'] == 2): ?>
                                 <a href="order.php?order=3&order_id=<?= $order_id ?>" class="badge bg-info">Testing</a>
+                                <a href="order.php?order=5&order_id=<?= $order_id ?>" class="badge bg-danger"> Cancelled </a>
                             <?php elseif ($first['status'] == 3): ?>
                                  <br><br><strong></strong>
                                 <a href="order.php?order=4&order_id=<?= $order_id ?>" class="badge bg-success">Success</a>
