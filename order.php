@@ -1,184 +1,214 @@
-<?php 
-if (!isset($_SESSION['customer_id'])) {
-    header("Location: login.php?message=please_login");
+<?php
+include("dbconn.php");
+
+// =========================================
+// XỬ LÝ UPDATE STATUS ĐƠN HÀNG
+// =========================================
+if (isset($_GET['order']) && isset($_GET['order_id'])) {
+    $order_id = (int)$_GET['order_id'];
+    $newStatus = (int)$_GET['order'];
+
+    if (isset($_GET['order']) && isset($_GET['order_id'])) {
+    $order_id = (int)$_GET['order_id'];
+    $newStatus = (int)$_GET['order'];
+
+    // Lấy trạng thái hiện tại
+    $check = mysqli_query($link, "SELECT status FROM orders WHERE order_id = $order_id");
+    $current = mysqli_fetch_assoc($check);
+
+    // Nếu đã cancelled rồi thì không làm gì nữa
+    if ($current['status'] == 5) {
+        header("Location: order.php?msg=already_cancelled");
+        exit();
+    }
+
+    mysqli_begin_transaction($link);
+
+    try {
+
+        // NẾU CANCEL → HOÀN STOCK
+        if ($newStatus == 5) {
+            $items = mysqli_query(
+                $link,
+                "SELECT vehicle_id, quantity FROM order_detail WHERE order_id = $order_id"
+            );
+
+            while ($row = mysqli_fetch_assoc($items)) {
+                $vehicle_id = (int)$row['vehicle_id'];
+                $qty = (int)$row['quantity'];
+
+                mysqli_query(
+                    $link,
+                    "UPDATE vehicle SET stock = stock + $qty WHERE vehicle_id = $vehicle_id"
+                );
+            }
+        }
+
+        // Update status
+        mysqli_query(
+            $link,
+            "UPDATE orders SET status = $newStatus WHERE order_id = $order_id"
+        );
+
+        mysqli_commit($link);
+
+    } catch (Exception $e) {
+        mysqli_rollback($link);
+        die("Update order failed");
+    }
+
+    header("Location: order.php?msg=updated");
     exit();
 }
-// CONNECT DATABASE
-require_once 'db.php';
 
-$customer_id = $_SESSION['customer_id'];
-
-// Get filter status from URL (Use 0 for "All")
-$statusFilter = isset($_GET['status']) ? intval($_GET['status']) : 0;
-
-// --- FUNCTION TO SUPPORT DISPLAYING STATUS ---
-function getStatusText($status) {
-    switch ($status) {
-        case 1: return ["Cancel Pending", "bg-warning"];
-        case 2: return ["Booked", "bg-primary"]; 
-        case 3: return ["Testing", "bg-info"]; 
-        case 4: return ["Success", "bg-success"]; 
-        case 5: return ["Cancelled", "bg-secondary"];
-        default: return ["Not Determine", "bg-dark"];
-    }
-}
-// --- QUERY OF GENERAL ORDER DATA ---
-$sql = "SELECT o.order_id, o.total_amount, o.status, o.test_drive_date,o.test_drive_time,o.showroom,
-               od_rep.model, od_rep.image_url, od_rep.manufacturer
-        FROM orders o 
-        JOIN (
-             SELECT 
-                 od1.order_id, 
-                 MIN(v.model) AS model,         
-                 MIN(v.image_url) AS image_url, 
-                 MIN(m.name) AS manufacturer   
-             FROM order_detail od1
-             JOIN vehicle v ON od1.vehicle_id = v.vehicle_id
-             JOIN manufacturer m ON v.manufacturer_id = m.manufacturer_id
-             GROUP BY od1.order_id
-        ) od_rep ON o.order_id = od_rep.order_id
-        WHERE o.customer_id = ?"; // Filter by customer_id in the orders table
-// Initialize parameters and data types
-$params = [$customer_id];
-$types = "i";
-
-
-// Add state filtering conditions
-if ($statusFilter > 0) {
-    // Filter by order table status
-    $sql .= " AND o.status = ?"; 
-    $params[] = $statusFilter;
-    $types .= "i";
 }
 
-$sql .= " ORDER BY o.created_at DESC";
+// =========================================
+// LẤY FILTER STATUS
+// =========================================
+$type = isset($_GET['type']) ? (int)$_GET['type'] : -1;
 
-// Use Prepared Statement
-$stmt = $conn->prepare($sql);
+// =========================================
+// LẤY DANH SÁCH ORDER (ưu tiên shipping_*)
+// =========================================
+$sql = "
+    SELECT 
+        o.order_id,
+        o.status,
+        o.test_drive_date,o.test_drive_time,
+        o.deposit,
+        c.email,
+        COALESCE(o.shipping_name, c.name) AS display_name,
+        COALESCE(o.shipping_phone, c.phone_number) AS display_phone,
+        COALESCE(o.shipping_address, c.address) AS display_address,
+        SUM(od.quantity) AS quantity,
+        MIN(v.model) AS vehicle_model
+    FROM orders o
+    JOIN customer c ON o.customer_id = c.customer_id
+    LEFT JOIN order_detail od ON o.order_id = od.order_id
+    LEFT JOIN vehicle v ON od.vehicle_id = v.vehicle_id
+";
 
-if (!$stmt) {
-    die("Query preparation error: " . $conn->error);
+if ($type != -1) {
+    $sql .= " WHERE o.status = $type ";
 }
 
-$stmt->bind_param($types, ...$params); 
+$sql .= " GROUP BY o.order_id ORDER BY o.created_at DESC";
 
-$stmt->execute();
-$result = $stmt->get_result();
-
+$orders = mysqli_query($link, $sql);
 ?>
 
-<div class="container py-5">
-    <h2 class="fw-bold mb-4 text-center">Your order</h2>
-    <div class="row g-4">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Order Management</title>
+    <link rel="stylesheet" href="bootstrap.min.css">
+    <link rel="stylesheet" href="./css/admin_order.css">
+</head>
+<body>
+<div class="layout">
+    <?php include("header.php"); ?>
+<div class="container-fluid">
+<div class="row">
+<div class="col-12">
 
-            <div class="col-lg-3 col-md-4">
-            <div class="p-4 shadow-sm bg-white rounded position-fixed" style="width: 250px;">           <h5 class="fw-bold mb-3">Status Filter</h5>
-             <div class="list-group">
-                 <a href="base.php?page=order" class="list-group-item list-group-item-action <?= ($statusFilter === 0) ? 'active' : '' ?>">
-                     All 
-                 </a>
-                    <a href="base.php?page=order&status=1" class="list-group-item list-group-item-action <?= ($statusFilter === 1) ? 'active' : '' ?>">
-                        Cancel Pending
-                    </a>
-                 <a href="base.php?page=order&status=2" class="list-group-item list-group-item-action <?= ($statusFilter === 2) ? 'active' : '' ?>">
-                     Booked
-                 </a>
-                 <a href="base.php?page=order&status=3" class="list-group-item list-group-item-action <?= ($statusFilter === 3) ? 'active' : '' ?>">
-                     Testing
-                 </a>
-                 <a href="base.php?page=order&status=4" class="list-group-item list-group-item-action <?= ($statusFilter === 4) ? 'active' : '' ?>">
-                      Success
-                 </a>
-                    <a href="base.php?page=order&status=5" class="list-group-item list-group-item-action <?= ($statusFilter === 5) ? 'active' : '' ?>">
-                        Cancelled
-                    </a>
-                 </div>
-             </div>
-          </div>
+<div class="card my-4">
+    <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+        <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
+            <h6 class="text-white text-capitalize ps-3">Order table</h6>
 
-            <div class="col-lg-9 col-md-8 offset-lg-3 offset-md-4">
-            <?php 
-            if ($result->num_rows > 0) {
-                while($row = $result->fetch_assoc()) { 
-                    list($statusText, $badgeClass) = getStatusText($row['status']);
+            <!-- FILTER -->
+            <a href="order.php" class="filter-btn all <?= $type == -1 ? 'active' : '' ?>">All</a>
+            <a href="order.php?type=1" class="filter-btn warning <?= $type == 1 ? 'active' : '' ?>">Cancel Pending</a>
+            <a href="order.php?type=2" class="filter-btn primary <?= $type == 2 ? 'active' : '' ?>">Booked</a>
+            <a href="order.php?type=3" class="filter-btn info <?= $type == 3 ? 'active' : '' ?>">Testing</a>
+            <a href="order.php?type=4" class="filter-btn success <?= $type == 4 ? 'active' : '' ?>">Success</a>
+            <a href="order.php?type=5" class="filter-btn secondary <?= $type == 5 ? 'active' : '' ?>">Cancelled</a>
+
+        </div>
+    </div>
+
+    <div class="card-body px-0 pb-2">
+        <div class="table-responsive p-0">
+            <table class="table align-items-center mb-0 mt-3">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Customer</th>
+                    <th>Vehicle</th>
+                    <th>Address</th>
+                    <th>Phone</th>
+                    <th>Deposit</th>
+                    <th class="text-center">Status</th>
+                    <th class="text-center">Customer Appointments</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                <?php while ($order = mysqli_fetch_assoc($orders)) { ?>
+                <tr>
+                    <td>#<?= $order['order_id'] ?></td>
+                    <td>
+                        <b><?= htmlspecialchars($order['display_name']) ?></b><br>
+                        <small><?= htmlspecialchars($order['email']) ?></small>
+                    </td>
+                    <td>
+                        <a href="order-detail.php?order_id=<?= $order['order_id'] ?>">View now</a><br>
+                        Qty: <?= $order['quantity'] ?>
+                    </td>
+                    <td><?= nl2br(htmlspecialchars($order['display_address'])) ?></td>
+                    <td><?= htmlspecialchars($order['display_phone']) ?></td>
+                    <td class="text-danger fw-bold"> $<?= number_format($order['deposit'], 0, ',', '.') ?>
+                    </td>
+
+                    <td class="text-center" style="min-width: 150px;">
+                    <?php
+                    switch ($order['status']) {
+                        case 1:
+                            echo '<span class="badge bg-warning text-dark">Cancel Pending</span>';
+                            break;
+                        case 2:
+                            echo '<span class="badge bg-primary">Booked</span>';
+                            break;
+                        case 3:
+                            echo '<span class="badge bg-info">Testing</span>';
+                            break;
+                        case 4:
+                            echo '<span class="badge bg-success">Success</span>';
+                            break;
+                        case 5:
+                            echo '<span class="badge bg-danger">Cancelled</span>';
+                            break;
+                        default:
+                            echo '<span class="badge bg-dark">Unknown</span>';
+                    }
                     ?>
-                    
-            <div class="card mb-4 shadow-sm">
-            <div class="row align-items-center m-3">
-              <div class="col-md-3">
-                <img src="<?= htmlspecialchars($row['image_url']) ?>" class="img-fluid rounded-start object-fit-cover" alt="<?= htmlspecialchars($row['model']) ?>" style="max-height: 150px; width: 100%;">
-              </div>
-            <div class="col-md-7">
-                <h5 class="fw-bold mb-2"><?= htmlspecialchars($row['model']) ?> - <?= htmlspecialchars($row['manufacturer']) ?></h5>
-                    <p class="mb-1">Order Code: <strong>#<?= htmlspecialchars($row['order_id']) ?></strong></p>
-                    <?php if (!empty($row['test_drive_date']) && !empty($row['test_drive_time'])): ?>
-                        <p>
-                            <strong>Test drive schedule:</strong>
+                    </td>
+
+                    <td class="text-center">
+                        <?php if (!empty($order['test_drive_date']) && !empty($order['test_drive_time'])): ?>
                             <?= date(
-                                "d/m/Y H:i",
-                                strtotime($row['test_drive_date'] . ' ' . $row['test_drive_time'])
+                                'd-m-Y H:i',
+                                strtotime($order['test_drive_date'] . ' ' . $order['test_drive_time'])
                             ) ?>
-                        </p>
-                    <?php endif; ?>
+                        <?php else: ?>
+                            <span class="text-muted">—</span>
+                        <?php endif; ?>
+                    </td>
 
-                    <p class="mb-1">Total Amount: <strong class="text-danger">$<?= number_format($row['total_amount'], 0, ',', '.') ?></strong></p>
-                    
-                    <span class="badge <?= $badgeClass ?> fs-6"><?= $statusText ?></span>
-                </div>
-                  <div class="col-md-2 text-end">
-                    <a 
-                        href="base.php?page=order_detail&order_id=<?= htmlspecialchars($row['order_id']) ?>" class="btn btn-success text-nowrap w-100"> 
-                             See details 
-                    </a>
-                  </div>
-                 <?php if ($row['status'] == 2): ?>
+                </tr>
+                <?php } ?>
 
-                    <div class="col-md-2 text-end">
-                        <button class="btn btn-danger text-nowrap w-100 mt-2"
-                                data-bs-toggle="modal"
-                                data-bs-target="#cancelModal<?= $row['order_id'] ?>">
-                            Cancel Order
-                        </button>
-                    </div>
-
-                    <!-- Cancel Modal -->
-                    <div class="modal fade" id="cancelModal<?= $row['order_id'] ?>" tabindex="-1">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title">Cancel Order</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                </div>
-                                <div class="modal-body">
-                                    Are you sure you want to cancel order #<?= htmlspecialchars($row['order_id']) ?>?
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
-                                    <a href="cancel_order.php?order_id=<?= htmlspecialchars($row['order_id']) ?>"
-                                    class="btn btn-danger">
-                                        Yes, Cancel
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                <?php endif; ?>
-
-
-
-                  </div>
-            </div>
-              <?php 
-          }
-             } else {
-               echo '<div class="d-flex justify-content-center align-items-center" style="min-height: 400px;">';
-               echo '    <div class="text-center text-muted">';
-               echo '        <p class="mt-3 fs-5">You don`t have any orders yet.</p>';
-               echo '    </div>';
-               echo '</div>';
-             }
-             ?>
-             </div>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
+</div>
+</div>
+</div>
+
+</div>
+</body>
+</html>
