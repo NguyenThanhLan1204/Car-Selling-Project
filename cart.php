@@ -108,7 +108,7 @@ $grand_total = 0;
                         </p>
                     </div>
 
-                    <button type="submit" class="btn btn-dark w-100 py-3 fw-bold rounded-pill text-uppercase">Book & Checkout</button>
+                    <button type="submit" class="btn btn-dark w-100 py-3 fw-bold rounded-pill text-uppercase">Book</button>
                 </form>
             </div>
         </div>

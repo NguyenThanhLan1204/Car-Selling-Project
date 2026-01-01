@@ -94,24 +94,46 @@ $total = 0;
     <strong>Status:</strong>
     <?php
         switch ($first['status']) {
-            case 2: echo '<span class="badge bg-primary">Booked</span>'; break;
-            case 3: echo '<span class="badge bg-info">Testing</span>'; break;
-            case 4: echo '<span class="badge bg-success">Success</span>'; break;
-            case 5: echo '<span class="badge bg-secondary">Cancelled</span>'; break;
-            default: echo '<span class="badge bg-dark">Unknown</span>';
-        }
+            case 1:
+            echo '<span class="badge bg-warning text-dark">Cancel Pending</span>';
+            break;
+
+            case 2:
+            echo '<span class="badge bg-primary">Booked</span>';
+            break;
+
+            case 3:
+            echo '<span class="badge bg-info">Testing</span>';
+            break;
+
+            case 4:
+            echo '<span class="badge bg-success">Success</span>';
+            break;
+
+            case 5:
+            echo '<span class="badge bg-danger">Cancelled</span>';
+            break;
+
+            default:
+            echo '<span class="badge bg-dark">Unknown</span>';
+            }
     ?>
 
     <?php if ($first['status'] == 2 || $first['status'] == 3): ?>
         <br><br><strong>Update to:</strong>
-        <?php if ($first['status'] == 2): ?>
-            <a href="order.php?order=3&order_id=<?= $order_id ?>" class="badge bg-info">Testing</a>
-            <a href="order.php?order=5&order_id=<?= $order_id ?>" class="badge bg-danger">Cancelled</a>
-        <?php else: ?>
-            <a href="order.php?order=4&order_id=<?= $order_id ?>" class="badge bg-success">Success</a>
-            <a href="order.php?order=5&order_id=<?= $order_id ?>" class="badge bg-danger">Cancelled</a>
-        <?php endif; ?>
-    <?php endif; ?>
+            <?php if ($first['status'] == 2): ?>
+                <a href="order.php?order=3&order_id=<?= $order_id ?>" class="badge bg-info">Testing</a>
+                <a href="order.php?order=5&order_id=<?= $order_id ?>" class="badge bg-danger"> Cancelled </a>
+            <?php elseif ($first['status'] == 3): ?>
+                <br><br><strong></strong>
+                <a href="order.php?order=4&order_id=<?= $order_id ?>" class="badge bg-success">Success</a>
+                <a href="order.php?order=5&order_id=<?= $order_id ?>" class="badge bg-danger"> Cancelled </a>
+            <?php endif; ?>
+            <?php elseif ($first['status'] == 1): ?>
+                <br><br><strong>Approve or Reject:</strong>
+                <a href="order.php?order=5&order_id=<?= $order_id ?>" class="badge bg-success">Approve</a>
+                <a href="order.php?order=2&order_id=<?= $order_id ?>" class="badge bg-danger">Reject</a>
+            <?php endif; ?>
 
     <hr>
 
@@ -152,7 +174,7 @@ $total = 0;
                 <form method="POST" action="order-detail.php?order_id=<?= $order_id ?>">
                     <input type="hidden" name="vehicle_id" value="<?= $item['vehicle_id'] ?>">
                     <select name="decision" class="form-select" onchange="this.form.submit()">
-                        <option value="">-- Chọn --</option>
+                        <option value="">-- Choose --</option>
                         <option value="buy" <?= ($item['buy_status'] == 1) ? "selected" : "" ?>>Accepted</option>
                         <option value="no_buy" <?= ($item['buy_status'] == 0) ? "selected" : "" ?>>Refused</option>
                     </select>

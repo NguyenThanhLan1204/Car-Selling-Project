@@ -101,18 +101,18 @@ $grand_total = $order_info['total_amount'];
 <div class="container py-5">
     <div class="row">
         <div class="col-lg-12">
-            <h2 class="fw-bold mb-4">Order Details #<?= $order_id ?></h2>
+            <h2 class="fw-bold mb-4">Booking Details #<?= $order_id ?></h2>
             <a href="base.php?page=order" class="btn btn-sm btn-outline-secondary mb-4"><i class='bx bx-arrow-back'></i> Return to Order List</a>
 
             <div class="card mb-4 shadow-sm">
                 <div class="card-header bg-light">
-                    <h5 class="mb-0">Order Information</h5>
+                    <h5 class="mb-0">Booking Information</h5>
                 </div>
                 <div class="card-body">
                     <?php list($statusText, $badgeClass) = getStatusText($order_info['status']); ?>
                     <div class="row">
                         <div class="col-md-6">
-                            <p><strong>Date order:</strong> <?= date("d/m/Y H:i:s", strtotime($order_info['created_at'])) ?></p>
+                            <p><strong>Date book:</strong> <?= date("d/m/Y H:i:s", strtotime($order_info['created_at'])) ?></p>
                             <p><strong>Status:</strong> <span class="<?= $badgeClass ?>"><?= $statusText ?></span></p>
                         <?php if (!empty($test_drive_date) && !empty($test_drive_time)): ?>
                             <p>

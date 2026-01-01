@@ -67,7 +67,7 @@ $result = $stmt->get_result();
 ?>
 
 <div class="container py-5">
-    <h2 class="fw-bold mb-4 text-center">Your order</h2>
+    <h2 class="fw-bold mb-4 text-center">Your booking</h2>
     <div class="row g-4">
 
             <div class="col-lg-3 col-md-4">
@@ -109,8 +109,8 @@ $result = $stmt->get_result();
               </div>
             <div class="col-md-7">
                 <h5 class="fw-bold mb-2"><?= htmlspecialchars($row['model']) ?> - <?= htmlspecialchars($row['manufacturer']) ?></h5>
-                    <p class="mb-1">Order Code: <strong>#<?= htmlspecialchars($row['order_id']) ?></strong></p>
-                    <p class="mb-1">Date order: <?= date("d.m.Y H:i:s", strtotime($row['created_at'])) ?></p>
+                    <p class="mb-1">Book Code: <strong>#<?= htmlspecialchars($row['order_id']) ?></strong></p>
+                    <p class="mb-1">Date book: <?= date("d.m.Y H:i:s", strtotime($row['created_at'])) ?></p>
                     
                     <p class="mb-1">Total Amount: <strong class="text-danger">$<?= number_format($row['total_amount'], 0, ',', '.') ?></strong></p>
                     
@@ -128,7 +128,7 @@ $result = $stmt->get_result();
                         <button class="btn btn-danger text-nowrap w-100 mt-2"
                                 data-bs-toggle="modal"
                                 data-bs-target="#cancelModal<?= $row['order_id'] ?>">
-                            Cancel Order
+                            Cancel Booking
                         </button>
                     </div>
 
@@ -137,11 +137,11 @@ $result = $stmt->get_result();
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title">Cancel Order</h5>
+                                    <h5 class="modal-title">Cancel Booking</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                 </div>
                                 <div class="modal-body">
-                                    Are you sure you want to cancel order #<?= htmlspecialchars($row['order_id']) ?>?
+                                    Are you sure you want to cancel booking #<?= htmlspecialchars($row['order_id']) ?>?
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>

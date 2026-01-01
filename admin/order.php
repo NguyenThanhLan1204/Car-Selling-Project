@@ -144,10 +144,11 @@ $orders = mysqli_query($link, $sql);
             <h6 class="text-white ps-3">Order table</h6>
 
             <a href="order.php" class="filter-btn all <?= $type == -1 ? 'active' : '' ?>">All</a>
+            <a href="order.php?type=1" class="filter-btn warning <?= $type == 1 ? 'active' : '' ?>">Cancel Pending</a>
             <a href="order.php?type=2" class="filter-btn primary <?= $type == 2 ? 'active' : '' ?>">Booked</a>
             <a href="order.php?type=3" class="filter-btn info <?= $type == 3 ? 'active' : '' ?>">Testing</a>
             <a href="order.php?type=4" class="filter-btn success <?= $type == 4 ? 'active' : '' ?>">Success</a>
-            <a href="order.php?type=5" class="filter-btn secondary <?= $type == 5 ? 'active' : '' ?>">Cancelled</a>
+            <a href="order.php?type=5" class="filter-btn danger <?= $type == 5 ? 'active' : '' ?>">Cancelled</a>
         </div>
     </div>
 
@@ -185,11 +186,23 @@ $orders = mysqli_query($link, $sql);
                     <td class="text-center">
                         <?php
                         switch ($order['status']) {
-                            case 2: echo '<span class="badge bg-primary">Booked</span>'; break;
-                            case 3: echo '<span class="badge bg-info">Testing</span>'; break;
-                            case 4: echo '<span class="badge bg-success">Success</span>'; break;
-                            case 5: echo '<span class="badge bg-danger">Cancelled</span>'; break;
-                            default: echo '<span class="badge bg-dark">Unknown</span>';
+                            case 1:
+                                echo '<span class="badge bg-warning text-dark">Cancel Pending</span>';
+                                break;
+                            case 2:
+                                echo '<span class="badge bg-primary">Booked</span>';
+                                break;
+                            case 3:
+                                echo '<span class="badge bg-info">Testing</span>';
+                                break;
+                            case 4:
+                                echo '<span class="badge bg-success">Success</span>';
+                                break;
+                            case 5:
+                                echo '<span class="badge bg-danger">Cancelled</span>';
+                                break;
+                            default:
+                                echo '<span class="badge bg-dark">Unknown</span>';
                         }
                         ?>
                     </td>
