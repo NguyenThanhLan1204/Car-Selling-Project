@@ -30,6 +30,7 @@ if (isset($_GET['order']) && isset($_GET['order_id'])) {
 
     mysqli_query($link, "UPDATE orders SET status = $newStatus WHERE order_id = $order_id");
 
+
     header("Location: order.php?msg=updated");
     exit();
 }
