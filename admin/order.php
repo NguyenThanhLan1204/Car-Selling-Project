@@ -8,6 +8,7 @@ if (isset($_GET['order']) && isset($_GET['order_id'])) {
     $order_id = (int)$_GET['order_id'];
     $newStatus = (int)$_GET['order'];
 
+<<<<<<< HEAD
     if (isset($_GET['order']) && isset($_GET['order_id'])) {
     $order_id = (int)$_GET['order_id'];
     $newStatus = (int)$_GET['order'];
@@ -56,6 +57,29 @@ if (isset($_GET['order']) && isset($_GET['order_id'])) {
         mysqli_rollback($link);
         die("Update order failed");
     }
+=======
+    $res = mysqli_query($link, "SELECT status FROM orders WHERE order_id = $order_id"); 
+    $row = mysqli_fetch_assoc($res); 
+    $oldStatus = (int)$row['status']; 
+    // Nếu đơn hàng đang Cancel Pending (1) 
+    if ($oldStatus === 1) { 
+        // Nếu admin bấm Approve (-> Cancelled = 5) 
+        if ($newStatus === 5) { 
+            // Lấy chi tiết sản phẩm trong đơn hàng 
+            $sqlDetail = "SELECT vehicle_id, quantity FROM order_detail WHERE order_id = $order_id"; 
+            $details = mysqli_query($link, $sqlDetail); 
+            
+            while ($item = mysqli_fetch_assoc($details)) { 
+                $vid = (int)$item['vehicle_id']; 
+                $qty = (int)$item['quantity']; 
+                // Cộng lại số lượng xe vào stock 
+                mysqli_query($link, "UPDATE vehicle SET stock = stock + $qty WHERE vehicle_id = $vid"); 
+            } 
+        } // Nếu admin bấm Reject (-> Booked = 2) thì không làm gì thêm 
+    }
+
+    mysqli_query($link, "UPDATE orders SET status = $newStatus WHERE order_id = $order_id");
+>>>>>>> 4f7121cfc1b8d17a95318067940bc04d53018b27
 
     header("Location: order.php?msg=updated");
     exit();
