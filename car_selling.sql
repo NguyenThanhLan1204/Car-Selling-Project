@@ -74,6 +74,7 @@ CREATE TABLE order_detail (
     amount DECIMAL(15, 2) NOT NULL,
 	quantity INT(11) NOT NULL,
     created_at timestamp NOT NULL DEFAULT current_timestamp(),
+    buy_status TINYINT(1) DEFAULT 1,
     CONSTRAINT fk_orderdetail_vehicle FOREIGN KEY (vehicle_id) REFERENCES vehicle(vehicle_id),
     CONSTRAINT fk_orderdetail_orders FOREIGN KEY (order_id) REFERENCES orders(order_id) ON DELETE CASCADE
 );
@@ -362,13 +363,18 @@ VALUES
 (2, 2, '2024-04-10 16:45:00', 1090000000, 109000, '2024-04-15', '15:00:00'),
 (5, 3, '2024-05-01 11:20:00', 1050000000, 105000, '2024-05-05', '08:30:00');
 
+ALTER TABLE order_detail
+ADD buy_status TINYINT(1) DEFAULT 1;
+
+
 -- 6. Insert Order Detail
 INSERT INTO order_detail 
-(vehicle_id, order_id, amount, quantity, created_at) 
+(vehicle_id, order_id, amount, quantity, buy_status, created_at) 
 VALUES
-(1, 1, 458000000, 1, '2024-01-15 10:30:00'),
-(3, 2, 665000000, 1, '2024-02-20 14:15:00'),
-(2, 3, 559000000, 1, '2024-03-05 09:00:00'),
-(5, 4, 1090000000, 1, '2024-04-10 16:45:00'),
-(4, 5, 1050000000, 1, '2024-05-01 11:20:00');
+(1, 1, 458000000, 1, 1, '2024-01-15 10:30:00'),
+(3, 2, 665000000, 1, 1, '2024-02-20 14:15:00'),
+(2, 3, 559000000, 1, 1, '2024-03-05 09:00:00'),
+(5, 4, 1090000000, 1, 1, '2024-04-10 16:45:00'),
+(4, 5, 1050000000, 1, 1, '2024-05-01 11:20:00');
+
 
