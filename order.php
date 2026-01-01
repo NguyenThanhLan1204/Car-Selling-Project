@@ -15,7 +15,7 @@ function getStatusText($status) {
     switch ($status) {
         case 1: return ["Cancel Pending", "bg-warning"];
         case 2: return ["Booked", "bg-primary"]; 
-        case 3: return ["Delivering", "bg-info"]; 
+        case 3: return ["Testing", "bg-info"]; 
         case 4: return ["Success", "bg-success"]; 
         case 5: return ["Cancelled", "bg-secondary"];
         default: return ["Not Determine", "bg-dark"];
@@ -83,7 +83,7 @@ $result = $stmt->get_result();
                      Booked
                  </a>
                  <a href="base.php?page=order&status=3" class="list-group-item list-group-item-action <?= ($statusFilter === 3) ? 'active' : '' ?>">
-                     Delivering
+                     Testing
                  </a>
                  <a href="base.php?page=order&status=4" class="list-group-item list-group-item-action <?= ($statusFilter === 4) ? 'active' : '' ?>">
                       Success
