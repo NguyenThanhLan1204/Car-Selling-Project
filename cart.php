@@ -4,7 +4,7 @@ if (session_status() == PHP_SESSION_NONE) {
 }
 
 // 1. XỬ LÝ LƯU TRẠNG THÁI (AJAX gọi đến chính nó)
-// ===== AJAX SAVE CART STATE =====
+// ===== AJAX SAVE CART STATE (SỬA LẠI) =====
 if (
     $_SERVER['REQUEST_METHOD'] === 'POST' &&
     isset($_GET['action']) &&
@@ -12,12 +12,17 @@ if (
 ) {
     $data = json_decode(file_get_contents('php://input'), true);
 
-    if ($data) {
+    if ($data && isset($data['quantities'])) {
         $_SESSION['selected_ids'] = $data['selected_ids'] ?? [];
-        $_SESSION['cart_quantities'] = $data['quantities'] ?? [];
+        
+        // Cập nhật TRỰC TIẾP vào giỏ hàng gốc
+        foreach ($data['quantities'] as $id => $new_qty) {
+            if (isset($_SESSION['cart'][$id])) {
+                $_SESSION['cart'][$id]['qty'] = (int)$new_qty;
+            }
+        }
     }
-
-    exit; // CHỈ EXIT CHO AJAX
+    exit; 
 }
 
 // 2. KIỂM TRA ĐĂNG NHẬP
