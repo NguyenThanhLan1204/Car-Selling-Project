@@ -8,56 +8,6 @@ if (isset($_GET['order']) && isset($_GET['order_id'])) {
     $order_id = (int)$_GET['order_id'];
     $newStatus = (int)$_GET['order'];
 
-<<<<<<< HEAD
-    if (isset($_GET['order']) && isset($_GET['order_id'])) {
-    $order_id = (int)$_GET['order_id'];
-    $newStatus = (int)$_GET['order'];
-
-    // Lấy trạng thái hiện tại
-    $check = mysqli_query($link, "SELECT status FROM orders WHERE order_id = $order_id");
-    $current = mysqli_fetch_assoc($check);
-
-    // Nếu đã cancelled rồi thì không làm gì nữa
-    if ($current['status'] == 5) {
-        header("Location: order.php?msg=already_cancelled");
-        exit();
-    }
-
-    mysqli_begin_transaction($link);
-
-    try {
-
-        // NẾU CANCEL thì HOÀN STOCK
-        if ($newStatus == 5) {
-            $items = mysqli_query(
-                $link,
-                "SELECT vehicle_id, quantity FROM order_detail WHERE order_id = $order_id"
-            );
-
-            while ($row = mysqli_fetch_assoc($items)) {
-                $vehicle_id = (int)$row['vehicle_id'];
-                $qty = (int)$row['quantity'];
-
-                mysqli_query(
-                    $link,
-                    "UPDATE vehicle SET stock = stock + $qty WHERE vehicle_id = $vehicle_id"
-                );
-            }
-        }
-
-        // Update status
-        mysqli_query(
-            $link,
-            "UPDATE orders SET status = $newStatus WHERE order_id = $order_id"
-        );
-
-        mysqli_commit($link);
-
-    } catch (Exception $e) {
-        mysqli_rollback($link);
-        die("Update order failed");
-    }
-=======
     $res = mysqli_query($link, "SELECT status FROM orders WHERE order_id = $order_id"); 
     $row = mysqli_fetch_assoc($res); 
     $oldStatus = (int)$row['status']; 
@@ -79,7 +29,6 @@ if (isset($_GET['order']) && isset($_GET['order_id'])) {
     }
 
     mysqli_query($link, "UPDATE orders SET status = $newStatus WHERE order_id = $order_id");
->>>>>>> 4f7121cfc1b8d17a95318067940bc04d53018b27
 
     header("Location: order.php?msg=updated");
     exit();
