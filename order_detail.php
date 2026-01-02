@@ -111,7 +111,7 @@ $grand_total = $order_info['total_amount'];
                     <div class="row">
                         <div class="col-md-6">
                             <p><strong>Date book:</strong> <?= date("d/m/Y H:i:s", strtotime($order_info['created_at'])) ?></p>
-                            <p><strong>Status:</strong> <span class="<?= $badgeClass ?>"><?= $statusText ?></span></p>
+                            <p><strong>Status:</strong> <span class="badge <?= $badgeClass ?> fs-6"><?= $statusText ?></span> </p>
                         <?php if (!empty($test_drive_date) && !empty($test_drive_time)): ?>
                             <p>
                                 <strong>Test drive schedule:</strong>
