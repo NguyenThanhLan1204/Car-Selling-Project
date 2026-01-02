@@ -33,7 +33,7 @@ $users = getAllCustomers();
                                 <th>Email</th>
                                 <th class="text-center">Age</th>
                                 <th class="text-center">Date of Birth</th>
-                                <th class="text-center">Total order</th>
+                                <th class="text-center">Total Booking</th>
                             </tr>
                         </thead>
 

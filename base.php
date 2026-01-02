@@ -76,7 +76,7 @@
                                 
                                 <li class="py-2"><a href="?page=profile" class="text-nowrap text-decoration-none custom_hover">My Profile</a></li>
                                 
-                                <li class="py-2"><a href="?page=order" class="text-nowrap text-decoration-none custom_hover">My Orders</a></li>
+                                <li class="py-2"><a href="?page=order" class="text-nowrap text-decoration-none custom_hover">My Bookings</a></li>
                                 <li class="py-2"><a href="logout.php" class="text-nowrap text-decoration-none custom_hover">Logout</a></li>
                             </ul>
                         <?php else: ?>

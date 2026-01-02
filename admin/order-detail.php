@@ -78,13 +78,13 @@ $total = 0;
 
 <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
     <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
-        <h6 class="text-white ps-3">Order Detail #<?= $order_id ?></h6>
+        <h6 class="text-white ps-3">Booking Detail #<?= $order_id ?></h6>
     </div>
 </div>
 
 <div class="card-body px-4">
-    <h2>Buyer Information</h2>
-    Buyer Name: <strong><?= htmlspecialchars($first['display_name']) ?></strong><br>
+    <h2>Customer Information</h2>
+    Customer Name: <strong><?= htmlspecialchars($first['display_name']) ?></strong><br>
     Phone: <strong><?= htmlspecialchars($first['display_phone']) ?></strong><br>
     Email: <strong><?= htmlspecialchars($first['email']) ?></strong><br>
     Address: <strong><?= nl2br(htmlspecialchars($first['display_address'])) ?></strong><br>

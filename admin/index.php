@@ -39,7 +39,7 @@ function totalValue($table) {
                     ["Users", "person", totalValue("customer"), "", "success"],
                     ["Product", "table_view", totalValue("vehicle"), "", "success"],
                     ["Manufacturer", "factory", totalValue("manufacturer"), "", "success"],
-                    ["Order", "receipt_long", totalValue("orders"), "", "danger"],
+                    ["Booking", "receipt_long", totalValue("orders"), "", "danger"],
                 ];
 
                 foreach ($cards as $c) { 

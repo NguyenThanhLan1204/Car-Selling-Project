@@ -148,7 +148,7 @@ $orders = mysqli_query($link, $sql);
             <a href="order.php?type=2" class="filter-btn primary <?= $type == 2 ? 'active' : '' ?>">Booked</a>
             <a href="order.php?type=3" class="filter-btn info <?= $type == 3 ? 'active' : '' ?>">Testing</a>
             <a href="order.php?type=4" class="filter-btn success <?= $type == 4 ? 'active' : '' ?>">Success</a>
-            <a href="order.php?type=5" class="filter-btn danger <?= $type == 5 ? 'active' : '' ?>">Cancelled</a>
+            <a href="order.php?type=5" class="filter-btn secondary <?= $type == 5 ? 'active' : '' ?>">Cancelled</a>
         </div>
     </div>
 
