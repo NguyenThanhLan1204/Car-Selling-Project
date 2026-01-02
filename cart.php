@@ -42,7 +42,7 @@ $grand_total = 0;
 <div class="cart container py-5">
     <div class="row g-4">
         <div class="col-lg-9">
-            <h3 class="mb-4 fw-bold">Your shopping cart</h3>
+            <h3 class="mb-4 fw-bold">Your Booking cart</h3>
             <?php if (empty($list_ids)): ?>
                 <div class="alert alert-warning text-center">
                     The shopping cart is empty! <a href="base.php?page=home" class="fw-bold">Shop now</a>
