@@ -226,7 +226,7 @@ if (!empty($selected_ids_str)) {
                 <span class="fw-bold h5">Total Amount:</span>
                 <span class="h4 fw-bold text-danger">$<?= number_format($total_for_display) ?></span>
             </div>
-            <button type="submit" name="btn_place_order" class="btn btn-primary w-100 fw-bold py-2">CREATE ORDER</button>
+            <button type="submit" name="btn_place_order" class="btn btn-primary w-100 fw-bold py-2">Book Now</button>
         </form>
     </div>
 </div>
