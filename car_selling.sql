@@ -8,7 +8,7 @@ USE car_selling;
 CREATE TABLE manufacturer (
     manufacturer_id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
-    country VARCHAR(100),
+    country VARCHAR(100) ,
     description TEXT
 );
 
@@ -19,13 +19,13 @@ CREATE TABLE customer (
     customer_id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     age INT, 
-    phone_number VARCHAR(20),
-    email VARCHAR(255),
+    phone_number VARCHAR(20) NOT NULL,
+    email VARCHAR(255) NOT NULL,
     dob DATE, 
-    username VARCHAR(100) UNIQUE,
-    address varchar(191) DEFAULT NULL, 
-    password VARCHAR(255),
-    role VARCHAR(20) DEFAULT 'user' 
+    username VARCHAR(100) NOT NULL UNIQUE,
+    address varchar(191) NOT NULL, 
+    password VARCHAR(255) NOT NULL,
+    role VARCHAR(20) NOT NULL DEFAULT 'user' 
 );
 
 -- ======================================================
@@ -33,13 +33,13 @@ CREATE TABLE customer (
 -- ======================================================
 CREATE TABLE vehicle (
     vehicle_id INT AUTO_INCREMENT PRIMARY KEY,
-    manufacturer_id INT, 
+    manufacturer_id INT NOT NULL, 
     model VARCHAR(255) NOT NULL,
-    year INT,
-    price DECIMAL(15, 2), 
-    image_url VARCHAR(500),
+    year INT NOT NULL,
+    price DECIMAL(15, 2) NOT NULL, 
+    image_url VARCHAR(500) NOT NULL,
     video_url VARCHAR(500), 
-    stock INT DEFAULT 0, 
+    stock INT  NOT NULL DEFAULT 0, 
     description TEXT,
     CONSTRAINT fk_vehicle_manufacturer FOREIGN KEY (manufacturer_id) REFERENCES manufacturer(manufacturer_id)
 );
@@ -53,12 +53,12 @@ CREATE TABLE orders (
     customer_id INT NOT NULL, 
     status INT(11) NOT NULL DEFAULT 2, 
     total_amount DECIMAL(15, 2) NOT NULL DEFAULT 0.00,
-    deposit DECIMAL(15, 2) DEFAULT 0.00,
-    booking_name VARCHAR(255),
-    booking_phone VARCHAR(20),
-    booking_address TEXT,
-    test_drive_date DATE,
-    test_drive_time TIME,
+    deposit DECIMAL(15, 2) NOT NULL DEFAULT 0.00,
+    booking_name VARCHAR(255) NOT NULL,
+    booking_phone VARCHAR(20) NOT NULL,
+    booking_address TEXT NOT NULL,
+    test_drive_date DATE NOT NULL,
+    test_drive_time TIME NOT NULL,
     created_at timestamp NOT NULL DEFAULT current_timestamp(), 
     CONSTRAINT fk_orders_customer FOREIGN KEY (customer_id) REFERENCES customer(customer_id)
 );
@@ -73,7 +73,7 @@ CREATE TABLE order_detail (
     amount DECIMAL(15, 2) NOT NULL,
 	quantity INT(11) NOT NULL,
     created_at timestamp NOT NULL DEFAULT current_timestamp(),
-    buy_status TINYINT(1) DEFAULT 1,
+    buy_status TINYINT(1) NOT NULL DEFAULT 1,
     CONSTRAINT fk_orderdetail_vehicle FOREIGN KEY (vehicle_id) REFERENCES vehicle(vehicle_id),
     CONSTRAINT fk_orderdetail_orders FOREIGN KEY (order_id) REFERENCES orders(order_id) ON DELETE CASCADE
 );
@@ -354,17 +354,27 @@ Open-top version available – pure exhilaration redefined.');
 
 -- 5. Insert Orders
 INSERT INTO orders 
-(customer_id, status, created_at, total_amount, deposit, test_drive_date, test_drive_time)
+(customer_id,status, total_amount, deposit, booking_name, booking_phone, booking_address, test_drive_date, test_drive_time, created_at)
 VALUES
-(2, 4, '2024-01-15 10:30:00', 458000000, 45800, '2024-01-20', '09:00:00'),
-(3, 2, '2024-02-20 14:15:00', 665000000, 66500, '2024-02-25', '14:30:00'),
-(4, 4, '2024-03-05 09:00:00', 559000000, 55900, '2024-03-10', '10:00:00'),
-(2, 2, '2024-04-10 16:45:00', 1090000000, 109000, '2024-04-15', '15:00:00'),
-(5, 3, '2024-05-01 11:20:00', 1050000000, 105000, '2024-05-05', '08:30:00');
+(2, 4, 458000000, 45800,
+ 'Dinh Khai', '0912345678', '45 Nguyen Hue, District 3, Ho Chi Minh City',
+ '2024-01-20', '09:00:00', '2024-01-15 10:30:00'),
 
-ALTER TABLE order_detail
-ADD buy_status TINYINT(1) DEFAULT 1;
+(3, 2, 665000000, 66500,
+ 'Minh Ly', '0988777666', '789 Le Loi, District 1, Ho Chi Minh City',
+ '2024-02-25', '14:30:00', '2024-02-20 14:15:00'),
 
+(4, 4, 559000000, 55900,
+ 'Namdo', '0365554444', '56 Tran Hung Dao, District 5, Ho Chi Minh City',
+ '2024-03-10', '10:00:00', '2024-03-05 09:00:00'),
+
+(2, 2, 1090000000, 109000,
+ 'Dinh Khai', '0912345678', '45 Nguyen Hue, District 3, Ho Chi Minh City',
+ '2024-04-15', '15:00:00', '2024-04-10 16:45:00'),
+
+(5, 3, 1050000000, 105000,
+ 'Lanlitdo', '0901239876', '321 Pham Ngu Lao, District 1, Ho Chi Minh City',
+ '2024-05-05', '08:30:00', '2024-05-01 11:20:00');
 
 -- 6. Insert Order Detail
 INSERT INTO order_detail 
