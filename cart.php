@@ -104,7 +104,7 @@ $grand_total = 0;
                     <div class="mb-4">
                         <p class="text-muted small">
                             <i class='bx bx-info-circle'></i> 
-                            Please proceed to checkout to select your test drive schedule and showroom.
+                            Please proceed to checkout to select your test drive schedule.
                         </p>
                     </div>
 

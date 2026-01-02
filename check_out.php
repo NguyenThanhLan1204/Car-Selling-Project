@@ -50,7 +50,6 @@ if (isset($_POST['btn_place_order'])) {
     // --- CẬP NHẬT LOGIC: Lấy ngày giờ trực tiếp từ form checkout ---
     $test_drive_date = $_POST['test_drive_date'] ?? null;
     $test_drive_time = $_POST['test_drive_time'] ?? null;
-    $showroom        = mysqli_real_escape_string($conn, $_POST['showroom'] ?? 'Hanoi');
     // ---------------------------------------------------------------
 
     // Validate
@@ -73,11 +72,11 @@ if (isset($_POST['btn_place_order'])) {
 
     if (!empty($final_selected_ids)) {
             $sql_order = "INSERT INTO orders 
-                (customer_id, status, total_amount, deposit, shipping_name, shipping_phone, shipping_address,
-                test_drive_date, test_drive_time, showroom)
+                (customer_id, status, total_amount, deposit, booking_name, booking_phone, booking_address,
+                test_drive_date, test_drive_time)
                 VALUES (
                     $customer_id, $status_code, $final_total, $deposit, '$fullname', '$phone',
-                    '$address', '$test_drive_date', '$test_drive_time', '$showroom')";
+                    '$address', '$test_drive_date', '$test_drive_time')";
 
         if (mysqli_query($conn, $sql_order)) {
             $order_id = mysqli_insert_id($conn);
@@ -182,14 +181,6 @@ if (!empty($selected_ids_str)) {
                     <label class="form-label">Time <span class="text-danger">*</span></label>
                     <input type="time" class="form-control" name="test_drive_time" required>
                 </div>
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Showroom <span class="text-danger">*</span></label>
-                <select name="showroom" class="form-select" required>
-                    <option value="Hanoi">Hà Nội</option>
-                    <option value="HCM">Hồ Chí Minh</option>
-                    <option value="Danang">Đà Nẵng</option>
-                </select>
             </div>
             <hr class="my-4">
 

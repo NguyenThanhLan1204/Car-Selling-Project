@@ -31,6 +31,7 @@ include("dbconn.php");
                             <th>Name</th>
                             <th>Country</th>
                             <th>Description</th>
+                            <th>Total Vehicles</th> <!-- ✅ THÊM -->
                             <th>Edit</th>
                             <th>Delete</th>
                         </tr>
@@ -38,7 +39,13 @@ include("dbconn.php");
 
                     <tbody>
                         <?php
-                        $manu = mysqli_query($link, "SELECT * FROM manufacturer");
+                        // ✅ CHỈ ĐỔI QUERY
+                        $manu = mysqli_query($link, "
+                            SELECT m.*, COUNT(v.vehicle_id) AS total_vehicle
+                            FROM manufacturer m
+                            LEFT JOIN vehicle v ON m.manufacturer_id = v.manufacturer_id
+                            GROUP BY m.manufacturer_id
+                        ");
 
                         if (mysqli_num_rows($manu) > 0) {
                             foreach ($manu as $m) {
@@ -49,28 +56,35 @@ include("dbconn.php");
                                 <td><?= $m["country"]; ?></td>
                                 <td><?= $m["description"]; ?></td>
 
+                                <!-- ✅ CỘT MỚI -->
                                 <td>
-                                <button 
-                                    class="btn btn-primary btn-sm"
-                                    onclick="window.location.href='edit_manufacturer.php?id=<?= $m['manufacturer_id']; ?>'">
-                                    Edit
-                                </button>
+                                    <span class="badge bg-info">
+                                        <?= $m["total_vehicle"]; ?>
+                                    </span>
                                 </td>
 
                                 <td>
-                                <button 
-                                    class="btn btn-danger btn-sm"
-                                    onclick="if(confirm('Delete this manufacturer?')) 
-                                            window.location.href='delete_manufacturer.php?id=<?= $m['manufacturer_id']; ?>'">
-                                    Delete
-                                </button>
+                                    <button 
+                                        class="btn btn-primary btn-sm"
+                                        onclick="window.location.href='edit_manufacturer.php?id=<?= $m['manufacturer_id']; ?>'">
+                                        Edit
+                                    </button>
+                                </td>
+
+                                <td>
+                                    <button 
+                                        class="btn btn-danger btn-sm"
+                                        onclick="if(confirm('Delete this manufacturer?')) 
+                                                window.location.href='delete_manufacturer.php?id=<?= $m['manufacturer_id']; ?>'">
+                                        Delete
+                                    </button>
                                 </td>
                             </tr>
                         <?php 
                             }
                         } else { 
                         ?>
-                            <tr><td colspan="6">No Manufacturers Found</td></tr>
+                            <tr><td colspan="7">No Manufacturers Found</td></tr>
                         <?php } ?>
                     </tbody>
 

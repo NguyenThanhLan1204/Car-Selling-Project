@@ -37,8 +37,7 @@ $sql_order = "SELECT
                 o.created_at, 
                 o.deposit,
                 o.test_drive_date,
-                o.test_drive_time,
-                o.showroom
+                o.test_drive_time
               FROM orders o
               WHERE o.order_id = ? AND o.customer_id = ?";
            
@@ -64,7 +63,6 @@ if (!$order_info) {
 $deposit = $order_info['deposit'] ?? 0;
 $test_drive_date = $order_info['test_drive_date'];
 $test_drive_time = $order_info['test_drive_time'];
-$showroom_name   = $order_info['showroom'];
 
 // --- 4. QUERY FOR PRODUCT DETAILS
 $sql_details = "SELECT od.quantity, od.amount, 
@@ -120,11 +118,7 @@ $grand_total = $order_info['total_amount'];
                                 <?= date("d/m/Y H:i:s", strtotime($test_drive_date . ' ' . $test_drive_time)) ?>
                             </p>
                         <?php endif; ?>
-                        <p><strong>Showroom:</strong> <?= htmlspecialchars($showroom_name) ?></p>
   
-                        </div>
-                        <div class="col-md-6 text-md-end">
-                            <p><strong>Total Value:</strong> <span class="text-danger fs-5">$<?= number_format($grand_total, 0, ',', '.') ?></span></p>
                         </div>
                     </div>
                 </div>
@@ -159,14 +153,10 @@ $grand_total = $order_info['total_amount'];
                         <span>Total Products Value:</span>
                         <span class="fw-bold">$<?= number_format($total_products_value, 0, ',', '.') ?></span>
                     </div>
-                    <div class="d-flex justify-content-between mb-2">
-                        <span>Deposit</span>
-                        <span class="fw-bold text-success">$<?= number_format($deposit, 0, ',', '.') ?></span>
-                    </div>
                     <hr>
                     <div class="d-flex justify-content-between fs-4">
-                        <span class="fw-bold text-danger">GRAND TOTAL:</span>
-                        <span class="fw-bold text-danger">$<?= number_format($grand_total, 0, ',', '.') ?></span>
+                        <span class="fw-bold text-danger">TOTAL DEPOSIT (10%):</span>
+                        <span class="fw-bold text-danger">$<?= number_format($deposit, 0, ',', '.') ?></span>
                     </div>
                 </div>
             </div>

@@ -34,9 +34,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['vehicle_id'])) {
 $sqlOrder = "
     SELECT 
         o.order_id, o.status, o.test_drive_date, o.test_drive_time,
-        COALESCE(o.shipping_name, c.name) AS display_name,
-        COALESCE(o.shipping_phone, c.phone_number) AS display_phone,
-        COALESCE(o.shipping_address, c.address) AS display_address,
+        COALESCE(o.booking_name, c.name) AS display_name,
+        COALESCE(o.booking_phone, c.phone_number) AS display_phone,
+        COALESCE(o.booking_address, c.address) AS display_address,
         c.email
     FROM orders o
     JOIN customer c ON o.customer_id = c.customer_id

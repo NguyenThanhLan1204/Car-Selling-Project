@@ -54,12 +54,11 @@ CREATE TABLE orders (
     status INT(11) NOT NULL DEFAULT 2, 
     total_amount DECIMAL(15, 2) NOT NULL DEFAULT 0.00,
     deposit DECIMAL(15, 2) DEFAULT 0.00,
-    shipping_name VARCHAR(255),
-    shipping_phone VARCHAR(20),
-    shipping_address TEXT,
+    booking_name VARCHAR(255),
+    booking_phone VARCHAR(20),
+    booking_address TEXT,
     test_drive_date DATE,
     test_drive_time TIME,
-    showroom VARCHAR(50),
     created_at timestamp NOT NULL DEFAULT current_timestamp(), 
     CONSTRAINT fk_orders_customer FOREIGN KEY (customer_id) REFERENCES customer(customer_id)
 );
