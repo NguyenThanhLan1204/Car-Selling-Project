@@ -52,7 +52,7 @@ $page = basename($_SERVER['PHP_SELF']);
             <li class="nav-item">
                 <a class="nav-link <?= $page == "manufacturer.php" ? 'active' : '' ?>" href="list_manufacturer.php">
                     <div><i class="fas fa-industry"></i></div>
-                    <span class="nav-link-text">Manufacturers manage</span>
+                    <span class="nav-link-text">Manufacturer manage</span>
                 </a>
             </li>
 

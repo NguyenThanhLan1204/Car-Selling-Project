@@ -37,8 +37,8 @@ function totalValue($table) {
             <?php 
                 $cards = [
                     ["Users", "person", totalValue("customer"), "", "success"],
-                    ["Product", "table_view", totalValue("vehicle"), "", "success"],
-                    ["Manufacturer", "factory", totalValue("manufacturer"), "", "success"],
+                    ["Vehicles", "table_view", totalValue("vehicle"), "", "success"],
+                    ["Manufacturers", "factory", totalValue("manufacturer"), "", "success"],
                     ["Booking", "receipt_long", totalValue("orders"), "", "danger"],
                 ];
 

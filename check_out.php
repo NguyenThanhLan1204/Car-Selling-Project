@@ -214,17 +214,15 @@ if (!empty($selected_ids_str)) {
             <?php endif; ?>
 
             <div class="d-flex justify-content-between mb-2">
-                <span class="fw-semibold">
-                    Deposit (<?= $DEPOSIT_PERCENT ?>%):
-                </span>
+                <span class="fw-semibold">Total Amount:</span>
                 <span class="fw-bold text-warning">
-                    $<?= number_format($deposit) ?>
+                    $<?= number_format($total_for_display) ?>
                 </span>
             </div>
 
             <div class="d-flex justify-content-between mb-4">
-                <span class="fw-bold h5">Total Amount:</span>
-                <span class="h4 fw-bold text-danger">$<?= number_format($total_for_display) ?></span>
+                <span class="fw-bold h5">Deposit (<?= $DEPOSIT_PERCENT ?>%):</span>
+                <span class="h4 fw-bold text-danger">$<?= number_format($deposit) ?></span>
             </div>
             <button type="submit" name="btn_place_order" class="btn btn-primary w-100 fw-bold py-2">Book Now</button>
         </form>
