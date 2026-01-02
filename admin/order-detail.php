@@ -57,7 +57,6 @@ $sqlDetail = "
 ";
 $details = mysqli_query($link, $sqlDetail);
 
-$total = 0;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -154,16 +153,6 @@ $total = 0;
                 <img src="../<?= htmlspecialchars($item['image_url']) ?>" width="60"><br>
                 <?= htmlspecialchars($item['model']) ?>
             </td>
-            <td>
-                Price: $<?= number_format($item['amount']) ?><br>
-                Qty: <?= $item['quantity'] ?><br>
-                Total:
-                <?php
-                    $tmp = $item['quantity'] * $item['amount'];
-                    $total += $tmp;
-                    echo "$" . number_format($tmp);
-                ?>
-            </td>
             <td><?= date('d-m-Y', strtotime($item['created_at'])) ?></td>
 
             <!-- BUY DECISION -->
@@ -199,7 +188,6 @@ $total = 0;
         </tbody>
     </table>
 
-    <h3>Total: $<?= number_format($total) ?></h3>
 </div>
 
 </div>
