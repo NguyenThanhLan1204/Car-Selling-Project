@@ -141,7 +141,7 @@ $orders = mysqli_query($link, $sql);
 <div class="card my-4">
     <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
         <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
-            <h6 class="text-white ps-3">Order table</h6>
+            <h6 class="text-white ps-3">Booking table</h6>
 
             <a href="order.php" class="filter-btn all <?= $type == -1 ? 'active' : '' ?>">All</a>
             <a href="order.php?type=1" class="filter-btn warning <?= $type == 1 ? 'active' : '' ?>">Cancel Pending</a>

@@ -38,7 +38,7 @@ $page = basename($_SERVER['PHP_SELF']);
             <li class="nav-item">
                 <a class="nav-link <?= $page == "order.php" ? 'active' : '' ?>" href="order.php">
                     <div><i class="fas fa-shopping-cart"></i></div>
-                    <span class="nav-link-text">Order manage</span>
+                    <span class="nav-link-text">Booking manage</span>
                 </a>
             </li>
 
