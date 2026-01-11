@@ -105,7 +105,7 @@ if (isset($_POST['btn_place_order'])) {
                     localStorage.removeItem('user_draft_phone');
                     localStorage.removeItem('user_draft_address');
                     localStorage.removeItem('last_selected_ids'); 
-                    alert('Order placed successfully!');
+                    alert('Booking placed successfully!');
                     window.location.href='base.php?page=order';
                 </script>";
                 exit();
