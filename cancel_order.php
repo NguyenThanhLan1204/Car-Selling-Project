@@ -15,12 +15,7 @@ $customer_id = $_SESSION['customer_id'];
 $order_id    = intval($_GET['order_id']);
 
 // CONNECT DATABASE
-$conn = new mysqli("localhost", "root", "", "car_selling");
-$conn->set_charset("utf8");
-
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+include("db.php");
 /**
  * Chỉ cho phép:
  * - Đơn thuộc về user

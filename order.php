@@ -65,7 +65,7 @@ $stmt->execute();
 $result = $stmt->get_result();
 
 ?>
-
+<body class="bg-light">
 <div class="container py-5">
     <h2 class="fw-bold mb-4 text-center">Your booking</h2>
     <div class="row g-4">
@@ -173,3 +173,4 @@ $result = $stmt->get_result();
              </div>
     </div>
 </div>
+</body>
