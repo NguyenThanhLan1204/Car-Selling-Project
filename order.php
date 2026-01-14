@@ -71,31 +71,31 @@ $result = $stmt->get_result();
     <div class="row g-4">
 
             <div class="col-lg-3 col-md-4">
-            <div class="p-4 shadow-sm bg-white rounded position-fixed" style="width: 250px;">           <h5 class="fw-bold mb-3">Status Filter</h5>
-             <div class="list-group">
-                 <a href="base.php?page=order" class="list-group-item list-group-item-action <?= ($statusFilter === 0) ? 'active' : '' ?>">
-                     All 
-                 </a>
-                    <a href="base.php?page=order&status=1" class="list-group-item list-group-item-action <?= ($statusFilter === 1) ? 'active' : '' ?>">
-                        Cancel Pending
+                <div class="p-4 shadow-sm bg-white rounded" style="width: 250px;"> <h5 class="fw-bold mb-3">Status Filter</h5>
+                <div class="list-group">
+                    <a href="base.php?page=order" class="list-group-item list-group-item-action <?= ($statusFilter === 0) ? 'active' : '' ?>">
+                        All 
                     </a>
-                 <a href="base.php?page=order&status=2" class="list-group-item list-group-item-action <?= ($statusFilter === 2) ? 'active' : '' ?>">
-                     Booked
-                 </a>
-                 <a href="base.php?page=order&status=3" class="list-group-item list-group-item-action <?= ($statusFilter === 3) ? 'active' : '' ?>">
-                     Testing
-                 </a>
-                 <a href="base.php?page=order&status=4" class="list-group-item list-group-item-action <?= ($statusFilter === 4) ? 'active' : '' ?>">
-                      Success
-                 </a>
-                    <a href="base.php?page=order&status=5" class="list-group-item list-group-item-action <?= ($statusFilter === 5) ? 'active' : '' ?>">
-                        Cancelled
+                        <a href="base.php?page=order&status=1" class="list-group-item list-group-item-action <?= ($statusFilter === 1) ? 'active' : '' ?>">
+                            Cancel Pending
+                        </a>
+                    <a href="base.php?page=order&status=2" class="list-group-item list-group-item-action <?= ($statusFilter === 2) ? 'active' : '' ?>">
+                        Booked
                     </a>
-                 </div>
-             </div>
+                    <a href="base.php?page=order&status=3" class="list-group-item list-group-item-action <?= ($statusFilter === 3) ? 'active' : '' ?>">
+                        Testing
+                    </a>
+                    <a href="base.php?page=order&status=4" class="list-group-item list-group-item-action <?= ($statusFilter === 4) ? 'active' : '' ?>">
+                        Success
+                    </a>
+                        <a href="base.php?page=order&status=5" class="list-group-item list-group-item-action <?= ($statusFilter === 5) ? 'active' : '' ?>">
+                            Cancelled
+                        </a>
+                </div>
+                </div>
           </div>
 
-            <div class="col-lg-9 col-md-8 offset-lg-3 offset-md-4">
+            <div class="col-lg-9 col-md-8 ">
             <?php 
             if ($result->num_rows > 0) {
                 while($row = $result->fetch_assoc()) { 
