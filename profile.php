@@ -1,60 +1,74 @@
 <?php
-// profile.php
+// Kiểm tra xem session đã bắt đầu chưa. Nếu chưa thì start session.
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
+
+// Kết nối database
 require_once 'db.php';
 
-// 1. Check login status
+// --- 1. KIỂM TRA QUYỀN TRUY CẬP ---
+// Nếu trong session chưa có 'customer_id' 
 if (!isset($_SESSION['customer_id'])) {
-    // Redirect to login if not authenticated
+    // Chuyển hướng người dùng về trang đăng nhập
     echo "<script>window.location.href='login.php';</script>";
-    exit();
+    exit(); 
 }
 
+// Lấy ID người dùng từ session hiện tại
 $customer_id = $_SESSION['customer_id'];
 $message = "";
-$msg_type = ""; // success or danger
+$msg_type = ""; 
 
-// 2. Handle Profile Update Request
+// --- 2. XỬ LÝ YÊU CẦU CẬP NHẬT  ---
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Lấy dữ liệu từ form gửi lên
     $name    = $_POST['name'];
     $email   = $_POST['email'];
     $phone   = $_POST['phone_number'];
     $address = $_POST['address'];
+    
+    // Kiểm tra dữ liệu rỗng: Nếu có nhập thì lấy giá trị, nếu không thì set là NULL
     $age     = !empty($_POST['age']) ? $_POST['age'] : NULL;
     $dob     = !empty($_POST['dob']) ? $_POST['dob'] : NULL;
 
-    // Update Database using Prepared Statement for security
+    // Sử dụng dấu ? (Prepared Statement) để chống hack SQL Injection
     $sql_update = "UPDATE customer 
                    SET name = ?, email = ?, phone_number = ?, address = ?, age = ?, dob = ? 
                    WHERE customer_id = ?";
     
+    // Chuẩn bị statement
     $stmt = $conn->prepare($sql_update);
     
-    // "ssssisi": s=string, i=integer. Parameter order must match SQL query
+    // Gán giá trị vào các dấu ? theo thứ tự
     $stmt->bind_param("ssssisi", $name, $email, $phone, $address, $age, $dob, $customer_id);
 
+    // Thực thi câu lệnh
     if ($stmt->execute()) {
         $message = "Update profile successful!";
-        $msg_type = "success";
+        $msg_type = "success"; // Màu xanh
         
-        // Update Session Name to reflect changes immediately on Header
+        // --- CẬP NHẬT LẠI SESSION ---
+      
         $_SESSION['name'] = $name;
-        // $_SESSION['username'] remains unchanged
+        // $_SESSION['username'] giữ nguyên vì thường username không cho đổi
     } else {
         $message = "Error updating information: " . $conn->error;
-        $msg_type = "danger";
+        $msg_type = "danger"; 
     }
+    // Đóng statement để giải phóng tài nguyên
     $stmt->close();
 }
 
-// 3. Fetch current User Info to display on the form
+// --- 3. LẤY THÔNG TIN HIỆN TẠI ĐỂ HIỂN THỊ LÊN FORM ---
 $sql_info = "SELECT * FROM customer WHERE customer_id = ?";
 $stmt_info = $conn->prepare($sql_info);
 $stmt_info->bind_param("i", $customer_id);
 $stmt_info->execute();
+
+// Lấy kết quả trả về
 $result = $stmt_info->get_result();
+// Chuyển dòng dữ liệu thành mảng kết hợp 
 $user = $result->fetch_assoc();
 $stmt_info->close();
 ?>
@@ -63,9 +77,11 @@ $stmt_info->close();
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card shadow-sm border-0">
+                
                 <div class="card-header bg-primary text-white">
                     <h4 class="fw-bold mb-0"><i class='bx bx-user-circle'></i> My Profile</h4>
                 </div>
+                
                 <div class="card-body p-4">
                     
                     <?php if ($message): ?>
