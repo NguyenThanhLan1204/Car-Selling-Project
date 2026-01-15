@@ -1,33 +1,40 @@
 <?php
-// Kết nối database
+// Kết nối database 
 require_once 'db.php';
 
-// Kiểm tra tham số ID trên URL
+// Kiểm tra xem trên thanh địa chỉ (URL) có tham số 'id' hay không 
 if (isset($_GET['id'])) {
+    // Lấy giá trị id và ép kiểu về số nguyên (intval) để tránh lỗi SQL Injection cơ bản
     $id = intval($_GET['id']);
 
-    // Truy vấn thông tin xe + hãng sản xuất
+    // Chuẩn bị SQL
     $sql = "SELECT v.*, m.name AS manufacturer_name, m.country 
             FROM vehicle v 
             JOIN manufacturer m ON v.manufacturer_id = m.manufacturer_id 
             WHERE v.vehicle_id = $id";
             
+    // Thực thi câu lệnh truy vấn
     $result = $conn->query($sql);
 
+    // Nếu tìm thấy dữ liệu (số dòng > 0)
     if ($result->num_rows > 0) {
+        // Lấy dữ liệu dòng đầu tiên gán vào biến $car dưới dạng mảng kết hợp
         $car = $result->fetch_assoc();
     } else {
+        // Nếu không tìm thấy xe với ID đó, hiển thị thông báo lỗi và nút quay về
         echo "<div class='container py-5 text-center'>
                 <h2>Vehicle not found!</h2>
                 <a href='base.php?page=home' class='btn btn-primary mt-3'>Back to Home</a>
               </div>";
-        exit();
+        exit(); // Dừng chạy code phía sau
     }
 } else {
+    // Nếu không có tham số ID trên URL, chuyển hướng người dùng về trang chủ
     header("Location: base.php?page=home");
     exit();
 }
 ?>
+
 <body>
     <div class="container mt-5">
         <div class="product-wrapper row bg-white rounded shadow-sm p-4">
@@ -48,10 +55,15 @@ if (isset($_GET['id'])) {
                     style="width: 500px; height: 500px; margin: auto; overflow:hidden;">
 
                     <?php 
+                        // Tạo mảng $media để chứa danh sách ảnh/video
                         $media = []; 
+                        
+                        // Nếu trong database có link video, thêm vào đầu mảng
                         if (!empty($car['video_url'])) {
                             $media[] = ['type' => 'video', 'url' => $car['video_url']];
                         }
+                        
+                        // Luôn thêm ảnh vào mảng (dùng ảnh placeholder nếu không có ảnh thật)
                         $media[] = [
                             'type' => 'image',
                             'url' => !empty($car['image_url']) ? $car['image_url'] : 'https://via.placeholder.com/600x400'
@@ -88,14 +100,21 @@ if (isset($_GET['id'])) {
             </div>
 
             <script>
+                // Chuyển mảng PHP $media thành mảng JSON để JavaScript sử dụng được
                 const mediaList = <?= json_encode($media) ?>;
+                
+                // Biến theo dõi vị trí media đang hiển thị
                 let currentIndex = 0;
+
+                // Hàm vẽ lại nội dung bên trong div #mediaContent
                 function renderMedia() {
                     const container = document.getElementById('mediaContent');
                     const item = mediaList[currentIndex];
-                    // Làm trống nội dung
+                    
+                    // Xóa nội dung cũ
                     container.innerHTML = "";
-                    // VIDEO
+                    
+                    // Nếu là VIDEO: Chèn thẻ <video>
                     if (item.type === "video") {
                         container.innerHTML = `
                              <video autoplay muted loop style="height:100%; width:auto; object-fit:cover;">
@@ -103,7 +122,7 @@ if (isset($_GET['id'])) {
                             </video>
                         `;
                     } 
-                    // ẢNH
+                    // Nếu là ẢNH: Chèn thẻ <img>
                     else {
                         container.innerHTML = `
                             <img src="${item.url}"
@@ -112,11 +131,13 @@ if (isset($_GET['id'])) {
                     }
                 }
 
+                // Hàm xử lý khi bấm nút Next (tăng index, quay về 0 nếu hết mảng)
                 function nextMedia() {
                     currentIndex = (currentIndex + 1) % mediaList.length;
                     renderMedia();
                 }
 
+                // Hàm xử lý khi bấm nút Prev (giảm index, quay về cuối mảng nếu < 0)
                 function prevMedia() {
                     currentIndex = (currentIndex - 1 + mediaList.length) % mediaList.length;
                     renderMedia();
@@ -124,11 +145,12 @@ if (isset($_GET['id'])) {
             </script>
 
             <div class="col-md-5">
-                <form action="cart_add.php" method="POST">
+                <form action="cart_add.php" method="POST"> 
                     <input type="hidden" name="vehicle_id" value="<?= $car['vehicle_id'] ?>">
-
+                    
                     <div class="brand-header d-flex justify-content-between align-items-center mb-2">
                         <span class="text-muted"><i class='bx bxs-check-circle text-primary'></i> <?= htmlspecialchars($car['manufacturer_name']) ?> Official</span>
+                        
                         <?php if ($car['stock'] > 0): ?>
                             <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-3">In Stock</span>
                         <?php else: ?>
